@@ -6,7 +6,9 @@
 
 ### First Release
 
-- First release with Ryan-Joiner test
+#### Module parameters
+- Added ``order_statistic`` function (02/11/2023);
+
 
 
 

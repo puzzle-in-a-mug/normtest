@@ -117,11 +117,12 @@ def order_statistic(sample_size, alpha="3/8", safe=False):
 
     Examples
     --------
-    >>> from normtest import normtest
-    >>> result = normtest.ordered_statistics(7, method="blom")
-    >>> print(result)
-    [0.0862069  0.22413793 0.36206897 0.5        0.63793103 0.77586207
-    0.9137931 ]
+    >>> from normtest import ryan_joiner
+    >>> size = 10
+    >>> pi = ryan_joiner.order_statistic(size)
+    >>> print(pi)
+    [0.06097561 0.15853659 0.25609756 0.35365854 0.45121951 0.54878049
+    0.64634146 0.74390244 0.84146341 0.93902439]
 
     """
     if safe:

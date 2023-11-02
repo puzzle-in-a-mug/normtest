@@ -31,8 +31,8 @@ dependencies = [
 ]
 
 [project.urls]
-Source = "https://github.com/puzzle-in-a-mug/paramcheckup"
-Docs = "https://paramcheckup.readthedocs.io/en/latest/index.html"
+Source = "https://github.com/puzzle-in-a-mug/paramcheckup" # <------------------- (corrigir no paramcheckup
+Docs = "https://paramcheckup.readthedocs.io/en/latest/index.html" # <------------------- (corrigir no paramcheckup
 
 [tool.setuptools.packages.find]
 # All the following settings are optional:

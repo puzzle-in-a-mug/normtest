@@ -76,9 +76,10 @@ def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
         One dimension :doc:`numpy array <numpy:reference/generated/numpy.array>` with at least ``4`` observations.
     cte_alpha : str, optional
         A `str` with the `cte_alpha` value that should be adopted (see details in the Notes section). The options are:
-         * `"0"`;
-         * `"3/8"` (default);
-         * `"1/2"`;
+
+        * `"0"`;
+        * `"3/8"` (default);
+        * `"1/2"`;
 
     weighted : bool, optional
         Whether to estimate the Normal order considering the repeats as its average (`True`) or not (`False`, default). Only has an effect if the dataset contains repeated values.
@@ -101,13 +102,11 @@ def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
 
     where :math:`p_i{}` is the normal statistical order and \\phi^{-1} is the inverse of the standard Normal distribution. The transformation is performed using :doc:`stats.norm.ppf() <scipy:reference/generated/scipy.stats.norm>`.
 
-    The statistical order (:math:`p_{i}`) is estimated using _order_statistic function. Also see this function for details on parameter `cte_alpha`.
+    The statistical order (:math:`p_{i}`) is estimated using :func:`order_statistic` function. See this function for details on parameter `cte_alpha`.
 
     Examples
     --------
-
     The first example uses `weighted=False`:
-
 
     >>> import numpy as np
     >>> from normtest import ryan_joiner

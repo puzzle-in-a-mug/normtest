@@ -55,7 +55,7 @@ from scipy import interpolate
 # import seaborn as sns
 
 ### self made ###
-from paramcheckup import parameters, types, numbers
+from paramcheckup import parameters, types, numbers, numpy_arrays
 
 # from .utils import constants
 
@@ -68,24 +68,84 @@ from paramcheckup import parameters, types, numbers
 
 
 def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
-    """ """
-    if safe:
-        pass
+    """This function transforms the statistical order to the standard Normal distribution scale (:math:`b_{i}`).
 
+    Parameters
+    ----------
+    x_data : :doc:`numpy array <numpy:reference/generated/numpy.array>`
+        One dimension :doc:`numpy array <numpy:reference/generated/numpy.array>` with at least ``4`` observations.
+    cte_alpha : str, optional
+        A `str` with the `cte_alpha` value that should be adopted (see details in the Notes section). The options are:
+         * `"0"`;
+         * `"3/8"` (default);
+         * `"1/2"`;
+
+    weighted : bool, optional
+        Whether to estimate the Normal order considering the repeats as its average (`True`) or not (`False`, default). Only has an effect if the dataset contains repeated values.
+    safe : bool, optional
+        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+
+    Returns
+    -------
+    bi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
+        The statistical order in the standard Normal distribution scale.
+
+
+    Notes
+    -----
+    The transformation to the standard Normal scale is done using the equation:
+
+    .. math::
+
+            b_{i} = \\phi^{-1} \\left(p_{i} \\right)
+
+    where :math:`p_i{}` is the normal statistical order and \\phi^{-1} is the inverse of the standard Normal distribution. The transformation is performed using :doc:`stats.norm.ppf() <scipy:reference/generated/scipy.stats.norm>`.
+
+    The statistical order (:math:`p_{i}`) is estimated using _order_statistic function. Also see this function for details on parameter `cte_alpha`.
+
+    Examples
+    --------
+
+    """
+    if safe:
+        types.is_numpy(
+            value=x_data, param_name="x_data", func_name="normal_order_statistic"
+        )
+        numpy_arrays.n_dimensions(
+            arr=x_data,
+            param_name="x_data",
+            func_name="normal_order_statistic",
+            n_dimensions=1,
+        )
+        numpy_arrays.greater_than_n(
+            array=x_data,
+            param_name="x_data",
+            func_name="normal_order_statistic",
+            minimum=4,
+            inclusive=True,
+        )
+        types.is_bool(
+            value=weighted, param_name="weighted", func_name="normal_order_statistic"
+        )
+
+    # ordering
+    x_data = np.sort(x_data)
     if weighted:
         df = pd.DataFrame({"x_data": x_data})
         # getting mi values
         df["Rank"] = np.arange(1, df.shape[0] + 1)
         df["Ui"] = order_statistic(
-            sample_size=x_data.size, cte_alpha=cte_alpha, safe=False
+            sample_size=x_data.size, cte_alpha=cte_alpha, safe=safe
         )
         df["Mi"] = df.groupby(["x_data"])["Ui"].transform("mean")
         normal_ordered = stats.norm.ppf(df["Mi"])
     else:
         ordered = order_statistic(
-            sample_size=x_data.size, cte_alpha=cte_alpha, safe=False
+            sample_size=x_data.size, cte_alpha=cte_alpha, safe=safe
         )
         normal_ordered = stats.norm.ppf(ordered)
+
+    return normal_ordered
 
 
 def order_statistic(sample_size, cte_alpha="3/8", safe=False):
@@ -96,7 +156,7 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
     sample_size : int
         The sample size. Must be equal or greater than `4`;
     cte_alpha : str, optional
-        A `str` with the cte_alpha value that should be adopted (See details in the Notes section). The options are:
+        A `str` with the `cte_alpha` value that should be adopted (see details in the Notes section). The options are:
          * `"0"`;
          * `"3/8"` (default);
          * `"1/2"`;

@@ -6,7 +6,7 @@
 
 ### First Release
 
-#### Module parameters
+#### Module ryan_joiner
 - Added ``order_statistic`` function (02/11/2023);
 
 

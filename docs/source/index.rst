@@ -7,7 +7,7 @@ Documentation
    :maxdepth: 1
    :caption: Contents:
 
-   api/normtest/index
+   ryan_joiner/index
 
 
 

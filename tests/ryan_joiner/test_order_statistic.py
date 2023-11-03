@@ -37,7 +37,9 @@ class Test_order_statistic(unittest.TestCase):
             msg=f"not a float when method={self.method} and n={self.n}",
         )
 
-        result = order_statistic(sample_size=self.n, alpha=self.method, safe=self.safe)
+        result = order_statistic(
+            sample_size=self.n, cte_alpha=self.method, safe=self.safe
+        )
         self.assertIsInstance(
             result,
             np.ndarray,
@@ -75,7 +77,7 @@ class Test_order_statistic(unittest.TestCase):
                 0.932432,
             ]
         )
-        result = order_statistic(sample_size=n, alpha="3/8")
+        result = order_statistic(n, "3/8")
         for pair in zip(result, expected):
             self.assertAlmostEqual(
                 pair[0], pair[1], places=5, msg=f"wrong statisitc order for 3/8"

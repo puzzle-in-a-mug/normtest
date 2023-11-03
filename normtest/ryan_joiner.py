@@ -1,9 +1,9 @@
 """This module contains functions related to the Ryan-Joiner test
 
-##### List of functions (alphabetical order) #####
+##### List of functions (cte_alphabetical order) #####
 
 ## Functions WITH good TESTS ###
-- order_statistic(sample_size, alpha="3/8", safe=False)
+- order_statistic(sample_size, cte_alpha="3/8", safe=False)
 
 ## Functions WITH some TESTS ###
 
@@ -11,20 +11,20 @@
 
 ## Functions WITHOUT tests ###
 
-- rj_critical_value(n, alpha=0.05)
+- rj_critical_value(n, cte_alpha=0.05)
 - rj_p_value(statistic, n)
-- ryan_joiner(x_data, alpha=0.05, method="blom", weighted=False)
+- ryan_joiner(x_data, cte_alpha=0.05, method="blom", weighted=False)
 
 - rj_correlation_plot(axes, x_data, method="blom", weighted=False)
 - rj_dist_plot(axes, x_data, method="blom", min=4, max=50, deleted=False, weighted=False)
 
-- make_bar_plot(axes, df, n_samples, alpha_column_name=None, n_rep_name=None, tests_column_names=None, normal=True, safe=False)
-- make_heatmap(axes, df, n_samples, alpha_column_name=None, n_rep_name=None, tests_column_names=None, normal=True, safe=False)
+- make_bar_plot(axes, df, n_samples, cte_alpha_column_name=None, n_rep_name=None, tests_column_names=None, normal=True, safe=False)
+- make_heatmap(axes, df, n_samples, cte_alpha_column_name=None, n_rep_name=None, tests_column_names=None, normal=True, safe=False)
 - normal_distribution_plot(axes, n_rep, seed=None, xinfo=[0.00001, 0.99999, 1000], loc=0.0, scale=1.0, safe=False)
 
 
 
-##### List of CLASS (alphabetical order) #####
+##### List of CLASS (cte_alphabetical order) #####
 
 ##### Dictionary of abbreviations #####
 
@@ -67,15 +67,36 @@ from paramcheckup import parameters, types, numbers
 ##### FUNCTIONS #####
 
 
-def order_statistic(sample_size, alpha="3/8", safe=False):
+def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
+    """ """
+    if safe:
+        pass
+
+    if weighted:
+        df = pd.DataFrame({"x_data": x_data})
+        # getting mi values
+        df["Rank"] = np.arange(1, df.shape[0] + 1)
+        df["Ui"] = order_statistic(
+            sample_size=x_data.size, cte_alpha=cte_alpha, safe=False
+        )
+        df["Mi"] = df.groupby(["x_data"])["Ui"].transform("mean")
+        normal_ordered = stats.norm.ppf(df["Mi"])
+    else:
+        ordered = order_statistic(
+            sample_size=x_data.size, cte_alpha=cte_alpha, safe=False
+        )
+        normal_ordered = stats.norm.ppf(ordered)
+
+
+def order_statistic(sample_size, cte_alpha="3/8", safe=False):
     """This function estimates the normal statistical order (:math:`p_{i}`) using approximations [1]_.
 
     Parameters
     ----------
     sample_size : int
         The sample size. Must be equal or greater than `4`;
-    alpha : str, optional
-        A `str` with the alpha value that should be adopted (See details in the Notes section). The options are:
+    cte_alpha : str, optional
+        A `str` with the cte_alpha value that should be adopted (See details in the Notes section). The options are:
          * `"0"`;
          * `"3/8"` (default);
          * `"1/2"`;
@@ -96,18 +117,18 @@ def order_statistic(sample_size, alpha="3/8", safe=False):
     Notes
     -----
 
-    The `alpha` parameter corresponds to the values studied by [1]_, which adopts the following equation to estimate the statistical order:
+    The `cte_alpha` parameter corresponds to the values studied by [1]_, which adopts the following equation to estimate the statistical order:
 
     .. math::
 
-            p_{i} = \\frac{i - \\alpha}{n - 2 \\times \\alpha + 1}
+            p_{i} = \\frac{i - \\cte_alpha}{n - 2 \\times \\cte_alpha + 1}
 
     where :math:`n` is the sample size and :math:`i` is the ith observation.
 
 
     .. admonition:: Info
 
-        `alpha="3/8"` is adopted in the implementations of the Ryan-Joiner test in Minitab and Statext software. This option is also cited as an alternative by [2]_.
+        `cte_alpha="3/8"` is adopted in the implementations of the Ryan-Joiner test in Minitab and Statext software. This option is also cited as an alternative by [2]_.
 
     References
     ----------
@@ -128,9 +149,9 @@ def order_statistic(sample_size, alpha="3/8", safe=False):
     """
     if safe:
         parameters.param_options(
-            option=alpha,
+            option=cte_alpha,
             param_options=["0", "3/8", "1/2"],
-            param_name="alpha",
+            param_name="cte_alpha",
             func_name="order_statistic",
         )
         types.is_int(
@@ -145,11 +166,11 @@ def order_statistic(sample_size, alpha="3/8", safe=False):
         )
 
     i = np.arange(1, sample_size + 1)
-    if alpha == "3/8":
-        alpha = 3 / 8
-    elif alpha == "0":
-        alpha = 0
+    if cte_alpha == "3/8":
+        cte_alpha = 3 / 8
+    elif cte_alpha == "0":
+        cte_alpha = 0
     else:
-        alpha = 0.5
+        cte_alpha = 0.5
 
-    return (i - alpha) / (sample_size - 2 * alpha + 1)
+    return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)

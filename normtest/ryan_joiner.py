@@ -6,7 +6,7 @@
 - order_statistic(sample_size, cte_alpha="3/8", safe=False)
 
 ## Functions WITH some TESTS ###
-
+- normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
 
 
 ## Functions WITHOUT tests ###

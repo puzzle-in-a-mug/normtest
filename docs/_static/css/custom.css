@@ -1,17 +1,8 @@
 .method {
-    padding-top: 75px !important;
-  }
+  padding-top: 75px !important;
+}
 
 .function {
-    padding-bottom: 50px !important;
-    background-color: whitesmoke !important;
-  }
+  padding-bottom: 50px !important;
+}
 
-  .code-dark-background {
-    background-color: rgba(0, 0, 0, 0.8); !important;
-    color: white !important;
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
-    padding-left: 10px !important;
-    font-family: monospace !important;
-  }

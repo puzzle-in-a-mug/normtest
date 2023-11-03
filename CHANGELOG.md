@@ -7,6 +7,7 @@
 ### First Release
 
 #### Module ryan_joiner
+- Added ``normal_order_statistic`` function (02/11/2023);
 - Added ``order_statistic`` function (02/11/2023);
 
 

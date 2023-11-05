@@ -345,7 +345,6 @@ def citation(export=False):
     return reference
 
 
-# com testes ok
 def critical_value(sample_size, alpha=0.05, safe=False):
     """This function calculates the critical value of the Ryan-Joiner test [1]_.
 

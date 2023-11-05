@@ -70,6 +70,124 @@ from . import bib
 ##### FUNCTIONS #####
 
 
+def citation(export=False):
+    """This function returns the reference from Ryan Joiner's test, with the option to export the reference in `.bib` format.
+
+    Parameters
+    ----------
+    export : bool
+        Whether to export the reference as `ryan-joiner.bib` file (`True`) or not (`False`, default);
+
+    Returns
+    -------
+    reference : str
+        The Ryan Joiner Test Reference
+
+
+    """
+    reference = bib.make_techreport(
+        citekey="RyanJoiner1976",
+        author="Thomas A. Ryan, Jr. and Brian L. Joiner",
+        title="Normal Probability Plots and Tests for Normality",
+        institution="The Pennsylvania State University, Statistics Department",
+        year="1976",
+        export=False,
+    )
+    if export:
+        with open("ryan-joiner.bib", "w") as my_bib:
+            my_bib.write(reference)
+    return reference
+
+
+def critical_value(sample_size, alpha=0.05, safe=False):
+    """This function calculates the critical value of the Ryan-Joiner test [1]_.
+
+    Parameters
+    ----------
+    sample_size : int
+        The sample size. Must be greater than ``3``.
+    alpha : float, optional
+        The level of significance (:math:`\\alpha`). Must be ``0.01``, ``0.05`` (default) or ``0.10``.
+    safe : bool, optional
+        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+
+    Returns
+    -------
+    critical : float
+        The critical value of the test.
+
+    See Also
+    --------
+    pass
+
+    Notes
+    -----
+    The critical values are calculated using [1]_ the following equations:
+
+    .. math::
+
+            R_{p;\\alpha=0.10}^{'} = 1.0071 - \\frac{0.1371}{\\sqrt{n}} - \\frac{0.3682}{n} + \\frac{0.7780}{n^{2}}
+
+            R_{p;\\alpha=0.05}^{'} = 1.0063 - \\frac{0.1288}{\\sqrt{n}} - \\frac{0.6118}{n} + \\frac{1.3505}{n^{2}}
+
+            R_{p;\\alpha=0.01}^{'} = 0.9963 - \\frac{0.0211}{\\sqrt{n}} - \\frac{1.4106}{n} + \\frac{3.1791}{n^{2}}
+
+    where :math:`n` is the sample size.
+
+
+    References
+    ----------
+    .. [1]  RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+
+
+    Examples
+    --------
+    >>> from normtest import ryan_joiner
+    >>> critical = ryan_joiner.critical_value(10, alpha=0.05)
+    >>> print(critical)
+    0.9178948637370312
+
+    """
+    func_name = "critical_value"
+    if safe:
+        parameters.param_options(
+            option=alpha,
+            param_options=[0.01, 0.05, 0.10],
+            param_name="alpha",
+            func_name=func_name,
+        )
+        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
+        numbers.is_greater_than(
+            value=sample_size,
+            lower=4,
+            param_name="sample_size",
+            func_name=func_name,
+            inclusive=True,
+        )
+
+    if alpha == 0.1:
+        return (
+            1.0071
+            - (0.1371 / np.sqrt(sample_size))
+            - (0.3682 / sample_size)
+            + (0.7780 / sample_size**2)
+        )
+    elif alpha == 0.05:
+        return (
+            1.0063
+            - (0.1288 / np.sqrt(sample_size))
+            - (0.6118 / sample_size)
+            + (1.3505 / sample_size**2)
+        )
+    else:  # alpha == 0.01:
+        return (
+            0.9963
+            - (0.0211 / np.sqrt(sample_size))
+            - (1.4106 / sample_size)
+            + (3.1791 / sample_size**2)
+        )
+
+
 def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
     """This function transforms the statistical order to the standard Normal distribution scale (:math:`b_{i}`).
 
@@ -263,6 +381,90 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
     return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
 
 
+def p_value(statistic, sample_size, safe=False):
+    """This function estimates the probability associated with the Ryan-Joiner Normality test.
+
+    Parameters
+    ----------
+    statistic : float (positive)
+        The Ryan-Joiner test statistics.
+    sample_size : int
+        The sample size. Must be equal or greater than `4`;
+    safe : bool, optional
+        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+
+    Returns
+    -------
+    p_value : float or str
+        The probability of the test.
+
+    See Also
+    --------
+    rj_critical_value
+    ryan_joiner
+
+
+    Notes
+    -----
+    The test probability is estimated through linear interpolation of the test statistic with critical values from the Ryan-Joiner test [1]_. The Interpolation is performed using the :doc:`scipy.interpolate.interp1d() <scipy:reference/generated/scipy.interpolate.interp1d>` function.
+
+    * If the test statistic is greater than the critical value for :math:`\\alpha=0.10`, the result is always *"p > 0.100"*.
+    * If the test statistic is lower than the critical value for :math:`\\alpha=0.01`, the result is always *"p < 0.010"*.
+
+
+
+    References
+    ----------
+    .. [1]  RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+
+
+    Examples
+    --------
+    >>> from normtest import ryan_joiner
+    >>> p_value = ryan_joiner.p_value(0.90, 10)
+    >>> print(p_value)
+    0.030930589077996555
+
+    """
+    func_name = "p_value"
+    if safe:
+        numbers.is_between_a_and_b(
+            value=statistic,
+            a=0,
+            b=1,
+            param_name="statistic",
+            func_name=func_name,
+            inclusive=False,
+        )
+        types.is_int(
+            value=sample_size, param_name="sample_size", func_name="order_statistic"
+        )
+        numbers.is_greater_than(
+            value=sample_size,
+            lower=4,
+            param_name="sample_size",
+            func_name="order_statistic",
+            inclusive=True,
+        )
+
+    alphas = np.array([0.10, 0.05, 0.01])
+    criticals = np.array(
+        [
+            critical_value(sample_size=sample_size, alpha=alphas[0], safe=False),
+            critical_value(sample_size=sample_size, alpha=alphas[1], safe=False),
+            critical_value(sample_size=sample_size, alpha=alphas[2], safe=False),
+        ]
+    )
+    f = interpolate.interp1d(criticals, alphas)
+    if statistic > max(criticals):
+        return "p > 0.100"
+    elif statistic < min(criticals):
+        return "p < 0.010"
+    else:
+        p_value = f(statistic)
+        return p_value
+
+
 def statistic(x_data, zi, safe=False):
     """This function estimates the Ryan-Joiner test statistic [1]_.
 
@@ -347,205 +549,3 @@ def statistic(x_data, zi, safe=False):
         )
 
     return stats.pearsonr(zi, x_data)[0]
-
-
-def citation(export=False):
-    """This function returns the reference from Ryan Joiner's test, with the option to export the reference in `.bib` format.
-
-    Parameters
-    ----------
-    export : bool
-        Whether to export the reference as `ryan-joiner.bib` file (`True`) or not (`False`, default);
-
-    Returns
-    -------
-    reference : str
-        The Ryan Joiner Test Reference
-
-
-    """
-    reference = bib.make_techreport(
-        citekey="RyanJoiner1976",
-        author="Thomas A. Ryan, Jr. and Brian L. Joiner",
-        title="Normal Probability Plots and Tests for Normality",
-        institution="The Pennsylvania State University, Statistics Department",
-        year="1976",
-        export=False,
-    )
-    if export:
-        with open("ryan-joiner.bib", "w") as my_bib:
-            my_bib.write(reference)
-    return reference
-
-
-def critical_value(sample_size, alpha=0.05, safe=False):
-    """This function calculates the critical value of the Ryan-Joiner test [1]_.
-
-    Parameters
-    ----------
-    sample_size : int
-        The sample size. Must be greater than ``3``.
-    alpha : float, optional
-        The level of significance (:math:`\\alpha`). Must be ``0.01``, ``0.05`` (default) or ``0.10``.
-    safe : bool, optional
-        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
-
-    Returns
-    -------
-    critical : float
-        The critical value of the test.
-
-    See Also
-    --------
-    pass
-
-    Notes
-    -----
-    The critical values are calculated using [1]_ the following equations:
-
-    .. math::
-
-            R_{p;\\alpha=0.10}^{'} = 1.0071 - \\frac{0.1371}{\\sqrt{n}} - \\frac{0.3682}{n} + \\frac{0.7780}{n^{2}}
-
-            R_{p;\\alpha=0.05}^{'} = 1.0063 - \\frac{0.1288}{\\sqrt{n}} - \\frac{0.6118}{n} + \\frac{1.3505}{n^{2}}
-
-            R_{p;\\alpha=0.01}^{'} = 0.9963 - \\frac{0.0211}{\\sqrt{n}} - \\frac{1.4106}{n} + \\frac{3.1791}{n^{2}}
-
-    where :math:`n` is the sample size.
-
-
-    References
-    ----------
-    .. [1]  RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
-
-
-    Examples
-    --------
-    >>> from normtest import ryan_joiner
-    >>> critical = ryan_joiner.critical_value(10, alpha=0.05)
-    >>> print(critical)
-    0.9178948637370312
-
-    """
-    func_name = "critical_value"
-    if safe:
-        parameters.param_options(
-            option=alpha,
-            param_options=[0.01, 0.05, 0.10],
-            param_name="alpha",
-            func_name=func_name,
-        )
-        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
-        numbers.is_greater_than(
-            value=sample_size,
-            lower=4,
-            param_name="sample_size",
-            func_name=func_name,
-            inclusive=True,
-        )
-
-    if alpha == 0.1:
-        return (
-            1.0071
-            - (0.1371 / np.sqrt(sample_size))
-            - (0.3682 / sample_size)
-            + (0.7780 / sample_size**2)
-        )
-    elif alpha == 0.05:
-        return (
-            1.0063
-            - (0.1288 / np.sqrt(sample_size))
-            - (0.6118 / sample_size)
-            + (1.3505 / sample_size**2)
-        )
-    else:  # alpha == 0.01:
-        return (
-            0.9963
-            - (0.0211 / np.sqrt(sample_size))
-            - (1.4106 / sample_size)
-            + (3.1791 / sample_size**2)
-        )
-
-
-def p_value(statistic, sample_size, safe=False):
-    """This function estimates the probability associated with the Ryan-Joiner Normality test.
-
-    Parameters
-    ----------
-    statistic : float (positive)
-        The Ryan-Joiner test statistics.
-    sample_size : int
-        The sample size. Must be equal or greater than `4`;
-    safe : bool, optional
-        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
-
-    Returns
-    -------
-    p_value : float or str
-        The probability of the test.
-
-    See Also
-    --------
-    rj_critical_value
-    ryan_joiner
-
-
-    Notes
-    -----
-    The test probability is estimated through linear interpolation of the test statistic with critical values from the Ryan-Joiner test [1]_. The Interpolation is performed using the :doc:`scipy.interpolate.interp1d() <scipy:reference/generated/scipy.interpolate.interp1d>` function.
-
-    * If the test statistic is greater than the critical value for :math:`\\alpha=0.10`, the result is always *"p > 0.100"*.
-    * If the test statistic is lower than the critical value for :math:`\\alpha=0.01`, the result is always *"p < 0.010"*.
-
-
-
-    References
-    ----------
-    .. [1]  RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
-
-
-    Examples
-    --------
-    >>> from normtest import ryan_joiner
-    >>> p_value = ryan_joiner.p_value(0.90, 10)
-    >>> print(p_value)
-    0.030930589077996555
-
-    """
-    func_name = "p_value"
-    if safe:
-        numbers.is_between_a_and_b(
-            value=statistic,
-            a=0,
-            b=1,
-            param_name="statistic",
-            func_name=func_name,
-            inclusive=False,
-        )
-        types.is_int(
-            value=sample_size, param_name="sample_size", func_name="order_statistic"
-        )
-        numbers.is_greater_than(
-            value=sample_size,
-            lower=4,
-            param_name="sample_size",
-            func_name="order_statistic",
-            inclusive=True,
-        )
-
-    alphas = np.array([0.10, 0.05, 0.01])
-    criticals = np.array(
-        [
-            critical_value(sample_size=sample_size, alpha=alphas[0], safe=False),
-            critical_value(sample_size=sample_size, alpha=alphas[1], safe=False),
-            critical_value(sample_size=sample_size, alpha=alphas[2], safe=False),
-        ]
-    )
-    f = interpolate.interp1d(criticals, alphas)
-    if statistic > max(criticals):
-        return "p > 0.100"
-    elif statistic < min(criticals):
-        return "p < 0.010"
-    else:
-        p_value = f(statistic)
-        return p_value

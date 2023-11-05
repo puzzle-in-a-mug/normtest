@@ -267,9 +267,9 @@ def citation(export=False):
         citekey="RyanJoiner1976",
         author="Thomas A. Ryan, Jr. and Brian L. Joiner",
         title="Normal Probability Plots and Tests for Normality",
-        institution="The Pennsylvania State University, Statistics Department.",
+        institution="The Pennsylvania State University, Statistics Department",
         year="1976",
-        export=export,
+        export=False,
     )
     if export:
         with open("ryan-joiner.bib", "w") as my_bib:

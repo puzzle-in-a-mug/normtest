@@ -505,8 +505,8 @@ def p_value(statistic, sample_size, safe=False):
 
     Examples
     --------
-    >>> from normtest import normtest
-    >>> p_value = normtest.rj_p_value(statistic=.90, n=10)
+    >>> from normtest import ryan_joiner
+    >>> p_value = ryan_joiner.p_value(0.90, 10)
     >>> print(p_value)
     0.030930589077996555
 

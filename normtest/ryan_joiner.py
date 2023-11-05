@@ -10,7 +10,7 @@
 
 
 ## Functions WITHOUT tests ###
-
+- citation(export=False)
 - rj_critical_value(n, cte_alpha=0.05)
 - rj_p_value(statistic, n)
 - ryan_joiner(x_data, cte_alpha=0.05, method="blom", weighted=False)
@@ -262,7 +262,20 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
 
 
 def citation(export=False):
-    """ """
+    """This function returns the reference from Ryan Joiner's test, with the option to export the reference in `.bib` format.
+
+    Parameters
+    ----------
+    export : bool
+        Whether to export the reference as `ryan-joiner.bib` file (`True`) or not (`False`, default);
+
+    Returns
+    -------
+    reference : str
+        The Ryan Joiner Test Reference
+
+
+    """
     reference = bib.make_techreport(
         citekey="RyanJoiner1976",
         author="Thomas A. Ryan, Jr. and Brian L. Joiner",

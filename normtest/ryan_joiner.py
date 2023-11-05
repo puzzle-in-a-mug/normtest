@@ -56,6 +56,7 @@ from scipy import interpolate
 
 ### self made ###
 from paramcheckup import parameters, types, numbers, numpy_arrays
+from . import bib
 
 # from .utils import constants
 
@@ -258,3 +259,19 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
         cte_alpha = 0.5
 
     return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
+
+
+def citation(export=False):
+    """ """
+    reference = bib.make_techreport(
+        citekey="RyanJoiner1976",
+        author="Thomas A. Ryan, Jr. and Brian L. Joiner",
+        title="Normal Probability Plots and Tests for Normality",
+        institution="The Pennsylvania State University, Statistics Department.",
+        year="1976",
+        export=export,
+    )
+    if export:
+        with open("ryan-joiner.bib", "w") as my_bib:
+            my_bib.write(reference)
+    return reference

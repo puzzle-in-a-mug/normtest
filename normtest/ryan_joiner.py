@@ -345,7 +345,7 @@ def citation(export=False):
 
 
 # com testes ok
-def critical_value(sample_size, alpha=0.05):
+def critical_value(sample_size, alpha=0.05, safe=False):
     """This function calculates the critical value of the Ryan-Joiner test [1]_.
 
     Parameters
@@ -354,7 +354,8 @@ def critical_value(sample_size, alpha=0.05):
         The sample size. Must be greater than ``3``.
     alpha : float, optional
         The level of significance (:math:`\\alpha`). Must be ``0.01``, ``0.05`` (default) or ``0.10``.
-
+    safe : bool, optional
+        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
 
     Returns
     -------
@@ -393,6 +394,23 @@ def critical_value(sample_size, alpha=0.05):
     0.9178948637370312
 
     """
+    func_name = "critical_value"
+    if safe:
+        parameters.param_options(
+            option=alpha,
+            param_options=[0.01, 0.05, 0.10],
+            param_name="alpha",
+            func_name=func_name,
+        )
+        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
+        numbers.is_greater_than(
+            value=sample_size,
+            lower=4,
+            param_name="sample_size",
+            func_name=func_name,
+            inclusive=True,
+        )
+
     if alpha == 0.1:
         return (
             1.0071

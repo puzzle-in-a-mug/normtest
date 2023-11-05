@@ -5,6 +5,7 @@
 ## Functions WITH good TESTS ###
 - order_statistic(sample_size, cte_alpha="3/8", safe=False)
 - citation(export=False)
+- critical_value(sample_size, alpha=0.05, safe=False)
 
 ## Functions WITH some TESTS ###
 - normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)

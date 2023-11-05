@@ -4,13 +4,13 @@
 
 ## Functions WITH good TESTS ###
 - order_statistic(sample_size, cte_alpha="3/8", safe=False)
+- citation(export=False)
 
 ## Functions WITH some TESTS ###
 - normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
 
 
 ## Functions WITHOUT tests ###
-- citation(export=False)
 - rj_critical_value(n, cte_alpha=0.05)
 - rj_p_value(statistic, n)
 - ryan_joiner(x_data, cte_alpha=0.05, method="blom", weighted=False)
@@ -259,6 +259,42 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
         cte_alpha = 0.5
 
     return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
+
+
+def statistic(x_data, pi):
+    """This function estimates the Ryan-Joiner test statistic [1]_.
+
+    Parameters
+    ----------
+    x_data : :doc:`numpy array <numpy:reference/generated/numpy.array>`
+        One dimension :doc:`numpy array <numpy:reference/generated/numpy.array>` with at least ``4`` observations (ordered in ascending order).
+    bi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
+        The corresponding statistical order in the standard Normal distribution scale.
+
+    Notes
+    -----
+
+    The test statistic (:math:`R_{p}`) is estimated through the correlation between the ordered data and the Normal statistical order:
+
+    .. math::
+
+            R_{p}=\\dfrac{\\sum_{i=1}^{n}x_{(i)}z_{(i)}}{\\sqrt{s^{2}(n-1)\\sum_{i=1}^{n}z_{(i)}^2}}
+
+    where :math:`z_{(i)}` values are the z-score values of the corresponding experimental data (:math:`x_{({i)}}`) value and :math:`s^{2}` is the sample variance.
+
+    The correlation is estimated using :doc:`scipy.stats.pearsonr() <scipy:reference/generated/scipy.stats.pearsonr>`.
+
+
+
+    References
+    ----------
+    .. [1] RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+
+
+    Examples
+    --------
+    """
+    return stats.pearsonr(pi, x_data)[0]
 
 
 def citation(export=False):

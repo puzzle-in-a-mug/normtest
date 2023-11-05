@@ -388,9 +388,9 @@ def critical_value(sample_size, alpha=0.05, safe=False):
 
     Examples
     --------
-    >>> from normtest import normtest
-    >>> result = normtest.rj_critical_value(10, alpha=0.05)
-    >>> print(result)
+    >>> from normtest import ryan_joiner
+    >>> critical = ryan_joiner.critical_value(10, alpha=0.05)
+    >>> print(critical)
     0.9178948637370312
 
     """

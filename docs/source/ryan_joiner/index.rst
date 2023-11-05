@@ -13,4 +13,5 @@ ryan_joiner
    normal_order_statistic
    order_statistic
    statistic
+   p_value
 

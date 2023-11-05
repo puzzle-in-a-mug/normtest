@@ -262,7 +262,7 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
     return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
 
 
-def statistic(x_data, zi):
+def statistic(x_data, zi, safe=False):
     """This function estimates the Ryan-Joiner test statistic [1]_.
 
     Parameters
@@ -271,6 +271,8 @@ def statistic(x_data, zi):
         One dimension :doc:`numpy array <numpy:reference/generated/numpy.array>` with at least ``4`` observations (ordered in ascending order).
     bi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
         The corresponding statistical order in the standard Normal distribution scale.
+    safe : bool, optional
+        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
 
 
     Returns
@@ -313,6 +315,37 @@ def statistic(x_data, zi):
 
 
     """
+    func_name = "statistic"
+    if safe:  # missing equal size test
+        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
+        numpy_arrays.n_dimensions(
+            arr=x_data,
+            param_name="x_data",
+            func_name=func_name,
+            n_dimensions=1,
+        )
+        numpy_arrays.greater_than_n(
+            array=x_data,
+            param_name="x_data",
+            func_name=func_name,
+            minimum=4,
+            inclusive=True,
+        )
+        types.is_numpy(value=zi, param_name="zi", func_name=func_name)
+        numpy_arrays.n_dimensions(
+            arr=zi,
+            param_name="zi",
+            func_name=func_name,
+            n_dimensions=1,
+        )
+        numpy_arrays.greater_than_n(
+            array=zi,
+            param_name="zi",
+            func_name=func_name,
+            minimum=4,
+            inclusive=True,
+        )
+
     return stats.pearsonr(zi, x_data)[0]
 
 

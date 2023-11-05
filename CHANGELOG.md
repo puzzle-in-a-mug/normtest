@@ -7,6 +7,7 @@
 ### First Release
 
 #### Module ryan_joiner
+- Added ``p_value`` function (05/11/2023);
 - Added ``critical_value`` function (05/11/2023);
 - Added ``statistic`` function (05/11/2023);
 - Added ``citation`` function (04/11/2023);

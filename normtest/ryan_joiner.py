@@ -261,7 +261,7 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
     return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
 
 
-def statistic(x_data, pi):
+def statistic(x_data, bi):
     """This function estimates the Ryan-Joiner test statistic [1]_.
 
     Parameters
@@ -270,6 +270,13 @@ def statistic(x_data, pi):
         One dimension :doc:`numpy array <numpy:reference/generated/numpy.array>` with at least ``4`` observations (ordered in ascending order).
     bi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
         The corresponding statistical order in the standard Normal distribution scale.
+
+
+    Returns
+    -------
+    statistic : float
+        The test statistic
+
 
     Notes
     -----
@@ -294,7 +301,7 @@ def statistic(x_data, pi):
     Examples
     --------
     """
-    return stats.pearsonr(pi, x_data)[0]
+    return stats.pearsonr(bi, x_data)[0]
 
 
 def citation(export=False):

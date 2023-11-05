@@ -342,3 +342,75 @@ def citation(export=False):
         with open("ryan-joiner.bib", "w") as my_bib:
             my_bib.write(reference)
     return reference
+
+
+# com testes ok
+def critical_value(sample_size, alpha=0.05):
+    """This function calculates the critical value of the Ryan-Joiner test [1]_.
+
+    Parameters
+    ----------
+    sample_size : int
+        The sample size. Must be greater than ``3``.
+    alpha : float, optional
+        The level of significance (:math:`\\alpha`). Must be ``0.01``, ``0.05`` (default) or ``0.10``.
+
+
+    Returns
+    -------
+    critical : float
+        The critical value of the test.
+
+    See Also
+    --------
+    pass
+
+    Notes
+    -----
+    The critical values are calculated using [1]_ the following equations:
+
+    .. math::
+
+            R_{p;\\alpha=0.10}^{'} = 1.0071 - \\frac{0.1371}{\\sqrt{n}} - \\frac{0.3682}{n} + \\frac{0.7780}{n^{2}}
+
+            R_{p;\\alpha=0.05}^{'} = 1.0063 - \\frac{0.1288}{\\sqrt{n}} - \\frac{0.6118}{n} + \\frac{1.3505}{n^{2}}
+
+            R_{p;\\alpha=0.01}^{'} = 0.9963 - \\frac{0.0211}{\\sqrt{n}} - \\frac{1.4106}{n} + \\frac{3.1791}{n^{2}}
+
+    where :math:`n` is the sample size.
+
+
+    References
+    ----------
+    .. [1]  RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+
+
+    Examples
+    --------
+    >>> from normtest import normtest
+    >>> result = normtest.rj_critical_value(10, alpha=0.05)
+    >>> print(result)
+    0.9178948637370312
+
+    """
+    if alpha == 0.1:
+        return (
+            1.0071
+            - (0.1371 / np.sqrt(sample_size))
+            - (0.3682 / sample_size)
+            + (0.7780 / sample_size**2)
+        )
+    elif alpha == 0.05:
+        return (
+            1.0063
+            - (0.1288 / np.sqrt(sample_size))
+            - (0.6118 / sample_size)
+            + (1.3505 / sample_size**2)
+        )
+    else:  # alpha == 0.01:
+        return (
+            0.9963
+            - (0.0211 / np.sqrt(sample_size))
+            - (1.4106 / sample_size)
+            + (3.1791 / sample_size**2)
+        )

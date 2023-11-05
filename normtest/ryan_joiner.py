@@ -464,3 +464,87 @@ def critical_value(sample_size, alpha=0.05, safe=False):
             - (1.4106 / sample_size)
             + (3.1791 / sample_size**2)
         )
+
+
+def p_value(statistic, sample_size, safe=False):
+    """This function estimates the probability associated with the Ryan-Joiner Normality test.
+
+    Parameters
+    ----------
+    statistic : float (positive)
+        The Ryan-Joiner test statistics.
+    sample_size : int
+        The sample size. Must be equal or greater than `4`;
+    safe : bool, optional
+        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+
+    Returns
+    -------
+    p_value : float or str
+        The probability of the test.
+
+    See Also
+    --------
+    rj_critical_value
+    ryan_joiner
+
+
+    Notes
+    -----
+    The test probability is estimated through linear interpolation of the test statistic with critical values from the Ryan-Joiner test [1]_. The Interpolation is performed using the :doc:`scipy.interpolate.interp1d() <scipy:reference/generated/scipy.interpolate.interp1d>` function.
+
+    * If the test statistic is greater than the critical value for :math:`\\alpha=0.10`, the result is always *"p > 0.100"*.
+    * If the test statistic is lower than the critical value for :math:`\\alpha=0.01`, the result is always *"p < 0.010"*.
+
+
+
+    References
+    ----------
+    .. [1]  RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+
+
+    Examples
+    --------
+    >>> from normtest import normtest
+    >>> p_value = normtest.rj_p_value(statistic=.90, n=10)
+    >>> print(p_value)
+    0.030930589077996555
+
+    """
+    func_name = "p_value"
+    if safe:
+        numbers.is_between_a_and_b(
+            value=statistic,
+            a=0,
+            b=1,
+            param_name="statistic",
+            func_name=func_name,
+            inclusive=False,
+        )
+        types.is_int(
+            value=sample_size, param_name="sample_size", func_name="order_statistic"
+        )
+        numbers.is_greater_than(
+            value=sample_size,
+            lower=4,
+            param_name="sample_size",
+            func_name="order_statistic",
+            inclusive=True,
+        )
+
+    alphas = np.array([0.10, 0.05, 0.01])
+    criticals = np.array(
+        [
+            critical_value(sample_size=sample_size, alpha=alphas[0], safe=False),
+            critical_value(sample_size=sample_size, alpha=alphas[1], safe=False),
+            critical_value(sample_size=sample_size, alpha=alphas[2], safe=False),
+        ]
+    )
+    f = interpolate.interp1d(criticals, alphas)
+    if statistic > max(criticals):
+        return "p > 0.100"
+    elif statistic < min(criticals):
+        return "p < 0.010"
+    else:
+        p_value = f(statistic)
+        return p_value

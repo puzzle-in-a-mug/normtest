@@ -261,7 +261,7 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
     return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
 
 
-def statistic(x_data, bi):
+def statistic(x_data, zi):
     """This function estimates the Ryan-Joiner test statistic [1]_.
 
     Parameters
@@ -287,7 +287,7 @@ def statistic(x_data, bi):
 
             R_{p}=\\dfrac{\\sum_{i=1}^{n}x_{(i)}z_{(i)}}{\\sqrt{s^{2}(n-1)\\sum_{i=1}^{n}z_{(i)}^2}}
 
-    where :math:`z_{(i)}` values are the z-score values of the corresponding experimental data (:math:`x_{({i)}}`) value and :math:`s^{2}` is the sample variance.
+    where :math:`z_{(i)}` values are the z-score values of the corresponding experimental data (:math:`x_{({i)}}`) value, :math:`n` is the sample size and :math:`s^{2}` is the sample variance.
 
     The correlation is estimated using :doc:`scipy.stats.pearsonr() <scipy:reference/generated/scipy.stats.pearsonr>`.
 
@@ -300,8 +300,19 @@ def statistic(x_data, bi):
 
     Examples
     --------
+    >>> from normtest import ryan_joiner
+    >>> import numpy as np
+    >>> x_data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
+    >>> x_data = np.sort(x_data)
+    >>> order_statistic = ryan_joiner.order_statistic(x_data.size)
+    >>> normal_order = ryan_joiner.normal_order_statistic(x_data)
+    >>> result = ryan_joiner.statistic(x_data, normal_order)
+    >>> print(result)
+    0.9225156050800545
+
+
     """
-    return stats.pearsonr(bi, x_data)[0]
+    return stats.pearsonr(zi, x_data)[0]
 
 
 def citation(export=False):

@@ -11,4 +11,5 @@ ryan_joiner
    citation
    normal_order_statistic
    order_statistic
+   statistic
 

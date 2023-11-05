@@ -39,7 +39,7 @@ class Test_statistic(unittest.TestCase):
                 195,
             ]
         )
-        cls.bi = np.array(
+        cls.zi = np.array(
             [
                 -1.59322,
                 -1.06056,
@@ -57,14 +57,14 @@ class Test_statistic(unittest.TestCase):
         cls.result = 0.9565
 
     def test_input(self):
-        result = statistic(self.x_data, self.bi)
+        result = statistic(self.x_data, self.zi)
         self.assertIsInstance(
             result,
             float,
             msg=f"not a float output",
         )
 
-        result = statistic(x_data=self.x_data, bi=self.bi)
+        result = statistic(x_data=self.x_data, zi=self.zi)
         self.assertIsInstance(
             result,
             float,

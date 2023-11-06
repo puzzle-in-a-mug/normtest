@@ -11,6 +11,7 @@ Main functions
    :maxdepth: 1
    
    citation
+   correlation_plot
    rj_test
 
 

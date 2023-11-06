@@ -19,7 +19,7 @@ ALPHA = {
 
 AXES = {
     "type": "axes : matplotlib.axes.SubplotBase",
-    "description": "The axis of the graph.;",
+    "description": "The axis of the graph;",
 }
 
 
@@ -31,7 +31,7 @@ CRITICAL = {
 
 CTE_ALPHA = {
     "type": "cte_alpha : str, optional",
-    "description": """A `str` with the `cte_alpha` value that should be adopted (see details in the Notes section). The options are:
+    "description": """A `str` with the `cte_alpha` value that should be adopted. The options are:
 
         * `"0"`;
         * `"3/8"` (default);

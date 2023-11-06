@@ -1,10 +1,10 @@
-"""Tests if  ``rj_correlation_plot`` is working as expected
+"""Tests if  ``correlation_plot`` is working as expected
 
 --------------------------------------------------------------------------------
 Command to run at the prompt:
-    python -m unittest -v tests/ryan_joiner/test_rj_correlation_plot.py
+    python -m unittest -v tests/ryan_joiner/test_correlation_plot.py
     or
-    python -m unittest -b tests/ryan_joiner/test_rj_correlation_plot.py
+    python -m unittest -b tests/ryan_joiner/test_correlation_plot.py
 
 --------------------------------------------------------------------------------
 """
@@ -17,14 +17,14 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 ### FUNCTION IMPORT ###
-from normtest.ryan_joiner import rj_correlation_plot
+from normtest.ryan_joiner import correlation_plot
 from tests.functions_to_test import functions
 
 
 os.system("cls")
 
 
-class Test_rj_correlation_plot(unittest.TestCase):
+class Test_correlation_plot(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         fig, cls.axes = plt.subplots()
@@ -33,21 +33,21 @@ class Test_rj_correlation_plot(unittest.TestCase):
         )
 
     def test_outputs(self):
-        result = rj_correlation_plot(self.axes, self.x_data)
+        result = correlation_plot(self.axes, self.x_data)
         self.assertIsInstance(result, SubplotBase, msg="not a SubplotBase")
         plt.close()
 
     def test_safe(self):
-        result = rj_correlation_plot(self.axes, self.x_data, safe=True)
+        result = correlation_plot(self.axes, self.x_data, safe=True)
         self.assertIsInstance(result, SubplotBase, msg="not a SubplotBase")
         plt.close()
 
     def test_basic_plot(self):
-        fig1_base_path = Path("tests/ryan_joiner/figs_rj_correlation_plot/fig1.png")
+        fig1_base_path = Path("tests/ryan_joiner/figs_correlation_plot/fig1.png")
 
         fig, ax = plt.subplots()
-        result = rj_correlation_plot(ax, self.x_data)
-        fig1_file = Path("tests/ryan_joiner/figs_rj_correlation_plot/fig1_test.png")
+        result = correlation_plot(ax, self.x_data)
+        fig1_file = Path("tests/ryan_joiner/figs_correlation_plot/fig1_test.png")
         plt.savefig(fig1_file)
         plt.close()
 
@@ -62,11 +62,11 @@ class Test_rj_correlation_plot(unittest.TestCase):
             [43.5, 125.1, 166.3, 38.1, 116.7, 25.4, 40, 38.1, 253.7, 81.1, 96.7]
         )
 
-        fig2_base_path = Path("tests/ryan_joiner/figs_rj_correlation_plot/fig2.png")
+        fig2_base_path = Path("tests/ryan_joiner/figs_correlation_plot/fig2.png")
 
         fig, ax = plt.subplots()
-        result = rj_correlation_plot(ax, x, weighted=True)
-        fig2_file = Path("tests/ryan_joiner/figs_rj_correlation_plot/fig2_test.png")
+        result = correlation_plot(ax, x, weighted=True)
+        fig2_file = Path("tests/ryan_joiner/figs_correlation_plot/fig2_test.png")
         plt.savefig(fig2_file)
         plt.close()
 

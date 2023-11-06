@@ -330,7 +330,11 @@ def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
     {samp_size}
         {samp_size_desc}
     {cte_alpha}
-        {cte_alpha_desc}
+        A `str` with the `cte_alpha` value that should be adopted (see details in the Notes section). The options are:
+
+        * `"0"`;
+        * `"3/8"` (default);
+        * `"1/2"`;
 
     {safe}
         {safe_desc}
@@ -743,8 +747,8 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
 )
-def rj_correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
-    """This function creates an axis with the Ryan-Joiner test correlation graph.
+def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
+    """This function creates an `axis` with the Ryan-Joiner test correlation graph.
 
     Parameters
     ----------
@@ -777,11 +781,11 @@ def rj_correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=Fals
     >>> from scipy import stats
     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
     >>> fig, ax = plt.subplots(figsize=(6, 4))
-    >>> ryan_joiner.rj_correlation_plot(axes=ax, x_data=data)
-    >>> #plt.savefig("rj_correlation_plot.png")
+    >>> ryan_joiner.correlation_plot(axes=ax, x_data=data)
+    >>> #plt.savefig("correlation_plot.png")
     >>> plt.show()
 
-    .. image:: img/rj_correlation_plot.png
+    .. image:: img/correlation_plot.png
         :alt: Correlaion chart for Ryan-Joiner test Normality test
         :align: center
 

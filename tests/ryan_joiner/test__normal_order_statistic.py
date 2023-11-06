@@ -1,10 +1,10 @@
-"""Tests if  ``normal_order_statistic`` is working as expected
+"""Tests if  ``_normal_order_statistic`` is working as expected
 
 --------------------------------------------------------------------------------
 Command to run at the prompt:
-    python -m unittest -v tests/ryan_joiner/test_normal_order_statistic.py
+    python -m unittest -v tests/ryan_joiner/test__normal_order_statistic.py
     or
-    python -m unittest -b tests/ryan_joiner/test_normal_order_statistic.py
+    python -m unittest -b tests/ryan_joiner/test__normal_order_statistic.py
 
 --------------------------------------------------------------------------------
 """
@@ -13,15 +13,15 @@ Command to run at the prompt:
 import os
 import unittest
 import numpy as np
-import random
+
 
 ### FUNCTION IMPORT ###
-from normtest.ryan_joiner import normal_order_statistic
+from normtest.ryan_joiner import _normal_order_statistic
 
 os.system("cls")
 
 
-class Test_normal_order_statistic(unittest.TestCase):
+class Test__normal_order_statistic(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.x_data = np.array([1, 1.1, 1.2, 1.3, 1.14, 1.5])
@@ -30,7 +30,7 @@ class Test_normal_order_statistic(unittest.TestCase):
         cls.weighted = False
 
     def test_input(self):
-        result = normal_order_statistic(
+        result = _normal_order_statistic(
             self.x_data, self.weighted, self.cte_alpha, self.safe
         )
         self.assertIsInstance(
@@ -40,7 +40,7 @@ class Test_normal_order_statistic(unittest.TestCase):
         )
         self.assertAlmostEqual(result.ndim, 1, msg="wrong number of dimenstions")
 
-        result = normal_order_statistic(
+        result = _normal_order_statistic(
             x_data=self.x_data,
             weighted=self.weighted,
             cte_alpha=self.cte_alpha,
@@ -58,7 +58,7 @@ class Test_normal_order_statistic(unittest.TestCase):
         x_data = np.array(
             [148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210]
         )
-        result = normal_order_statistic(x_data, False, self.cte_alpha, False)
+        result = _normal_order_statistic(x_data, False, self.cte_alpha, False)
         expected = np.array(
             [
                 -1.67294,
@@ -78,14 +78,14 @@ class Test_normal_order_statistic(unittest.TestCase):
         )
         for pair in zip(result, expected):
             self.assertAlmostEqual(
-                pair[0], pair[1], places=5, msg=f"wrong normal_order_statistic"
+                pair[0], pair[1], places=5, msg=f"wrong _normal_order_statistic"
             )
 
         # dataset 6
         x_data = np.array(
             [43.5, 125.1, 166.3, 38.1, 116.7, 25.4, 40, 38.1, 253.7, 81.1, 96.7]
         )
-        result = normal_order_statistic(x_data, False, self.cte_alpha, False)
+        result = _normal_order_statistic(x_data, False, self.cte_alpha, False)
         expected = np.array(
             [
                 -1.59322,
@@ -103,7 +103,7 @@ class Test_normal_order_statistic(unittest.TestCase):
         )
         for pair in zip(result, expected):
             self.assertAlmostEqual(
-                pair[0], pair[1], places=5, msg=f"wrong normal_order_statistic"
+                pair[0], pair[1], places=5, msg=f"wrong _normal_order_statistic"
             )
 
     def test_datasets_repeated_values_weighted_True(self):
@@ -111,7 +111,7 @@ class Test_normal_order_statistic(unittest.TestCase):
         x_data = np.array(
             [148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210]
         )
-        result = normal_order_statistic(x_data, True, self.cte_alpha, False)
+        result = _normal_order_statistic(x_data, True, self.cte_alpha, False)
         expected = np.array(
             [
                 -1.37281,
@@ -131,14 +131,14 @@ class Test_normal_order_statistic(unittest.TestCase):
         )
         for pair in zip(result, expected):
             self.assertAlmostEqual(
-                pair[0], pair[1], places=5, msg=f"wrong normal_order_statistic"
+                pair[0], pair[1], places=5, msg=f"wrong _normal_order_statistic"
             )
 
         # dataset 6
         x_data = np.array(
             [43.5, 125.1, 166.3, 38.1, 116.7, 25.4, 40, 38.1, 253.7, 81.1, 96.7]
         )
-        result = normal_order_statistic(x_data, True, self.cte_alpha, False)
+        result = _normal_order_statistic(x_data, True, self.cte_alpha, False)
         expected = np.array(
             [
                 -1.59322,
@@ -156,13 +156,13 @@ class Test_normal_order_statistic(unittest.TestCase):
         )
         for pair in zip(result, expected):
             self.assertAlmostEqual(
-                pair[0], pair[1], places=5, msg=f"wrong normal_order_statistic"
+                pair[0], pair[1], places=5, msg=f"wrong _normal_order_statistic"
             )
 
     def test_datasets_weighted_False(self):
         # dataset 1
         x_data = np.array([44.1, -33.1, 243.1, -25.2, 11])
-        result = normal_order_statistic(x_data, False, self.cte_alpha, False)
+        result = _normal_order_statistic(x_data, False, self.cte_alpha, False)
         expected = np.array(
             [
                 -1.17976,
@@ -174,14 +174,14 @@ class Test_normal_order_statistic(unittest.TestCase):
         )
         for pair in zip(result, expected):
             self.assertAlmostEqual(
-                pair[0], pair[1], places=5, msg=f"wrong normal_order_statistic"
+                pair[0], pair[1], places=5, msg=f"wrong _normal_order_statistic"
             )
 
         # dataset 10
         x_data = np.array(
             [0.876, 0.001, 0.704, 0.852, 0.498, 0.12, 0.094, 0.865, 0.069, 0.019]
         )
-        result = normal_order_statistic(x_data, False, self.cte_alpha, False)
+        result = _normal_order_statistic(x_data, False, self.cte_alpha, False)
         expected = np.array(
             [
                 -1.54664,
@@ -198,13 +198,13 @@ class Test_normal_order_statistic(unittest.TestCase):
         )
         for pair in zip(result, expected):
             self.assertAlmostEqual(
-                pair[0], pair[1], places=5, msg=f"wrong normal_order_statistic"
+                pair[0], pair[1], places=5, msg=f"wrong _normal_order_statistic"
             )
 
     def test_datasets_weighted_True(self):
         # dataset 1
         x_data = np.array([44.1, -33.1, 243.1, -25.2, 11])
-        result = normal_order_statistic(x_data, True, self.cte_alpha, False)
+        result = _normal_order_statistic(x_data, True, self.cte_alpha, False)
         expected = np.array(
             [
                 -1.17976,
@@ -216,14 +216,14 @@ class Test_normal_order_statistic(unittest.TestCase):
         )
         for pair in zip(result, expected):
             self.assertAlmostEqual(
-                pair[0], pair[1], places=5, msg=f"wrong normal_order_statistic"
+                pair[0], pair[1], places=5, msg=f"wrong _normal_order_statistic"
             )
 
         # dataset 10
         x_data = np.array(
             [0.876, 0.001, 0.704, 0.852, 0.498, 0.12, 0.094, 0.865, 0.069, 0.019]
         )
-        result = normal_order_statistic(x_data, True, self.cte_alpha, False)
+        result = _normal_order_statistic(x_data, True, self.cte_alpha, False)
         expected = np.array(
             [
                 -1.54664,
@@ -240,7 +240,7 @@ class Test_normal_order_statistic(unittest.TestCase):
         )
         for pair in zip(result, expected):
             self.assertAlmostEqual(
-                pair[0], pair[1], places=5, msg=f"wrong normal_order_statistic"
+                pair[0], pair[1], places=5, msg=f"wrong _normal_order_statistic"
             )
 
 

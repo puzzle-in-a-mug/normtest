@@ -208,9 +208,11 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
     cte_alpha_desc=docs.CTE_ALPHA["description"],
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
+    zi=docs.ZI["type"],
+    zi_desc=docs.ZI["description"],
 )
-def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
-    """This function transforms the statistical order to the standard Normal distribution scale (:math:`b_{{i}}`).
+def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
+    """This function transforms the statistical order to the standard Normal distribution scale (:math:`z_{{i}}`).
 
     Parameters
     ----------
@@ -226,8 +228,8 @@ def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
 
     Returns
     -------
-    bi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
-        The statistical order in the standard Normal distribution scale.
+    {zi}
+        {zi_desc}
 
 
     Notes
@@ -236,7 +238,7 @@ def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
 
     .. math::
 
-            b_{{i}} = \\phi^{{-1}} \\left(p_{{i}} \\right)
+            z_{{i}} = \\phi^{{-1}} \\left(p_{{i}} \\right)
 
     where :math:`p_{{i}}` is the normal statistical order and :math:`\\phi^{{-1}}` is the inverse of the standard Normal distribution. The transformation is performed using :doc:`stats.norm.ppf() <scipy:reference/generated/scipy.stats.norm>`.
 
@@ -255,7 +257,7 @@ def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
     >>> import numpy as np
     >>> from normtest import ryan_joiner
     >>> data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
-    >>> result = ryan_joiner.normal_order_statistic(data, weighted=False)
+    >>> result = ryan_joiner._normal_order_statistic(data, weighted=False)
     >>> print(result)
     [-1.67293739 -1.16188294 -0.84837993 -0.6020065  -0.38786869 -0.19032227
     0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
@@ -263,7 +265,7 @@ def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
 
     The second example uses `weighted=True`, with the same data set:
 
-    >>> result = ryan_joiner.normal_order_statistic(data, weighted=True)
+    >>> result = ryan_joiner._normal_order_statistic(data, weighted=True)
     >>> print(result)
     [-1.37281032 -1.37281032 -0.84837993 -0.4921101  -0.4921101  -0.19032227
     0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
@@ -484,9 +486,9 @@ def p_value(statistic, sample_size, safe=False):
     alphas = np.array([0.10, 0.05, 0.01])
     criticals = np.array(
         [
-            critical_value(sample_size=sample_size, alpha=alphas[0], safe=False),
-            critical_value(sample_size=sample_size, alpha=alphas[1], safe=False),
-            critical_value(sample_size=sample_size, alpha=alphas[2], safe=False),
+            _critical_value(sample_size=sample_size, alpha=alphas[0], safe=False),
+            _critical_value(sample_size=sample_size, alpha=alphas[1], safe=False),
+            _critical_value(sample_size=sample_size, alpha=alphas[2], safe=False),
         ]
     )
     f = interpolate.interp1d(criticals, alphas)

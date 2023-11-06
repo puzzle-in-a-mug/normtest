@@ -44,6 +44,13 @@ CTE_ALPHA = {
         * `"1/2"`;""",
 }
 
+
+ZI = {
+    "type": "zi : :doc:`numpy array <numpy:reference/generated/numpy.array>`",
+    "description": "The statistical order in the standard Normal distribution scale.",
+}
+
+
 # PARAM = {
 #     "type":
 #     "description":

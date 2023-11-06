@@ -9,6 +9,7 @@
 - _p_value(statistic, sample_size, safe=False)
 - citation(export=False)
 - rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False)
+- correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False)
 
 ## Functions WITH some TESTS ###
 - _statistic(x_data, zi, safe=False)
@@ -823,5 +824,116 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
     # perfuming
     axes.set_xlabel("Normal statistical order")
     axes.set_ylabel("Ordered data")
+
+    return axes
+
+
+@docs.docstring_parameter(
+    axes=docs.AXES["type"],
+    axes_desc=docs.AXES["description"],
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    cte_alpha=docs.CTE_ALPHA["type"],
+    cte_alpha_desc=docs.CTE_ALPHA["description"],
+    weighted=docs.WEIGHTED["type"],
+    weighted_desc=docs.WEIGHTED["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+)
+def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe=False):
+    """This function generates axis with critical data from the Ryan-Joiner Normality test.
+
+    Parameters
+    ----------
+    {axes}
+        {axes_desc}
+    {x_data}
+        {x_data_desc}
+    {cte_alpha}
+        {cte_alpha_desc}
+    min : int, optional
+        The lower range of the number of observations for the critical values (default is ``4``).
+    max : int, optional
+        The upper range of the number of observations for the critical values (default is ``50``).
+    {weighted}
+        {weighted_desc}
+    {safe}
+        {safe_desc}
+
+
+    Returns
+    -------
+    {axes}
+        {axes_desc}
+
+
+    See Also
+    --------
+    rj_test
+    correlation_plot
+
+
+    References
+    ----------
+    .. [1]  RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+
+
+    Examples
+    --------
+    >>> from normtest import normtest
+    >>> import matplotlib.pyplot as plt
+    >>> from scipy import stats
+    >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
+    >>> fig, ax = plt.subplots(figsize=(6,4))
+    >>> normtest.rj_dist_plot(axes=ax, x_data=data)
+    >>> plt.savefig("rj_dist_plot.png")
+    >>> plt.show()
+
+    .. image:: img/dist_plot.png
+        :alt: Critical chart for Ryan-Joiner test Normality test
+        :align: center
+
+    """
+    func_name = "dist_plot"
+    if safe:
+        types.is_subplots(value=axes, param_name="axes", func_name=func_name)
+
+    constants.warning_plot()
+
+    if x_data.size > max:
+        print(
+            f"The graphical visualization is best suited if the sample size is smaller ({x_data.size}) than the max value ({max})."
+        )
+    if x_data.size < min:
+        print(
+            f"The graphical visualization is best suited if the sample size is greater ({x_data.size}) than the min value ({min})."
+        )
+
+    n_samples = np.arange(min, max + 1)
+    alphas = [0.10, 0.05, 0.01]
+    alphas_label = ["$R_{p;10\%}^{'}$", "$R_{p;5\%}^{'}$", "$R_{p;1\%}^{'}$"]
+    colors = [
+        (0.2980392156862745, 0.4470588235294118, 0.6901960784313725),
+        (0.8666666666666667, 0.5176470588235295, 0.3215686274509804),
+        (0.3333333333333333, 0.6588235294117647, 0.40784313725490196),
+    ]
+
+    # main test
+    result = rj_test(x_data=x_data, cte_alpha=cte_alpha, weighted=weighted, safe=safe)
+    axes.scatter(x_data.size, result[0], color="r", label="$R_{p}$")
+
+    # adding critical values
+    for alp, color, alp_label in zip(alphas, colors, alphas_label):
+        criticals = []
+        for sample in n_samples:
+            criticals.append(_critical_value(sample_size=sample, alpha=alp, safe=False))
+        axes.scatter(n_samples, criticals, label=alp_label, color=color, s=10)
+
+    axes.set_title("Ryan-Joiner Normality test")
+
+    # adding details
+    axes.legend(loc=4)
+    axes.set_xlabel("Sample size")
+    axes.set_ylabel("Critical value")
 
     return axes

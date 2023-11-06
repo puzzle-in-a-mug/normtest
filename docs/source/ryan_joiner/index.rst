@@ -7,8 +7,9 @@ ryan_joiner
 
 .. toctree::
    :maxdepth: 1
-
+   
    citation
+   rj_test
    _critical_value
    _normal_order_statistic
    _order_statistic

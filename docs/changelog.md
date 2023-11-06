@@ -5,6 +5,7 @@
 
 
 #### Module ryan_joiner
+- Added ``rj_test`` function (06/11/2023);
 - Added ``_p_value`` function (06/11/2023);
 - Added ``_statistic`` function (06/11/2023);
 - Added ``_normal_order_statistic`` function (06/11/2023);

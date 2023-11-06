@@ -60,7 +60,7 @@ from scipy import interpolate
 from paramcheckup import parameters, types, numbers, numpy_arrays
 from . import bib
 
-# from .utils import constants
+from .utils import constants
 
 ##### CONSTANTS #####
 
@@ -109,6 +109,8 @@ def citation(export=False):
     alpha_desc=docs.ALPHA["description"],
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
+    critical=docs.CRITICAL["type"],
+    critical_desc=docs.CRITICAL["description"],
 )
 def _critical_value(sample_size, alpha=0.05, safe=False):
     """This function calculates the critical value of the Ryan-Joiner test [1]_.
@@ -124,8 +126,8 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
 
     Returns
     -------
-    critical : float
-        The critical value of the test.
+    {critical}
+        {critical_desc}
 
     See Also
     --------
@@ -400,12 +402,12 @@ def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
         )
 
     i = np.arange(1, sample_size + 1)
-    if cte_alpha == "3/8":
-        cte_alpha = 3 / 8
+    if cte_alpha == "1/2":
+        cte_alpha = 0.5
     elif cte_alpha == "0":
         cte_alpha = 0
     else:
-        cte_alpha = 0.5
+        cte_alpha = 3 / 8
 
     return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
 
@@ -595,3 +597,141 @@ def _statistic(x_data, zi, safe=False):
         )
 
     return stats.pearsonr(zi, x_data)[0]
+
+
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    alpha=docs.ALPHA["type"],
+    alpha_desc=docs.ALPHA["description"],
+    cte_alpha=docs.CTE_ALPHA["type"],
+    cte_alpha_desc=docs.CTE_ALPHA["description"],
+    weighted=docs.WEIGHTED["type"],
+    weighted_desc=docs.WEIGHTED["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    critical=docs.CRITICAL["type"],
+    critical_desc=docs.CRITICAL["description"],
+    p_value=docs.P_VALUE["type"],
+    p_value_desc=docs.P_VALUE["description"],
+)
+def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
+    """This function applies the Ryan-Joiner Normality test [1]_.
+
+    Parameters
+    ----------
+    {x_data}
+        {x_data_desc}
+    {alpha}
+        {alpha_desc}
+    {cte_alpha}
+        {cte_alpha_desc}
+    {weighted}
+        {weighted_desc}
+    {safe}
+        {safe_desc}
+
+
+    Returns
+    -------
+    result : tuple with
+        {statistic}
+            {statistic_desc}
+        critical
+            {critical_desc}
+        {p_value}
+            {p_value_desc}
+        conclusion : str
+            The test conclusion (e.g, Normal/Not Normal).
+
+
+    See Also
+    --------
+    pass
+
+
+
+    Notes
+    -----
+    The test statistic (:math:`R_{{p}}`) is estimated through the correlation between the ordered data and the Normal statistical order:
+
+    .. math::
+
+            R_{{p}}=\\dfrac{{\\sum_{{i=1}}^{{n}}x_{{(i)}}z_{{(i)}}}}{{\\sqrt{{s^{{2}}(n-1)\\sum_{{i=1}}^{{n}}z_{{(i)}}^2}}}}
+
+    where :math:`z_{{(i)}}` values are the z-score values of the corresponding experimental data (:math:`x_{{({{i)}}}}`) value and :math:`s^{{2}}` is the sample variance.
+
+    The correlation is estimated using :func:`_statistic`.
+
+    The Normality test has the following assumptions:
+
+    .. admonition:: \u2615
+
+       :math:`H_0:` Data was sampled from a Normal distribution.
+
+       :math:`H_1:` The data was sampled from a distribution other than the Normal distribution.
+
+
+    The conclusion of the test is based on the comparison between the *critical* value (at :math:`\\alpha` significance level) and `statistic` of the test:
+
+    .. admonition:: \u2615
+
+       if critical :math:`\leq` statistic:
+           Fail to reject :math:`H_0:` (e.g., data is Normal)
+       else:
+           Reject :math:`H_0:` (e.g., data is not Normal)
+
+    The critical values are obtained using :func:`_critical_value`.
+
+
+    References
+    ----------
+    .. [1]  RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+
+
+    Examples
+    --------
+    >>> import normtest as nm
+    >>> from scipy import stats
+    >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
+    >>> result = nm.rj_test(data)
+    >>> print(result)
+    RyanJoiner(statistic=0.990439558451558, critical=0.963891667086667, p_value='p > 0.100', conclusion='Fail to reject H₀')
+
+    """
+    func_name = "rj_test"
+    if safe:
+        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
+        numpy_arrays.n_dimensions(
+            arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
+        )
+
+    # ordering
+    x_data = np.sort(x_data)
+
+    # zi
+    zi = _normal_order_statistic(
+        x_data=x_data, weighted=weighted, cte_alpha=cte_alpha, safe=safe
+    )
+
+    # calculating the stats
+    statistic = _statistic(x_data=x_data, zi=zi, safe=safe)
+
+    # getting the critical values
+    critical_value = _critical_value(sample_size=x_data.size, alpha=alpha, safe=safe)
+
+    # conclusion
+    if statistic < critical_value:
+        conclusion = constants.REJECTION
+    else:
+        conclusion = constants.ACCEPTATION
+
+    # pvalue
+    p_value = _p_value(statistic=statistic, sample_size=x_data.size, safe=safe)
+
+    result = namedtuple(
+        "RyanJoiner", ("statistic", "critical", "p_value", "conclusion")
+    )
+    return result(statistic, critical_value, p_value, conclusion)

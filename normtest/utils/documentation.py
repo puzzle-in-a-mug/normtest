@@ -61,6 +61,12 @@ P_VALUE = {
 }
 
 
+CRITICAL = {
+    "type": "critical : float",
+    "description": "The critical value of the test;",
+}
+
+
 # PARAM = {
 #     "type":
 #     "description":

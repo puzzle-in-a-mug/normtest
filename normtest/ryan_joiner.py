@@ -12,18 +12,15 @@
 
 ## Functions WITH some TESTS ###
 - _statistic(x_data, zi, safe=False)
-- dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe=False)
 - correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False)
+- dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe=False)
 
 
 ## Functions WITHOUT tests ###
 
 
 
-
 ##### List of CLASS (alphabetical order) #####
-
-##### Dictionary of abbreviations #####
 
 
 
@@ -32,15 +29,13 @@ Author: Anderson Marcos Dias Canteli <andersonmdcanteli@gmail.com>
 Last update: November 06, 2023
 
 Last update: November 02, 2023
-
-
-
 """
 
 ##### IMPORTS #####
 
 ### Standard ###
 from collections import namedtuple
+
 
 ### Third part ###
 import numpy as np
@@ -51,15 +46,19 @@ from scipy import interpolate
 
 # import seaborn as sns
 
+
 ### self made ###
 from paramcheckup import parameters, types, numbers, numpy_arrays
 from . import bib
-
 from .utils import constants
 
-##### CONSTANTS #####
 
-##### DOCUMENTATION #####
+##### CONSTANTS #####
+RyanJoiner1976 = "RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023."
+Blom1958 = "BLOM, G. Statistical Estimates and Transformed Beta-Variables. New York: John Wiley and Sons, Inc, p. 71-72, 1958."
+
+
+#### DOCUMENTATION ####
 from .utils import documentation as docs
 
 
@@ -76,6 +75,7 @@ def citation(export=False):
     ----------
     export : bool
         Whether to export the reference as `ryan-joiner.bib` file (`True`) or not (`False`, default);
+
 
     Returns
     -------
@@ -106,6 +106,7 @@ def citation(export=False):
     safe_desc=docs.SAFE["description"],
     critical=docs.CRITICAL["type"],
     critical_desc=docs.CRITICAL["description"],
+    rj_ref=RyanJoiner1976,
 )
 def _critical_value(sample_size, alpha=0.05, safe=False):
     """This function calculates the critical value of the Ryan-Joiner test [1]_.
@@ -119,14 +120,17 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
     {safe}
         {safe_desc}
 
+
     Returns
     -------
     {critical}
         {critical_desc}
 
+
     See Also
     --------
     rj_test
+
 
     Notes
     -----
@@ -145,7 +149,7 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
 
     References
     ----------
-    .. [1]  RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+    .. [1] {rj_ref}
 
 
     Examples
@@ -222,6 +226,7 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
         {weighted_desc}
     {safe}
         {safe_desc}
+
 
     Returns
     -------
@@ -322,6 +327,8 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
     cte_alpha_desc=docs.CTE_ALPHA["description"],
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
+    blom_ref=Blom1958,
+    rj_ref=RyanJoiner1976,
 )
 def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
     """This function estimates the normal statistical order (:math:`p_{{i}}`) using approximations [1]_.
@@ -340,10 +347,12 @@ def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
     {safe}
         {safe_desc}
 
+
     Returns
     -------
     pi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
         The estimated statistical order (:math:`p_{{i}}`)
+
 
     See Also
     --------
@@ -366,11 +375,12 @@ def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
 
         `cte_alpha="3/8"` is adopted in the implementations of the Ryan-Joiner test in Minitab and Statext software. This option is also cited as an alternative by [2]_.
 
+
     References
     ----------
-    .. [1] BLOM, G. Statistical Estimates and Transformed Beta-Variables. New York: John Wiley and Sons, Inc, p. 71-72, 1958.
+    .. [1] {blom_ref}
 
-    .. [2] RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+    .. [2] {rj_ref}
 
 
     Examples
@@ -420,6 +430,7 @@ def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
     safe_desc=docs.SAFE["description"],
     p_value=docs.P_VALUE["type"],
     p_value_desc=docs.P_VALUE["description"],
+    rj_ref=RyanJoiner1976,
 )
 def _p_value(statistic, sample_size, safe=False):
     """This function estimates the probability associated with the Ryan-Joiner Normality test [1]_.
@@ -456,7 +467,7 @@ def _p_value(statistic, sample_size, safe=False):
 
     References
     ----------
-    .. [1]  RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+    .. [1] {rj_ref}
 
 
     Examples
@@ -513,6 +524,7 @@ def _p_value(statistic, sample_size, safe=False):
     safe_desc=docs.SAFE["description"],
     statistic=docs.STATISTIC["type"],
     statistic_desc=docs.STATISTIC["description"],
+    rj_ref=RyanJoiner1976,
 )
 def _statistic(x_data, zi, safe=False):
     """This function estimates the Ryan-Joiner test statistic [1]_.
@@ -548,7 +560,7 @@ def _statistic(x_data, zi, safe=False):
 
     References
     ----------
-    .. [1] RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+    .. [1] {rj_ref}
 
 
     Examples
@@ -561,7 +573,6 @@ def _statistic(x_data, zi, safe=False):
     >>> result = ryan_joiner._statistic(x_data, normal_order)
     >>> print(result)
     0.9225156050800545
-
 
     """
     func_name = "statistic"
@@ -615,6 +626,7 @@ def _statistic(x_data, zi, safe=False):
     critical_desc=docs.CRITICAL["description"],
     p_value=docs.P_VALUE["type"],
     p_value_desc=docs.P_VALUE["description"],
+    rj_ref=RyanJoiner1976,
 )
 def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
     """This function applies the Ryan-Joiner Normality test [1]_.
@@ -648,8 +660,8 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
 
     See Also
     --------
-    pass
-
+    correlation_plot
+    dist_plot
 
 
     Notes
@@ -687,7 +699,7 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
 
     References
     ----------
-    .. [1]  RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+    .. [1] {rj_ref}
 
 
     Examples
@@ -747,9 +759,10 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
     weighted_desc=docs.WEIGHTED["description"],
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
+    rj_ref=RyanJoiner1976,
 )
 def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
-    """This function creates an `axis` with the Ryan-Joiner test correlation graph.
+    """This function creates an `axis` with the Ryan-Joiner test [1]_ correlation graph.
 
     Parameters
     ----------
@@ -765,14 +778,22 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
     {safe}
         {safe_desc}
 
+
     Returns
     -------
     {axes}
         {axes_desc}
 
+
     See Also
     --------
     rj_test
+    dist_plot
+
+
+    References
+    ----------
+    .. [1] {rj_ref}
 
 
     Examples
@@ -789,7 +810,6 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
     .. image:: img/correlation_plot.png
         :alt: Correlaion chart for Ryan-Joiner test Normality test
         :align: center
-
 
     """
     func_name = "rj_correlation_plot"
@@ -839,9 +859,10 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
     weighted_desc=docs.WEIGHTED["description"],
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
+    rj_ref=RyanJoiner1976,
 )
 def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe=False):
-    """This function generates axis with critical data from the Ryan-Joiner Normality test.
+    """This function generates axis with critical data from the Ryan-Joiner Normality test [1]_.
 
     Parameters
     ----------
@@ -875,7 +896,7 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
 
     References
     ----------
-    .. [1]  RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023.
+    .. [1] {rj_ref}
 
 
     Examples

@@ -64,10 +64,24 @@ from . import bib
 
 ##### CONSTANTS #####
 
+##### DOCUMENTATION #####
+from .utils import documentation as docs
+
+SAFE = {
+    "type": "safe : bool, optional",
+    "description": "Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).",
+}
 
 ##### CLASS #####
 
+
 ##### FUNCTIONS #####
+def docstring_parameter(*args, **kwargs):
+    def dec(obj):
+        obj.__doc__ = obj.__doc__.format(*args, **kwargs)
+        return obj
+
+    return dec
 
 
 def citation(export=False):
@@ -82,7 +96,6 @@ def citation(export=False):
     -------
     reference : str
         The Ryan Joiner Test Reference
-
 
     """
     reference = bib.make_techreport(
@@ -99,17 +112,25 @@ def citation(export=False):
     return reference
 
 
+@docstring_parameter(
+    sample_size=docs.SAMPLE_SIZE["type"],
+    samp_size_desc=docs.SAMPLE_SIZE["description"],
+    alpha=docs.ALPHA["type"],
+    alpha_desc=docs.ALPHA["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+)
 def critical_value(sample_size, alpha=0.05, safe=False):
     """This function calculates the critical value of the Ryan-Joiner test [1]_.
 
     Parameters
     ----------
-    sample_size : int
-        The sample size. Must be greater than ``3``.
-    alpha : float, optional
-        The level of significance (:math:`\\alpha`). Must be ``0.01``, ``0.05`` (default) or ``0.10``.
-    safe : bool, optional
-        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+    {sample_size}
+        {samp_size_desc}
+    {alpha}
+        {alpha_desc}
+    {safe}
+        {safe_desc}
 
     Returns
     -------
@@ -126,11 +147,8 @@ def critical_value(sample_size, alpha=0.05, safe=False):
 
     .. math::
 
-            R_{p;\\alpha=0.10}^{'} = 1.0071 - \\frac{0.1371}{\\sqrt{n}} - \\frac{0.3682}{n} + \\frac{0.7780}{n^{2}}
+            R_{{p;\\alpha=0.10}}^{{'}} = 1.0071 - \\frac{{0.1371}}{{\\sqrt{{n}}}} - \\frac{{0.3682}}{{n}} + \\frac{{0.7780}}{{n^{{2}}}}
 
-            R_{p;\\alpha=0.05}^{'} = 1.0063 - \\frac{0.1288}{\\sqrt{n}} - \\frac{0.6118}{n} + \\frac{1.3505}{n^{2}}
-
-            R_{p;\\alpha=0.01}^{'} = 0.9963 - \\frac{0.0211}{\\sqrt{n}} - \\frac{1.4106}{n} + \\frac{3.1791}{n^{2}}
 
     where :math:`n` is the sample size.
 

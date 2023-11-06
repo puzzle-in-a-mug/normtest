@@ -110,7 +110,7 @@ def citation(export=False):
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
 )
-def critical_value(sample_size, alpha=0.05, safe=False):
+def _critical_value(sample_size, alpha=0.05, safe=False):
     """This function calculates the critical value of the Ryan-Joiner test [1]_.
 
     Parameters
@@ -154,12 +154,12 @@ def critical_value(sample_size, alpha=0.05, safe=False):
     Examples
     --------
     >>> from normtest import ryan_joiner
-    >>> critical = ryan_joiner.critical_value(10, alpha=0.05)
+    >>> critical = ryan_joiner._critical_value(10, alpha=0.05)
     >>> print(critical)
     0.9178948637370312
 
     """
-    func_name = "critical_value"
+    func_name = "_critical_value"
     if safe:
         parameters.param_options(
             option=alpha,

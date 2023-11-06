@@ -3,7 +3,7 @@
 ##### List of functions (cte_alphabetical order) #####
 
 ## Functions WITH good TESTS ###
-- order_statistic(sample_size, cte_alpha="3/8", safe=False)
+- _order_statistic(sample_size, cte_alpha="3/8", safe=False)
 - citation(export=False)
 - critical_value(sample_size, alpha=0.05, safe=False)
 - p_value(statistic, sample_size, safe=False)
@@ -242,7 +242,7 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
 
     where :math:`p_{{i}}` is the normal statistical order and :math:`\\phi^{{-1}}` is the inverse of the standard Normal distribution. The transformation is performed using :doc:`stats.norm.ppf() <scipy:reference/generated/scipy.stats.norm>`.
 
-    The statistical order (:math:`p_{{i}}`) is estimated using :func:`order_statistic` function. See this function for details on parameter `cte_alpha`.
+    The statistical order (:math:`p_{{i}}`) is estimated using :func:`_order_statistic` function. See this function for details on parameter `cte_alpha`.
 
 
     See Also
@@ -304,13 +304,13 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
         df = pd.DataFrame({"x_data": x_data})
         # getting mi values
         df["Rank"] = np.arange(1, df.shape[0] + 1)
-        df["Ui"] = order_statistic(
+        df["Ui"] = _order_statistic(
             sample_size=x_data.size, cte_alpha=cte_alpha, safe=safe
         )
         df["Mi"] = df.groupby(["x_data"])["Ui"].transform("mean")
         normal_ordered = stats.norm.ppf(df["Mi"])
     else:
-        ordered = order_statistic(
+        ordered = _order_statistic(
             sample_size=x_data.size, cte_alpha=cte_alpha, safe=safe
         )
         normal_ordered = stats.norm.ppf(ordered)
@@ -326,7 +326,7 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
 )
-def order_statistic(sample_size, cte_alpha="3/8", safe=False):
+def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
     """This function estimates the normal statistical order (:math:`p_{{i}}`) using approximations [1]_.
 
     Parameters
@@ -352,11 +352,11 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
     Notes
     -----
 
-    The `cte_alpha` parameter corresponds to the values studied by [1]_, which adopts the following equation to estimate the statistical order:
+    The `cte_alpha` (:math:`\\alpha_{{cte}}`) parameter corresponds to the values studied by [1]_, which adopts the following equation to estimate the statistical order:
 
     .. math::
 
-            p_{{i}} = \\frac{{i - \\cte_alpha}}{{n - 2 \\times \\cte_alpha + 1}}
+            p_{{i}} = \\frac{{i - \\alpha_{{cte}}}}{{n - 2 \\times \\alpha_{{cte}} + 1}}
 
     where :math:`n` is the sample size and :math:`i` is the ith observation.
 
@@ -376,27 +376,26 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
     --------
     >>> from normtest import ryan_joiner
     >>> size = 10
-    >>> pi = ryan_joiner.order_statistic(size)
+    >>> pi = ryan_joiner._order_statistic(size)
     >>> print(pi)
     [0.06097561 0.15853659 0.25609756 0.35365854 0.45121951 0.54878049
     0.64634146 0.74390244 0.84146341 0.93902439]
 
     """
+    func_name = "_order_statistic"
     if safe:
         parameters.param_options(
             option=cte_alpha,
             param_options=["0", "3/8", "1/2"],
             param_name="cte_alpha",
-            func_name="order_statistic",
+            func_name=func_name,
         )
-        types.is_int(
-            value=sample_size, param_name="sample_size", func_name="order_statistic"
-        )
+        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
         numbers.is_greater_than(
             value=sample_size,
             lower=4,
             param_name="sample_size",
-            func_name="order_statistic",
+            func_name=func_name,
             inclusive=True,
         )
 
@@ -472,14 +471,12 @@ def p_value(statistic, sample_size, safe=False):
             func_name=func_name,
             inclusive=False,
         )
-        types.is_int(
-            value=sample_size, param_name="sample_size", func_name="order_statistic"
-        )
+        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
         numbers.is_greater_than(
             value=sample_size,
             lower=4,
             param_name="sample_size",
-            func_name="order_statistic",
+            func_name=func_name,
             inclusive=True,
         )
 
@@ -550,8 +547,8 @@ def statistic(x_data, zi, safe=False):
     >>> import numpy as np
     >>> x_data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
     >>> x_data = np.sort(x_data)
-    >>> order_statistic = ryan_joiner.order_statistic(x_data.size)
-    >>> normal_order = ryan_joiner.normal_order_statistic(x_data)
+    >>> order_statistic = ryan_joiner._order_statistic(x_data.size)
+    >>> normal_order = ryan_joiner.normal__order_statistic(x_data)
     >>> result = ryan_joiner.statistic(x_data, normal_order)
     >>> print(result)
     0.9225156050800545

@@ -11,7 +11,7 @@ ryan_joiner
    citation
    _critical_value
    _normal_order_statistic
-   order_statistic
+   _order_statistic
    statistic
    p_value
 

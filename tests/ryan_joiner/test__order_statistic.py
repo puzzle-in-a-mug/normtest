@@ -1,10 +1,10 @@
-"""Tests if  ``order_statistic`` is working as expected
+"""Tests if  ``_order_statistic`` is working as expected
 
 --------------------------------------------------------------------------------
 Command to run at the prompt:
-    python -m unittest -v tests/ryan_joiner/test_order_statistic.py
+    python -m unittest -v tests/ryan_joiner/test__order_statistic.py
     or
-    python -m unittest -b tests/ryan_joiner/test_order_statistic.py
+    python -m unittest -b tests/ryan_joiner/test__order_statistic.py
 
 --------------------------------------------------------------------------------
 """
@@ -16,12 +16,12 @@ import numpy as np
 import random
 
 ### FUNCTION IMPORT ###
-from normtest.ryan_joiner import order_statistic
+from normtest.ryan_joiner import _order_statistic
 
 os.system("cls")
 
 
-class Test_order_statistic(unittest.TestCase):
+class Test__order_statistic(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.n = random.randrange(4, 200)
@@ -30,14 +30,14 @@ class Test_order_statistic(unittest.TestCase):
         cls.safe = True
 
     def test_input(self):
-        result = order_statistic(self.n, self.method, self.safe)
+        result = _order_statistic(self.n, self.method, self.safe)
         self.assertIsInstance(
             result,
             np.ndarray,
             msg=f"not a float when method={self.method} and n={self.n}",
         )
 
-        result = order_statistic(
+        result = _order_statistic(
             sample_size=self.n, cte_alpha=self.method, safe=self.safe
         )
         self.assertIsInstance(
@@ -47,7 +47,7 @@ class Test_order_statistic(unittest.TestCase):
         )
 
     def test_outputs(self):
-        result = order_statistic(self.n, self.method)
+        result = _order_statistic(self.n, self.method)
         self.assertIsInstance(
             result,
             np.ndarray,
@@ -55,7 +55,7 @@ class Test_order_statistic(unittest.TestCase):
         )
 
     def test_safe(self):
-        result = order_statistic(self.n, self.method, safe=True)
+        result = _order_statistic(self.n, self.method, safe=True)
         self.assertIsInstance(
             result,
             np.ndarray,
@@ -77,7 +77,7 @@ class Test_order_statistic(unittest.TestCase):
                 0.932432,
             ]
         )
-        result = order_statistic(n, "3/8")
+        result = _order_statistic(n, "3/8")
         for pair in zip(result, expected):
             self.assertAlmostEqual(
                 pair[0], pair[1], places=5, msg=f"wrong statisitc order for 3/8"
@@ -99,7 +99,7 @@ class Test_order_statistic(unittest.TestCase):
                 0.939024,
             ]
         )
-        result = order_statistic(n, "3/8")
+        result = _order_statistic(n, "3/8")
         for pair in zip(result, expected):
             self.assertAlmostEqual(
                 pair[0], pair[1], places=5, msg=f"wrong statisitc order for 3/8"
@@ -108,7 +108,7 @@ class Test_order_statistic(unittest.TestCase):
     def test_0_odd(self):
         n = 9
         expected = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
-        result = order_statistic(n, "0")
+        result = _order_statistic(n, "0")
         for pair in zip(result, expected):
             self.assertAlmostEqual(
                 pair[0], pair[1], places=5, msg=f"wrong statisitc order for 0"
@@ -130,7 +130,7 @@ class Test_order_statistic(unittest.TestCase):
                 0.909091,
             ]
         )
-        result = order_statistic(n, "0")
+        result = _order_statistic(n, "0")
         for pair in zip(result, expected):
             self.assertAlmostEqual(
                 pair[0], pair[1], places=5, msg=f"wrong statisitc order for 0"
@@ -151,7 +151,7 @@ class Test_order_statistic(unittest.TestCase):
                 0.944444,
             ]
         )
-        result = order_statistic(n, "1/2")
+        result = _order_statistic(n, "1/2")
         for pair in zip(result, expected):
             self.assertAlmostEqual(
                 pair[0], pair[1], places=5, msg=f"wrong statisitc order for 1/2"
@@ -173,7 +173,7 @@ class Test_order_statistic(unittest.TestCase):
                 0.950000,
             ]
         )
-        result = order_statistic(n, "1/2")
+        result = _order_statistic(n, "1/2")
         for pair in zip(result, expected):
             self.assertAlmostEqual(
                 pair[0], pair[1], places=5, msg=f"wrong statisitc order for 1/2"
@@ -184,7 +184,7 @@ class Test_order_statistic(unittest.TestCase):
             ValueError,
             msg=f"Does not raised ValueError when method={None} and n={self.n}",
         ):
-            result = order_statistic(self.n, None, safe=True)
+            result = _order_statistic(self.n, None, safe=True)
 
     def test_n_not_int(self):
         n_values = [
@@ -198,7 +198,7 @@ class Test_order_statistic(unittest.TestCase):
                 TypeError,
                 msg=f"Does not raised ValueError when method={self.method} and n={n}",
             ):
-                result = order_statistic(n, self.method, safe=True)
+                result = _order_statistic(n, self.method, safe=True)
 
     def test_small_n(self):
         n_values = [-5, 0, 3]
@@ -207,7 +207,7 @@ class Test_order_statistic(unittest.TestCase):
                 ValueError,
                 msg=f"Does not raised ValueError when method={self.method} and n={n}",
             ):
-                result = order_statistic(n, self.method, safe=True)
+                result = _order_statistic(n, self.method, safe=True)
 
 
 if __name__ == "__main__":

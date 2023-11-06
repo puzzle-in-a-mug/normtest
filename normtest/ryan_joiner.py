@@ -67,11 +67,6 @@ from . import bib
 ##### DOCUMENTATION #####
 from .utils import documentation as docs
 
-SAFE = {
-    "type": "safe : bool, optional",
-    "description": "Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).",
-}
-
 ##### CLASS #####
 
 
@@ -95,7 +90,7 @@ def citation(export=False):
     Returns
     -------
     reference : str
-        The Ryan Joiner Test Reference
+        The Ryan Joiner Test reference
 
     """
     reference = bib.make_techreport(
@@ -139,7 +134,7 @@ def critical_value(sample_size, alpha=0.05, safe=False):
 
     See Also
     --------
-    pass
+    rj_test
 
     Notes
     -----
@@ -206,24 +201,30 @@ def critical_value(sample_size, alpha=0.05, safe=False):
         )
 
 
+@docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    weighted=docs.WEIGHTED["type"],
+    weighted_desc=docs.WEIGHTED["description"],
+    cte_alpha=docs.CTE_ALPHA["type"],
+    cte_alpha_desc=docs.CTE_ALPHA["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+)
 def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
-    """This function transforms the statistical order to the standard Normal distribution scale (:math:`b_{i}`).
+    """This function transforms the statistical order to the standard Normal distribution scale (:math:`b_{{i}}`).
 
     Parameters
     ----------
-    x_data : :doc:`numpy array <numpy:reference/generated/numpy.array>`
-        One dimension :doc:`numpy array <numpy:reference/generated/numpy.array>` with at least ``4`` observations.
-    cte_alpha : str, optional
-        A `str` with the `cte_alpha` value that should be adopted (see details in the Notes section). The options are:
+    {x_data}
+        {x_data_desc}
+    {cte_alpha}
+        {cte_alpha_desc}
 
-        * `"0"`;
-        * `"3/8"` (default);
-        * `"1/2"`;
-
-    weighted : bool, optional
-        Whether to estimate the Normal order considering the repeats as its average (`True`) or not (`False`, default). Only has an effect if the dataset contains repeated values.
-    safe : bool, optional
-        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+    {weighted}
+        {weighted_desc}
+    {safe}
+        {safe_desc}
 
     Returns
     -------
@@ -237,11 +238,17 @@ def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
 
     .. math::
 
-            b_{i} = \\phi^{-1} \\left(p_{i} \\right)
+            b_{{i}} = \\phi^{{-1}} \\left(p_{{i}} \\right)
 
-    where :math:`p_i{}` is the normal statistical order and \\phi^{-1} is the inverse of the standard Normal distribution. The transformation is performed using :doc:`stats.norm.ppf() <scipy:reference/generated/scipy.stats.norm>`.
+    where :math:`p_{{i}}` is the normal statistical order and :math:`\\phi^{{-1}}` is the inverse of the standard Normal distribution. The transformation is performed using :doc:`stats.norm.ppf() <scipy:reference/generated/scipy.stats.norm>`.
 
-    The statistical order (:math:`p_{i}`) is estimated using :func:`order_statistic` function. See this function for details on parameter `cte_alpha`.
+    The statistical order (:math:`p_{{i}}`) is estimated using :func:`order_statistic` function. See this function for details on parameter `cte_alpha`.
+
+
+    See Also
+    --------
+    rj_test
+
 
     Examples
     --------
@@ -311,26 +318,31 @@ def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
     return normal_ordered
 
 
+@docstring_parameter(
+    samp_size=docs.SAMPLE_SIZE["type"],
+    samp_size_desc=docs.SAMPLE_SIZE["description"],
+    cte_alpha=docs.CTE_ALPHA["type"],
+    cte_alpha_desc=docs.CTE_ALPHA["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+)
 def order_statistic(sample_size, cte_alpha="3/8", safe=False):
-    """This function estimates the normal statistical order (:math:`p_{i}`) using approximations [1]_.
+    """This function estimates the normal statistical order (:math:`p_{{i}}`) using approximations [1]_.
 
     Parameters
     ----------
-    sample_size : int
-        The sample size. Must be equal or greater than `4`;
-    cte_alpha : str, optional
-        A `str` with the `cte_alpha` value that should be adopted (see details in the Notes section). The options are:
-         * `"0"`;
-         * `"3/8"` (default);
-         * `"1/2"`;
+    {samp_size}
+        {samp_size_desc}
+    {cte_alpha}
+        {cte_alpha_desc}
 
-    safe : bool, optional
-        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+    {safe}
+        {safe_desc}
 
     Returns
     -------
     pi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
-        The estimated statistical order (:math:`p_{i}`)
+        The estimated statistical order (:math:`p_{{i}}`)
 
     See Also
     --------
@@ -344,7 +356,7 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
 
     .. math::
 
-            p_{i} = \\frac{i - \\cte_alpha}{n - 2 \\times \\cte_alpha + 1}
+            p_{{i}} = \\frac{{i - \\cte_alpha}}{{n - 2 \\times \\cte_alpha + 1}}
 
     where :math:`n` is the sample size and :math:`i` is the ith observation.
 
@@ -399,6 +411,12 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
     return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
 
 
+@docstring_parameter(
+    samp_size=docs.SAMPLE_SIZE["type"],
+    samp_size_desc=docs.SAMPLE_SIZE["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+)
 def p_value(statistic, sample_size, safe=False):
     """This function estimates the probability associated with the Ryan-Joiner Normality test.
 
@@ -406,20 +424,21 @@ def p_value(statistic, sample_size, safe=False):
     ----------
     statistic : float (positive)
         The Ryan-Joiner test statistics.
-    sample_size : int
-        The sample size. Must be equal or greater than `4`;
-    safe : bool, optional
-        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+    {samp_size}
+        {samp_size_desc}
+    {safe}
+        {safe_desc}
+
 
     Returns
     -------
     p_value : float or str
         The probability of the test.
 
+
     See Also
     --------
-    rj_critical_value
-    ryan_joiner
+    rj_test
 
 
     Notes
@@ -428,7 +447,6 @@ def p_value(statistic, sample_size, safe=False):
 
     * If the test statistic is greater than the critical value for :math:`\\alpha=0.10`, the result is always *"p > 0.100"*.
     * If the test statistic is lower than the critical value for :math:`\\alpha=0.01`, the result is always *"p < 0.010"*.
-
 
 
     References
@@ -483,17 +501,23 @@ def p_value(statistic, sample_size, safe=False):
         return p_value
 
 
+@docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+)
 def statistic(x_data, zi, safe=False):
     """This function estimates the Ryan-Joiner test statistic [1]_.
 
     Parameters
     ----------
-    x_data : :doc:`numpy array <numpy:reference/generated/numpy.array>`
-        One dimension :doc:`numpy array <numpy:reference/generated/numpy.array>` with at least ``4`` observations (ordered in ascending order).
-    bi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
+    {x_data}
+        {x_data_desc}
+    zi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
         The corresponding statistical order in the standard Normal distribution scale.
-    safe : bool, optional
-        Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+    {safe}
+        {safe_desc}
 
 
     Returns
@@ -504,14 +528,13 @@ def statistic(x_data, zi, safe=False):
 
     Notes
     -----
-
-    The test statistic (:math:`R_{p}`) is estimated through the correlation between the ordered data and the Normal statistical order:
+    The test statistic (:math:`R_{{p}}`) is estimated through the correlation between the ordered data and the Normal statistical order:
 
     .. math::
 
-            R_{p}=\\dfrac{\\sum_{i=1}^{n}x_{(i)}z_{(i)}}{\\sqrt{s^{2}(n-1)\\sum_{i=1}^{n}z_{(i)}^2}}
+            R_{{p}}=\\dfrac{{\\sum_{{i=1}}^{{n}}x_{{(i)}}z_{{(i)}}}}{{\\sqrt{{s^{{2}}(n-1)\\sum_{{i=1}}^{{n}}z_{{(i)}}^2}}}}
 
-    where :math:`z_{(i)}` values are the z-score values of the corresponding experimental data (:math:`x_{({i)}}`) value, :math:`n` is the sample size and :math:`s^{2}` is the sample variance.
+    where :math:`z_{{(i)}}` values are the z-score values of the corresponding experimental data (:math:`x_{{({{i)}}}}`) value, :math:`n` is the sample size and :math:`s^{{2}}` is the sample variance.
 
     The correlation is estimated using :doc:`scipy.stats.pearsonr() <scipy:reference/generated/scipy.stats.pearsonr>`.
 

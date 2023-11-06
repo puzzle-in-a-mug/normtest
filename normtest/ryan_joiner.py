@@ -144,6 +144,9 @@ def critical_value(sample_size, alpha=0.05, safe=False):
 
             R_{{p;\\alpha=0.10}}^{{'}} = 1.0071 - \\frac{{0.1371}}{{\\sqrt{{n}}}} - \\frac{{0.3682}}{{n}} + \\frac{{0.7780}}{{n^{{2}}}}
 
+            R_{{p;\\alpha=0.05}}^{{'}} = 1.0063 - \\frac{{0.1288}}{{\\sqrt{{n}}}} - \\frac{{0.6118}}{{n}} + \\frac{{1.3505}}{{n^{{2}}}}
+
+            R_{{p;\\alpha=0.01}}^{{'}} = 0.9963 - \\frac{{0.0211}}{{\\sqrt{{n}}}} - \\frac{{1.4106}}{{n}} + \\frac{{3.1791}}{{n^{{2}}}}
 
     where :math:`n` is the sample size.
 

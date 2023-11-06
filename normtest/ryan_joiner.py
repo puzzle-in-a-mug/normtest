@@ -880,13 +880,13 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
 
     Examples
     --------
-    >>> from normtest import normtest
+    >>> from normtest import ryan_joiner
     >>> import matplotlib.pyplot as plt
     >>> from scipy import stats
     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
-    >>> fig, ax = plt.subplots(figsize=(6,4))
-    >>> normtest.rj_dist_plot(axes=ax, x_data=data)
-    >>> plt.savefig("rj_dist_plot.png")
+    >>> fig, ax = plt.subplots(figsize=(6, 4))
+    >>> ryan_joiner.dist_plot(axes=ax, x_data=data)
+    >>> # plt.savefig("rj_dist_plot.png")
     >>> plt.show()
 
     .. image:: img/dist_plot.png
@@ -897,6 +897,9 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
     func_name = "dist_plot"
     if safe:
         types.is_subplots(value=axes, param_name="axes", func_name=func_name)
+        types.is_int(value=min, param_name="min", func_name=func_name)
+        types.is_int(value=max, param_name="max", func_name=func_name)
+        # _check_a_lower_than_b(value_a, value_b, param_a_name, param_b_name)  # not implemented yet
 
     constants.warning_plot()
 

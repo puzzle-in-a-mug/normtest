@@ -7,6 +7,7 @@
 ### First Release
 
 #### Module ryan_joiner
+- Added ``dist_plot`` function (06/11/2023);
 - Added ``correlation_plot`` function (06/11/2023);
 - Added ``rj_test`` function (06/11/2023);
 - Added ``_statistic`` function (06/11/2023);

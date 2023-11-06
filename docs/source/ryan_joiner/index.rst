@@ -12,6 +12,7 @@ Main functions
    
    citation
    correlation_plot
+   dist_plot
    rj_test
 
 

@@ -9,11 +9,11 @@
 - _p_value(statistic, sample_size, safe=False)
 - citation(export=False)
 - rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False)
-- correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False)
 
 ## Functions WITH some TESTS ###
 - _statistic(x_data, zi, safe=False)
-
+- dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe=False)
+- correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False)
 
 
 ## Functions WITHOUT tests ###

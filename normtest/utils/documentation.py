@@ -50,6 +50,16 @@ ZI = {
     "description": "The statistical order in the standard Normal distribution scale.",
 }
 
+STATISTIC = {
+    "type": "statistic : float (positive)",
+    "description": "The test statistic;",
+}
+
+P_VALUE = {
+    "type": "p_value : float or str",
+    "description": "The probability of the test;",
+}
+
 
 # PARAM = {
 #     "type":

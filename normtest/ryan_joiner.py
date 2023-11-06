@@ -411,18 +411,22 @@ def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
 
 
 @docs.docstring_parameter(
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
     samp_size=docs.SAMPLE_SIZE["type"],
     samp_size_desc=docs.SAMPLE_SIZE["description"],
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
+    p_value=docs.P_VALUE["type"],
+    p_value_desc=docs.P_VALUE["description"],
 )
-def p_value(statistic, sample_size, safe=False):
-    """This function estimates the probability associated with the Ryan-Joiner Normality test.
+def _p_value(statistic, sample_size, safe=False):
+    """This function estimates the probability associated with the Ryan-Joiner Normality test [1]_.
 
     Parameters
     ----------
-    statistic : float (positive)
-        The Ryan-Joiner test statistics.
+    {statistic}
+        {statistic_desc}
     {samp_size}
         {samp_size_desc}
     {safe}
@@ -431,8 +435,8 @@ def p_value(statistic, sample_size, safe=False):
 
     Returns
     -------
-    p_value : float or str
-        The probability of the test.
+    {p_value}
+        {p_value_desc}
 
 
     See Also
@@ -456,12 +460,12 @@ def p_value(statistic, sample_size, safe=False):
     Examples
     --------
     >>> from normtest import ryan_joiner
-    >>> p_value = ryan_joiner.p_value(0.90, 10)
+    >>> p_value = ryan_joiner._p_value(0.90, 10)
     >>> print(p_value)
     0.030930589077996555
 
     """
-    func_name = "p_value"
+    func_name = "_p_value"
     if safe:
         numbers.is_between_a_and_b(
             value=statistic,

@@ -67,16 +67,11 @@ from . import bib
 ##### DOCUMENTATION #####
 from .utils import documentation as docs
 
+
 ##### CLASS #####
 
 
 ##### FUNCTIONS #####
-def docstring_parameter(*args, **kwargs):
-    def dec(obj):
-        obj.__doc__ = obj.__doc__.format(*args, **kwargs)
-        return obj
-
-    return dec
 
 
 def citation(export=False):
@@ -107,7 +102,7 @@ def citation(export=False):
     return reference
 
 
-@docstring_parameter(
+@docs.docstring_parameter(
     sample_size=docs.SAMPLE_SIZE["type"],
     samp_size_desc=docs.SAMPLE_SIZE["description"],
     alpha=docs.ALPHA["type"],
@@ -204,7 +199,7 @@ def critical_value(sample_size, alpha=0.05, safe=False):
         )
 
 
-@docstring_parameter(
+@docs.docstring_parameter(
     x_data=docs.X_DATA["type"],
     x_data_desc=docs.X_DATA["description"],
     weighted=docs.WEIGHTED["type"],
@@ -321,7 +316,7 @@ def normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
     return normal_ordered
 
 
-@docstring_parameter(
+@docs.docstring_parameter(
     samp_size=docs.SAMPLE_SIZE["type"],
     samp_size_desc=docs.SAMPLE_SIZE["description"],
     cte_alpha=docs.CTE_ALPHA["type"],
@@ -414,7 +409,7 @@ def order_statistic(sample_size, cte_alpha="3/8", safe=False):
     return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
 
 
-@docstring_parameter(
+@docs.docstring_parameter(
     samp_size=docs.SAMPLE_SIZE["type"],
     samp_size_desc=docs.SAMPLE_SIZE["description"],
     safe=docs.SAFE["type"],
@@ -504,7 +499,7 @@ def p_value(statistic, sample_size, safe=False):
         return p_value
 
 
-@docstring_parameter(
+@docs.docstring_parameter(
     x_data=docs.X_DATA["type"],
     x_data_desc=docs.X_DATA["description"],
     safe=docs.SAFE["type"],

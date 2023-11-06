@@ -77,6 +77,7 @@ html_css_files = [
 # Set up intersphinx maps
 intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
     "pandas": ("https://pandas.pydata.org/docs/", None),
     "matplotlib": ("https://matplotlib.org/stable/", None),
 }

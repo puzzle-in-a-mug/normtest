@@ -423,6 +423,7 @@ def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
 def _p_value(statistic, sample_size, safe=False):
     """This function estimates the probability associated with the Ryan-Joiner Normality test [1]_.
 
+
     Parameters
     ----------
     {statistic}
@@ -505,26 +506,30 @@ def _p_value(statistic, sample_size, safe=False):
 @docs.docstring_parameter(
     x_data=docs.X_DATA["type"],
     x_data_desc=docs.X_DATA["description"],
+    zi=docs.ZI["type"],
+    zi_desc=docs.ZI["description"],
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
 )
-def statistic(x_data, zi, safe=False):
+def _statistic(x_data, zi, safe=False):
     """This function estimates the Ryan-Joiner test statistic [1]_.
 
     Parameters
     ----------
     {x_data}
         {x_data_desc}
-    zi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
-        The corresponding statistical order in the standard Normal distribution scale.
+    {zi}
+        {zi_desc}
     {safe}
         {safe_desc}
 
 
     Returns
     -------
-    statistic : float
-        The test statistic
+    {statistic}
+        {statistic_desc}
 
 
     Notes
@@ -551,9 +556,8 @@ def statistic(x_data, zi, safe=False):
     >>> import numpy as np
     >>> x_data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
     >>> x_data = np.sort(x_data)
-    >>> order_statistic = ryan_joiner._order_statistic(x_data.size)
-    >>> normal_order = ryan_joiner.normal__order_statistic(x_data)
-    >>> result = ryan_joiner.statistic(x_data, normal_order)
+    >>> normal_order = ryan_joiner._normal_order_statistic(x_data)
+    >>> result = ryan_joiner._statistic(x_data, normal_order)
     >>> print(result)
     0.9225156050800545
 

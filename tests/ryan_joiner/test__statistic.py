@@ -1,10 +1,10 @@
-"""Tests if  ``statistic`` is working as expected
+"""Tests if  ``_statistic`` is working as expected
 
 --------------------------------------------------------------------------------
 Command to run at the prompt:
-    python -m unittest -v tests/ryan_joiner/test_statistic.py
+    python -m unittest -v tests/ryan_joiner/test__statistic.py
     or
-    python -m unittest -b tests/ryan_joiner/test_statistic.py
+    python -m unittest -b tests/ryan_joiner/test__statistic.py
 
 --------------------------------------------------------------------------------
 """
@@ -13,15 +13,15 @@ Command to run at the prompt:
 import os
 import unittest
 import numpy as np
-import random
+
 
 ### FUNCTION IMPORT ###
-from normtest.ryan_joiner import statistic
+from normtest.ryan_joiner import _statistic
 
 os.system("cls")
 
 
-class Test_statistic(unittest.TestCase):
+class Test__statistic(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.x_data = np.array(
@@ -57,21 +57,21 @@ class Test_statistic(unittest.TestCase):
         cls.result = 0.9565
 
     def test_input(self):
-        result = statistic(self.x_data, self.zi)
+        result = _statistic(self.x_data, self.zi)
         self.assertIsInstance(
             result,
             float,
             msg=f"not a float output",
         )
 
-        result = statistic(x_data=self.x_data, zi=self.zi)
+        result = _statistic(x_data=self.x_data, zi=self.zi)
         self.assertIsInstance(
             result,
             float,
             msg=f"not a float output",
         )
 
-        self.assertAlmostEqual(result, self.result, places=3, msg="wrong statistic")
+        self.assertAlmostEqual(result, self.result, places=3, msg="wrong _statistic")
 
 
 if __name__ == "__main__":

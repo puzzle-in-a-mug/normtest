@@ -17,6 +17,11 @@ ALPHA = {
     "description": "The level of significance (:math:`\\alpha`). Must be ``0.01``, ``0.05`` (default) or ``0.10``;",
 }
 
+AXES = {
+    "type": "axes : matplotlib.axes.SubplotBase",
+    "description": "The axis of the graph.;",
+}
+
 
 CRITICAL = {
     "type": "critical : float",

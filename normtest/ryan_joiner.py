@@ -3,30 +3,24 @@
 ##### List of functions (cte_alphabetical order) #####
 
 ## Functions WITH good TESTS ###
+- _critical_value(sample_size, alpha=0.05, safe=False)
+- _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
 - _order_statistic(sample_size, cte_alpha="3/8", safe=False)
+- _p_value(statistic, sample_size, safe=False)
 - citation(export=False)
-- critical_value(sample_size, alpha=0.05, safe=False)
-- p_value(statistic, sample_size, safe=False)
+- rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False)
 
 ## Functions WITH some TESTS ###
-- normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
+- _statistic(x_data, zi, safe=False)
+
 
 
 ## Functions WITHOUT tests ###
-- rj_critical_value(n, cte_alpha=0.05)
-- rj_p_value(statistic, n)
-- ryan_joiner(x_data, cte_alpha=0.05, method="blom", weighted=False)
-
-- rj_correlation_plot(axes, x_data, method="blom", weighted=False)
-- rj_dist_plot(axes, x_data, method="blom", min=4, max=50, deleted=False, weighted=False)
-
-- make_bar_plot(axes, df, n_samples, cte_alpha_column_name=None, n_rep_name=None, tests_column_names=None, normal=True, safe=False)
-- make_heatmap(axes, df, n_samples, cte_alpha_column_name=None, n_rep_name=None, tests_column_names=None, normal=True, safe=False)
-- normal_distribution_plot(axes, n_rep, seed=None, xinfo=[0.00001, 0.99999, 1000], loc=0.0, scale=1.0, safe=False)
 
 
 
-##### List of CLASS (cte_alphabetical order) #####
+
+##### List of CLASS (alphabetical order) #####
 
 ##### Dictionary of abbreviations #####
 
@@ -34,7 +28,7 @@
 
 Author: Anderson Marcos Dias Canteli <andersonmdcanteli@gmail.com>
 
-Last update: November 02, 2023
+Last update: November 06, 2023
 
 Last update: November 02, 2023
 
@@ -735,3 +729,95 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
         "RyanJoiner", ("statistic", "critical", "p_value", "conclusion")
     )
     return result(statistic, critical_value, p_value, conclusion)
+
+
+@docs.docstring_parameter(
+    axes=docs.AXES["type"],
+    axes_desc=docs.AXES["description"],
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    cte_alpha=docs.CTE_ALPHA["type"],
+    cte_alpha_desc=docs.CTE_ALPHA["description"],
+    weighted=docs.WEIGHTED["type"],
+    weighted_desc=docs.WEIGHTED["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+)
+def rj_correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
+    """This function creates an axis with the Ryan-Joiner test correlation graph.
+
+    Parameters
+    ----------
+    {axes}
+        {axes_desc}
+    {x_data}
+        {x_data_desc}
+    {cte_alpha}
+        {cte_alpha_desc}
+
+    {weighted}
+        {weighted_desc}
+    {safe}
+        {safe_desc}
+
+    Returns
+    -------
+    {axes}
+        {axes_desc}
+
+    See Also
+    --------
+    rj_test
+
+
+    Examples
+    --------
+    >>> from normtest import ryan_joiner
+    >>> import matplotlib.pyplot as plt
+    >>> from scipy import stats
+    >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
+    >>> fig, ax = plt.subplots(figsize=(6, 4))
+    >>> ryan_joiner.rj_correlation_plot(axes=ax, x_data=data)
+    >>> #plt.savefig("rj_correlation_plot.png")
+    >>> plt.show()
+
+    .. image:: img/rj_correlation_plot.png
+        :alt: Correlaion chart for Ryan-Joiner test Normality test
+        :align: center
+
+
+    """
+    func_name = "rj_correlation_plot"
+    if safe:
+        types.is_subplots(value=axes, param_name="axes", func_name=func_name)
+
+    constants.warning_plot()
+
+    # ordering the sample
+    zi = _normal_order_statistic(
+        x_data=x_data, weighted=weighted, cte_alpha=cte_alpha, safe=safe
+    )
+    x_data = np.sort(x_data)
+
+    # performing regression
+    reg = stats.linregress(zi, x_data)
+    # pred data
+    y_pred = zi * reg.slope + reg.intercept
+
+    ## making the plot
+
+    # adding the data
+    axes.scatter(zi, x_data, fc="none", ec="k")
+
+    # adding the trend line
+    axes.plot(zi, y_pred, c="r")
+
+    # adding the statistic
+    text = "$R_{p}=" + str(round(reg.rvalue, 4)) + "$"
+    axes.text(0.1, 0.9, text, ha="left", va="center", transform=axes.transAxes)
+
+    # perfuming
+    axes.set_xlabel("Normal statistical order")
+    axes.set_ylabel("Ordered data")
+
+    return axes

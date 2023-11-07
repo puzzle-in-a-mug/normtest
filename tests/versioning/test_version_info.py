@@ -17,7 +17,7 @@ import toml
 
 
 ### FUNCTION IMPORT ###
-import paramcheckup
+import normtest
 from packaging import version
 
 os.system("cls")
@@ -29,7 +29,7 @@ class Test_version(unittest.TestCase):
         pass
 
     def test_version(self):
-        doc_version = paramcheckup.__version__
+        doc_version = normtest.__version__
         pyproject_version = toml.load("pyproject.toml")["project"]["version"]
         self.assertTrue(
             version.parse(doc_version) == version.parse(pyproject_version),
@@ -37,17 +37,17 @@ class Test_version(unittest.TestCase):
         )
 
     def test_author(self):
-        doc_author = paramcheckup.__author__
+        doc_author = normtest.__author__
         pyproject_author = toml.load("pyproject.toml")["project"]["authors"][0]["name"]
         self.assertEqual(doc_author, pyproject_author, msg="main author doesn't match")
 
     def test_email(self):
-        doc_email = paramcheckup.__email__
+        doc_email = normtest.__email__
         pyproject_email = toml.load("pyproject.toml")["project"]["authors"][0]["email"]
         self.assertEqual(doc_email, pyproject_email, msg="main email doesn't match")
 
     def test_name(self):
-        doc_name = paramcheckup.__name__
+        doc_name = normtest.__name__
         pyproject_name = toml.load("pyproject.toml")["project"]["name"]
         self.assertEqual(doc_name, pyproject_name, msg="main name doesn't match")
 

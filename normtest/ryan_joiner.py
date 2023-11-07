@@ -15,6 +15,8 @@
 - correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False)
 - dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe=False)
 - _make_line_up_data(x_data, weighted, cte_alpha, safe)
+- line_up(x_data, cte_alpha="3/8", weighted=False, seed=42, correct=False, safe=False)
+
 
 ## Functions WITHOUT tests ###
 

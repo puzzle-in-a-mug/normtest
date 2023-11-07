@@ -7,11 +7,18 @@ Contribute
 
    Under construction.
 
+|
+|
 
-Você pode contribuir de diversas formas
+You can contribute in several ways
 
-* Tradução para outros idiomas
-* Revisão gramatical dos idiomas já conhecidos
-* Sugestões de novas funcionalidades que possam contribuir com um nicho acadêmico
-* Criando testes para as funções já existentes
-* Financeiramente
+* Grammar review;
+* Suggestions for new features;
+* Creating tests for existing functions;
+* Financially;
+
+Get in touch: andersonmdcanteli@gmail.com
+
+|
+|
+|

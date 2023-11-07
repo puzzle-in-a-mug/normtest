@@ -6,6 +6,11 @@
 
 This package has a series of tests used to check whether a set of sample data follows, at least approximately, the Normal distribution.
 
+## Available tests (07/11/2023)
+
+- Ryan-Joiner
+
+
 ## Install
 
 ```

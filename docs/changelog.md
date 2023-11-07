@@ -5,6 +5,7 @@
 
 
 #### Module ryan_joiner
+- Added ``line_up`` (07/11/2023);
 - Added ``dist_plot`` function (06/11/2023);
 - Added ``correlation_plot`` function (06/11/2023);
 - Added ``rj_test`` function (06/11/2023);

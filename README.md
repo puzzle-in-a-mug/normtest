@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/puzzle-in-a-mug/paramcheckup/main/docs/_static/logo.png" align="right" />
+<img src="https://raw.githubusercontent.com/puzzle-in-a-mug/normtest/main/docs/_static/logo.png" align="right" />
 
 # normtest
 

@@ -14,7 +14,7 @@
 - _statistic(x_data, zi, safe=False)
 - correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False)
 - dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe=False)
-
+- _make_line_up_data(x_data, weighted, cte_alpha, safe)
 
 ## Functions WITHOUT tests ###
 
@@ -975,7 +975,7 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
-def __make_line_up_data(x_data, weighted, cte_alpha, safe):
+def _make_line_up_data(x_data, weighted, cte_alpha, safe):
     """Tthis function prepares the data for the Ryan Joiner test `line_up` function.
 
     Parameters

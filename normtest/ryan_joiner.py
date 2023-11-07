@@ -1049,8 +1049,8 @@ def line_up(
 
     Returns
     -------
-    * If `correct=False`, the function generates and exports a graph without indicating which graph is `True` (file name is `"line_up.png"`)
-    * If `correct=True`, the function generates and exports a graph indicating in red which graph is `True` (file name is `"line_up_true.png"`)
+    fig : matplotlib.figure.Figure
+        A figure with the generated graphics;
 
 
     Notes
@@ -1071,6 +1071,7 @@ def line_up(
 
     References
     ----------
+    .. [1] BUJA, A. et al. Statistical inference for exploratory data analysis and model diagnostics. Philosophical Transactions of the Royal Society A: Mathematical, Physical and Engineering Sciences, v. 367, n. 1906, p. 4361–4383, 13 nov. 2009
 
 
     Examples
@@ -1113,6 +1114,7 @@ def line_up(
             arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
         )
         numbers.is_positive(value=seed, param_name="seed", func_name=func_name)
+    constants.warning_plot()
     # creating a list of 20 integers and shuffling
     position = np.arange(20)
     rng = np.random.default_rng(seed)
@@ -1170,11 +1172,5 @@ def line_up(
     fig.text(0.5, 0.0, "Normal statistical order", ha="center")
     fig.text(0.0, 0.5, "Ordered data", va="center", rotation="vertical")
     fig.patch.set_facecolor("white")
-    fig.tight_layout()
 
-    if color == "k":
-        plt.savefig("line_up.png", dpi=300, bbox_inches="tight")
-        plt.show()
-    else:
-        plt.savefig("line_up_true.png", dpi=300, bbox_inches="tight")
-        plt.close()
+    return fig

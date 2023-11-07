@@ -55,13 +55,12 @@ from . import bib
 from .utils import constants
 
 
-##### CONSTANTS #####
+##### DOCUMENTATION #####
+from .utils import documentation as docs
+
+#### CONSTANTS ####
 RyanJoiner1976 = "RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023."
 Blom1958 = "BLOM, G. Statistical Estimates and Transformed Beta-Variables. New York: John Wiley and Sons, Inc, p. 71-72, 1958."
-
-
-#### DOCUMENTATION ####
-from .utils import documentation as docs
 
 
 ##### CLASS #####
@@ -691,7 +690,7 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
 
     .. admonition:: \u2615
 
-       if critical :math:`\leq` statistic:
+       if critical :math:`\\leq` statistic:
            Fail to reject :math:`H_0:` (e.g., data is Normal)
        else:
            Reject :math:`H_0:` (e.g., data is not Normal)
@@ -937,7 +936,7 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
 
     n_samples = np.arange(min, max + 1)
     alphas = [0.10, 0.05, 0.01]
-    alphas_label = ["$R_{p;10\%}^{'}$", "$R_{p;5\%}^{'}$", "$R_{p;1\%}^{'}$"]
+    alphas_label = ["$R_{p;10\\%}^{'}$", "$R_{p;5\\%}^{'}$", "$R_{p;1\\%}^{'}$"]
     colors = [
         (0.2980392156862745, 0.4470588235294118, 0.6901960784313725),
         (0.8666666666666667, 0.5176470588235295, 0.3215686274509804),

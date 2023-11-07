@@ -808,7 +808,7 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
     >>> plt.show()
 
     .. image:: img/correlation_plot.png
-        :alt: Correlaion chart for Ryan-Joiner test Normality test
+        :alt: Correlation chart for Ryan-Joiner test Normality test
         :align: center
 
     """
@@ -1011,3 +1011,170 @@ def _make_line_up_data(x_data, weighted, cte_alpha, safe):
     y_pred = zi * reg.slope + reg.intercept
 
     return x_data, zi, y_pred
+
+
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    cte_alpha=docs.CTE_ALPHA["type"],
+    cte_alpha_desc=docs.CTE_ALPHA["description"],
+    weighted=docs.WEIGHTED["type"],
+    weighted_desc=docs.WEIGHTED["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    zi=docs.ZI["type"],
+    zi_desc=docs.ZI["description"],
+)
+def line_up(
+    x_data, cte_alpha="3/8", weighted=False, seed=42, correct=False, safe=False
+):
+    """This function exports the figure with the correlation graphs for the line up method [1]_.
+
+    Parameters
+    ----------
+    {x_data}
+        {x_data_desc}
+    {cte_alpha}
+        {cte_alpha_desc}
+
+    {weighted}
+        {weighted_desc}
+    seed : int, optional
+        A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``42``;
+    correct : bool, optional
+        Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
+    {safe}
+        {safe_desc}
+
+
+    Returns
+    -------
+    * If `correct=False`, the function generates and exports a graph without indicating which graph is `True` (file name is `"line_up.png"`)
+    * If `correct=True`, the function generates and exports a graph indicating in red which graph is `True` (file name is `"line_up_true.png"`)
+
+
+    Notes
+    -----
+    This function is based on the line up method, where ``20`` correlation graphs are generated. One of these graphs contains the graph obtained with the true data (`x_data`). The other `19` graphs are drawn from pseudo-random data obtained from the Normal distribution with a mean and standard deviation similar to `x_data`.
+
+    The objective is to observe the 20 graphs at the same time and discover *which graph is the *least similar* to the behavior expected for the Normal distribution*.
+
+    * If the identified graph corresponds to the true data, it can be concluded that the data set is not similar to a Normal distribution (with 95% confidence);
+    * If the identified graph does not correspond to that obtained with real data, it can be concluded that the data set is similar to a Normal distribution (with 95% confidence);
+
+
+    See Also
+    --------
+    rj_test
+    dist_plot
+
+
+    References
+    ----------
+
+
+    Examples
+    --------
+    Initially, we must generate the line up graph without marking which graph is correct
+
+
+    >>> from normtest import ryan_joiner
+    >>> import numpy as np
+    >>> x_exp = np.array([5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, 4.9, 5.4])
+    >>> ryan_joiner.line_up(x_exp, seed=42, correct=False)
+
+
+    .. image:: img/line_up.png
+        :alt: Line-up method chart for Ryan-Joiner test Normality test
+        :align: center
+
+
+    Suppose that the most different graph is the one present in the first row and second column. Now we need to know which graph is `True`. To do this, simply change `correct=True`:
+
+
+    >>> ryan_joiner.line_up(x_exp, seed=42, correct=True)
+
+    .. dropdown:: click to reveal output
+        :animate: fade-in
+
+        .. image:: img/line_up_true.png
+            :alt: Line-up method chart for Ryan-Joiner test Normality test
+            :align: center
+
+
+        As the true data corresponds to the graph in the second line and first column, which is not what was identified as different from the others, we can conclude that the data set follows, at least approximately, the Normal distribution.
+
+
+    """
+    func_name = "line_up"
+    if safe:
+        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
+        numpy_arrays.n_dimensions(
+            arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
+        )
+        numbers.is_positive(value=seed, param_name="seed", func_name=func_name)
+    # creating a list of 20 integers and shuffling
+    position = np.arange(20)
+    rng = np.random.default_rng(seed)
+    # sampling one to be the true position
+    real_data_position = rng.choice(position)
+
+    # preparing a list of 1000 seeds to generate Normal data
+    seeds = np.arange(1000)
+    seeds = rng.choice(seeds, 20)
+
+    # making the synthetic data and grouping it with the real data at the random position
+    data = []
+    mean = x_data.mean()
+    std = x_data.std(ddof=1)
+    size = x_data.size
+
+    for pos, sed in zip(position, seeds):
+        if pos == real_data_position:
+            data.append(x_data)
+        else:
+            data.append(
+                stats.norm.rvs(loc=mean, scale=std, size=size, random_state=sed)
+            )
+
+    # creating the figure with the 20 axes
+
+    rows = 5
+    cols = 4
+    fig, ax = plt.subplots(cols, rows, figsize=(10, 7))
+
+    i = 0
+    if correct:
+        color = "r"
+    else:
+        color = "k"
+    for row in range(rows):
+        for col in range(cols):
+            if i == real_data_position:
+                x, zi, y_pred = _make_line_up_data(
+                    x_data=data[i], weighted=weighted, cte_alpha=cte_alpha, safe=safe
+                )
+                ax[col, row].scatter(zi, x, c=color)
+                ax[col, row].plot(zi, y_pred, ls="--", c=color)
+
+            else:
+                x, zi, y_pred = _make_line_up_data(
+                    x_data=data[i], weighted=weighted, cte_alpha=cte_alpha, safe=safe
+                )
+                ax[col, row].scatter(zi, x, c="k")
+                ax[col, row].plot(zi, y_pred, ls="--", c="k")
+
+            i += 1
+            ax[col, row].tick_params(axis="both", which="major", labelsize=5)
+
+    fig.text(0.5, 0.0, "Normal statistical order", ha="center")
+    fig.text(0.0, 0.5, "Ordered data", va="center", rotation="vertical")
+    fig.patch.set_facecolor("white")
+    fig.tight_layout()
+
+    if color == "k":
+        plt.savefig("line_up.png", dpi=300, bbox_inches="tight")
+        plt.show()
+    else:
+        plt.savefig("line_up_true.png", dpi=300, bbox_inches="tight")
+        plt.close()

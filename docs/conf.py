@@ -42,6 +42,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.autosummary",
     "sphinx_favicon",
+    "sphinx_design",
     # 'sphinx_toolbox.shields',
     # 'sphinx.ext.doctest', # o problema é que ele quebra todo o output, e retorna muitos falsos erros
 ]

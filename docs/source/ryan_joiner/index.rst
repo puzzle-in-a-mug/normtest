@@ -4,6 +4,7 @@ ryan_joiner
 
 This module contains the relevant functions to apply the Ryan-Joiner Normality test [1]_.
 
+
 Main functions
 --------------
 
@@ -13,6 +14,7 @@ Main functions
    citation
    correlation_plot
    dist_plot
+   line_up
    rj_test
 
 

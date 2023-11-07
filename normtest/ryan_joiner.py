@@ -965,6 +965,7 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
     return axes
 
 
+# this function does not have documentation on purpose (private)
 @docs.docstring_parameter(
     x_data=docs.X_DATA["type"],
     x_data_desc=docs.X_DATA["description"],

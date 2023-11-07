@@ -1076,24 +1076,30 @@ def line_up(
 
     Examples
     --------
-    Initially, we must generate the line up graph without marking which graph is correct
+    The line-up method must be conducted in two steps. The first step involves generating a figure with 20 graphs from the data, without indicating which graph is the true one.
 
 
     >>> from normtest import ryan_joiner
     >>> import numpy as np
+    >>> import matplotlib.pyplot as plt
     >>> x_exp = np.array([5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, 4.9, 5.4])
-    >>> ryan_joiner.line_up(x_exp, seed=42, correct=False)
+    >>> fig = ryan_joiner.line_up(x_exp, seed=42, correct=False)
+    >>> fig.tight_layout()
+    >>> plt.savefig("line_up.png", bbox_inches="tight")
 
 
     .. image:: img/line_up.png
         :alt: Line-up method chart for Ryan-Joiner test Normality test
         :align: center
 
+    The researcher must identify which of the 20 graphs deviates most significantly from what is expected for a Normal distribution. For instance, the graph located in the first row and second column.
 
-    Suppose that the most different graph is the one present in the first row and second column. Now we need to know which graph is `True`. To do this, simply change `correct=True`:
+    The second step involves determining which graph corresponds to the true data set. This can be accomplished by simply changing parameter `correct` from `False` to `True`:
 
 
-    >>> ryan_joiner.line_up(x_exp, seed=42, correct=True)
+    >>> fig = ryan_joiner.line_up(x_exp, seed=42, correct=True)
+    >>> fig.tight_layout()
+    >>> plt.savefig("line_up_true.png", bbox_inches="tight")
 
     .. dropdown:: click to reveal output
         :animate: fade-in
@@ -1103,7 +1109,7 @@ def line_up(
             :align: center
 
 
-        As the true data corresponds to the graph in the second line and first column, which is not what was identified as different from the others, we can conclude that the data set follows, at least approximately, the Normal distribution.
+        Given that the true data corresponds to the graph in the second row and first column, which was not identified as deviating from the others, we can conclude that the data set follows the Normal distribution, at least approximately.
 
 
     """

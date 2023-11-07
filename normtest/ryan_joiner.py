@@ -961,3 +961,53 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
     axes.set_ylabel("Critical value")
 
     return axes
+
+
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    cte_alpha=docs.CTE_ALPHA["type"],
+    cte_alpha_desc=docs.CTE_ALPHA["description"],
+    weighted=docs.WEIGHTED["type"],
+    weighted_desc=docs.WEIGHTED["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    zi=docs.ZI["type"],
+    zi_desc=docs.ZI["description"],
+)
+def __make_line_up_data(x_data, weighted, cte_alpha, safe):
+    """Tthis function prepares the data for the Ryan Joiner test `line_up` function.
+
+    Parameters
+    ----------
+    {x_data}
+        {x_data_desc}
+    {weighted}
+        {weighted_desc}
+    {cte_alpha}
+        {cte_alpha_desc}
+    {safe}
+        {safe_desc}
+
+    Returns
+    -------
+    {x_data}
+        The input data *ordered*
+    {zi}
+        {zi_desc}
+    y_pred : :doc:`numpy array <numpy:reference/generated/numpy.array>`
+        The predicted values for the linear regression between `x_data` and `zi`;
+
+    """
+    # ordering the sample
+    x_data = np.sort(x_data)
+    zi = _normal_order_statistic(
+        x_data=x_data, weighted=weighted, cte_alpha=cte_alpha, safe=safe
+    )
+
+    # performing regression
+    reg = stats.linregress(zi, x_data)
+    # pred data
+    y_pred = zi * reg.slope + reg.intercept
+
+    return x_data, zi, y_pred

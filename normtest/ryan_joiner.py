@@ -1087,7 +1087,8 @@ def line_up(
     >>> x_exp = np.array([5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, 4.9, 5.4])
     >>> fig = ryan_joiner.line_up(x_exp, seed=42, correct=False)
     >>> fig.tight_layout()
-    >>> plt.savefig("line_up.png", bbox_inches="tight")
+    >>> # plt.savefig("line_up.png", bbox_inches="tight")
+    >>> plt.show()
 
 
     .. image:: img/line_up.png
@@ -1101,7 +1102,9 @@ def line_up(
 
     >>> fig = ryan_joiner.line_up(x_exp, seed=42, correct=True)
     >>> fig.tight_layout()
-    >>> plt.savefig("line_up_true.png", bbox_inches="tight")
+    >>> # plt.savefig("line_up_true.png", bbox_inches="tight")
+    >>> plt.show()
+
 
     .. dropdown:: click to reveal output
         :animate: fade-in

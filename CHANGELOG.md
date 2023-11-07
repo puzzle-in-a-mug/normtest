@@ -7,6 +7,7 @@
 ### First Release
 
 #### Module ryan_joiner
+- Added ``line_up`` (07/11/2023);
 - Added ``_make_line_up_data`` (06/11/2023);
 - Added ``dist_plot`` function (06/11/2023);
 - Added ``correlation_plot`` function (06/11/2023);

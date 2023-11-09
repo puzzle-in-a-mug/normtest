@@ -288,6 +288,8 @@ def _statistic(x_data, zi, safe=False):
 
     * :math:`n` is the sample size;
 
+    The correlation is estimated using :doc:`scipy.stats.pearsonr() <scipy:reference/generated/scipy.stats.pearsonr>`.
+
     References
     ----------
     .. [1] {fi_ref}

@@ -7,7 +7,7 @@
 
 ## Functions WITH some TESTS ###
 - citation()
-
+- _uniform_order_medians(sample_size, safe=False)
 
 ## Functions WITHOUT tests ###
 

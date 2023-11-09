@@ -133,7 +133,7 @@ def _uniform_order_medians(sample_size, safe=False):
 
     References
     ----------
-    .. [1] FILLIBEN, J. J. The Probability Plot Correlation Coefficient Test for Normality. Technometrics, 17(1), 111-117, (1975). Available at `doi.org/10.2307/1268008 <https://doi.org/10.2307/1268008>`_.
+    .. [1] {fi_ref}
 
 
 

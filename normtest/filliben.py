@@ -42,12 +42,13 @@ from scipy import interpolate
 
 ### self made ###
 from paramcheckup import parameters, types, numbers, numpy_arrays
-from . import bib
+from normtest import bibmaker
 from .utils import constants
 
 
 ##### DOCUMENTATION #####
 from .utils import documentation as docs
+
 
 #### CONSTANTS ####
 Filliben1975 = "FILLIBEN, J. J. The Probability Plot Correlation Coefficient Test for Normality. Technometrics, v. 17, n. 1, p. 111-117, 1975."
@@ -61,29 +62,32 @@ Blom1958 = "BLOM, G. Statistical Estimates and Transformed Beta-Variables. New Y
 
 
 def citation(export=False):
-    """This function returns the reference from Ryan Joiner's test, with the option to export the reference in `.bib` format.
+    """This function returns the reference from Filliben's test, with the option to export the reference in `.bib` format.
 
     Parameters
     ----------
     export : bool
-        Whether to export the reference as `ryan-joiner.bib` file (`True`) or not (`False`, default);
+        Whether to export the reference as `Filliben1975.bib` file (`True`) or not (`False`, default);
 
 
     Returns
     -------
     reference : str
-        The Ryan Joiner Test reference
+        The Filliben Test reference
 
     """
-    reference = bib.make_techreport(
-        citekey="RyanJoiner1976",
-        author="Thomas A. Ryan, Jr. and Brian L. Joiner",
-        title="Normal Probability Plots and Tests for Normality",
-        institution="The Pennsylvania State University, Statistics Department",
-        year="1976",
-        export=False,
+    reference = bibmaker.make_article(
+        author="James J. Filliben",
+        title="The Probability Plot Correlation Coefficient Test for Normality",
+        journaltitle="Technometrics",
+        year=1975,
+        citekey="Filliben1975",
+        date=None,
+        volume="17",
+        number="1",
+        pages="111--117",
+        doi="10.2307/1268008",
+        month=2,
+        export=export,
     )
-    if export:
-        with open("ryan-joiner.bib", "w") as my_bib:
-            my_bib.write(reference)
     return reference

@@ -5,6 +5,7 @@
 
 ### Module filliben
 
+- Added ``_normal_order_medians`` (09/11/2023);
 - Added ``_uniform_order_medians`` (09/11/2023);
 - Added ``citation`` (09/11/2023);
 

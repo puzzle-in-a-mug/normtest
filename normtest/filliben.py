@@ -91,3 +91,67 @@ def citation(export=False):
         export=export,
     )
     return reference
+
+
+def _uniform_order_medians(sample_size, safe=False):
+    """This function estimates the uniform order statistic median (:math:`m_{i}`) used in the Filliben normality test [1]_.
+
+    Parameters
+    ----------
+    sample_size : int
+        The sample size (greater than ``3``);
+    safe : bool, optional
+        Whether to check the inputs before performing the calculations (*True*) or not (*False*, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+
+    Returns
+    -------
+    mi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
+        The estimated the uniform order statistic median (:math:`m_{i}`)
+
+    See Also
+    --------
+    pass
+
+
+    Notes
+    -----
+    The uniform order statistic median is estimated using:
+
+    .. math::
+
+            m_{i} = \\begin{cases}1-0.5^{1/n} & i = 1\\\ \\frac{i-0.3175}{n+0.365} & i = 2, 3,  \\ldots , n-1 \\\ 0.5^{1/n}& i=n \\end{cases}
+
+    where :math:`n` is the sample size and :math:`i` is the ith observation.
+
+
+    References
+    ----------
+    .. [1] FILLIBEN, J. J. The Probability Plot Correlation Coefficient Test for Normality. Technometrics, 17(1), 111-117, (1975). Available at `doi.org/10.2307/1268008 <https://doi.org/10.2307/1268008>`_.
+
+
+
+    Examples
+    --------
+    >>> uniform_order_medians(7)
+    array([0.09427634, 0.22844535, 0.36422267, 0.5       , 0.63577733,
+           0.77155465, 0.90572366])
+    """
+
+    if safe:
+        types.is_int(
+            value=sample_size, param_name="sample_size", func_name="normal_medians"
+        )
+        numbers.is_greater_than(
+            value=sample_size,
+            lower=3,
+            param_name="sample_size",
+            func_name="normal_medians",
+            inclusive=True,
+        )
+
+    i = np.arange(1, sample_size + 1)
+    mi = (i - 0.3175) / (sample_size + 0.365)
+    mi[0] = 1 - 0.5 ** (1 / sample_size)
+    mi[-1] = 0.5 ** (1 / sample_size)
+
+    return mi

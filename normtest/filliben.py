@@ -110,7 +110,7 @@ def _uniform_order_medians(sample_size, safe=False):
 
     See Also
     --------
-    pass
+    fi_test
 
 
     Notes
@@ -132,7 +132,9 @@ def _uniform_order_medians(sample_size, safe=False):
 
     Examples
     --------
-    >>> uniform_order_medians(7)
+    >>> from normtest import filliben
+    >>> uniform_order = filliben._uniform_order_medians(7)
+    >>> print(uniform_order)
     array([0.09427634, 0.22844535, 0.36422267, 0.5       , 0.63577733,
            0.77155465, 0.90572366])
     """

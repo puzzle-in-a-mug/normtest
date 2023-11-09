@@ -51,7 +51,7 @@ from scipy import interpolate
 
 ### self made ###
 from paramcheckup import parameters, types, numbers, numpy_arrays
-from . import bib
+from . import bibmaker
 from .utils import constants
 
 
@@ -84,7 +84,7 @@ def citation(export=False):
         The Ryan Joiner Test reference
 
     """
-    reference = bib.make_techreport(
+    reference = bibmaker.make_techreport(
         citekey="RyanJoiner1976",
         author="Thomas A. Ryan, Jr. and Brian L. Joiner",
         title="Normal Probability Plots and Tests for Normality",

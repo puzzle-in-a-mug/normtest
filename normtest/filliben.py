@@ -98,6 +98,8 @@ def citation(export=False):
     samp_size_desc=docs.SAMPLE_SIZE["description"],
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
+    mi=docs.MI["type"],
+    mi_desc=docs.MI["description"],
     fi_ref=Filliben1975,
 )
 def _uniform_order_medians(sample_size, safe=False):
@@ -112,8 +114,8 @@ def _uniform_order_medians(sample_size, safe=False):
 
     Returns
     -------
-    mi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
-        The estimated the uniform order statistic median (:math:`m_{{i}}`)
+    {mi}
+        {mi_desc}
 
     See Also
     --------
@@ -164,3 +166,91 @@ def _uniform_order_medians(sample_size, safe=False):
     mi[-1] = 0.5 ** (1 / sample_size)
 
     return mi
+
+
+@docs.docstring_parameter(
+    mi=docs.MI["type"],
+    mi_desc=docs.MI["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    zi=docs.ZI["type"],
+    zi_desc=docs.ZI["description"],
+)
+def _normal_order_medians(mi, safe=False):
+    """This function transforms the uniform order median to normal order median using the standard Normal distribution (:math:`z_{{i}}`).
+
+    Parameters
+    ----------
+    {mi}
+        {mi_desc}
+
+
+    Returns
+    -------
+    {zi}
+        {zi_desc}
+
+
+    Notes
+    -----
+    The transformation to the standard Normal scale is done using the equation:
+
+    .. math::
+
+            z_{{i}} = \\phi^{{-1}} \\left(m_{{i}} \\right)
+
+    where :math:`m_{{i}}` is the uniform statistical order and :math:`\\phi^{{-1}}` is the inverse of the standard Normal distribution. The transformation is performed using :doc:`stats.norm.ppf() <scipy:reference/generated/scipy.stats.norm>`.
+
+
+    See Also
+    --------
+    fi_test
+
+
+    Examples
+    --------
+    The first example uses `weighted=False`:
+
+    >>> import numpy as np
+    >>> from normtest import ryan_joiner
+    >>> data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
+    >>> result = ryan_joiner._normal_order_statistic(data, weighted=False)
+    >>> print(result)
+    [-1.67293739 -1.16188294 -0.84837993 -0.6020065  -0.38786869 -0.19032227
+    0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
+    1.67293739]
+
+    The second example uses `weighted=True`, with the same data set:
+
+    >>> result = ryan_joiner._normal_order_statistic(data, weighted=True)
+    >>> print(result)
+    [-1.37281032 -1.37281032 -0.84837993 -0.4921101  -0.4921101  -0.19032227
+    0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
+    1.67293739]
+
+
+    Note that the results are only different for positions where we have repeated values. Using `weighted=True`, the normal statistical order is obtained with the average of the order statistic values.
+
+    The results will be identical if the data set does not contain repeated values.
+
+    """
+    func_name = "_normal_order_medians"
+    if safe:
+        types.is_numpy(value=mi, param_name="mi", func_name=func_name)
+        numpy_arrays.n_dimensions(
+            arr=mi,
+            param_name="mi",
+            func_name=func_name,
+            n_dimensions=1,
+        )
+        numpy_arrays.greater_than_n(
+            array=mi,
+            param_name="mi",
+            func_name=func_name,
+            minimum=4,
+            inclusive=True,
+        )
+
+    normal_ordered = stats.norm.ppf(mi)
+
+    return normal_ordered

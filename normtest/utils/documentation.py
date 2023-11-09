@@ -38,6 +38,13 @@ CTE_ALPHA = {
         * `"1/2"`;""",
 }
 
+
+MI = {
+    "type": "mi : :doc:`numpy array <numpy:reference/generated/numpy.array>`",
+    "description": "The estimated the uniform order statistic median (:math:`m_{{i}}`)",
+}
+
+
 P_VALUE = {
     "type": "p_value : float or str",
     "description": "The probability of the test;",

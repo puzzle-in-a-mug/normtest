@@ -239,3 +239,84 @@ def _normal_order_medians(mi, safe=False):
     normal_ordered = stats.norm.ppf(mi)
 
     return normal_ordered
+
+
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    zi=docs.ZI["type"],
+    zi_desc=docs.ZI["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    fi_ref=Filliben1975,
+)
+def _statistic(x_data, zi, safe=False):
+    """This function estimates the statistic of the Filliben normality test [1]_
+
+    Parameters
+    ----------
+    {x_data}
+        {x_data_desc}
+    {zi}
+        {zi_desc}
+    {safe}
+        {safe_desc}
+
+    Returns
+    -------
+    statistic
+        {statistic_desc}
+
+
+    See Also
+    --------
+    fi_test
+
+
+    Notes
+    -----
+    The test statistic (:math:`F_{{p}}`) is estimated through the correlation between the ordered data and the Normal statistical order:
+
+
+    .. math::
+
+            r = \\frac{{\\sum_{{i=1}}^n \\left(x_i - \\overline{{x}}\\right) \\left(y_i - \\overline{{y}}\\right)}}{{\\sqrt{{\\sum_{{i=1}}^n \\left( x_i - \\overline{{x}}\\right)^2 \\sum_{{i=1}}^n \\left( y_i - \\overline{{y}}\\right)^2}}}}
+
+    where:
+
+    * :math:`n` is the sample size;
+
+    References
+    ----------
+    .. [1] {fi_ref}
+
+
+
+
+    """
+    if safe:
+        func_name = "_statistic"
+        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
+        numpy_arrays.greater_than_n(
+            array=x_data,
+            param_name="x_data",
+            func_name=func_name,
+            minimum=4,
+            inclusive=True,
+        )
+        types.is_numpy(value=zi, param_name="zi", func_name=func_name)
+        numpy_arrays.greater_than_n(
+            array=zi, param_name="zi", func_name=func_name, minimum=4, inclusive=True
+        )
+        numpy_arrays.matching_size(
+            array_a=x_data,
+            param_name_a="x_data",
+            array_b=zi,
+            param_name_b="zi",
+            func_name=func_name,
+        )
+
+    correl = stats.pearsonr(x_data, zi)[0]
+    return correl

@@ -1,7 +1,7 @@
 # Changelog
 
 
-## v0.0.2 (08/11/2023)
+## v0.0.2 (09/11/2023)
 
 ### Module filliben
 - Added ``citation`` (09/11/2023);

@@ -8,6 +8,7 @@
 ## Functions WITH some TESTS ###
 - citation()
 - _uniform_order_medians(sample_size, safe=False)
+- _normal_order_medians(mi, safe=False)
 
 ## Functions WITHOUT tests ###
 

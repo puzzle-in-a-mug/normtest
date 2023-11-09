@@ -21,8 +21,10 @@ os.system("cls")
 class Test_uniform_order_medians(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        cls.filliben = np.array(
+            [0.0943, 0.2284, 0.3642, 0.5, 0.6358, 0.7716, 0.9057]
+        )  # Filliben example
         cls.sample_size = 10
-        cls.filliben = np.array([0.0943, 0.2284, 0.3642, 0.5, 0.6358, 0.7716, 0.9057])
 
     def test_outputs(self):
         result = _uniform_order_medians(self.sample_size, False)

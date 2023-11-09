@@ -15,7 +15,13 @@ Main functions
    
 
 
+Others functions
+----------------
 
+.. toctree:: 
+   :maxdepth: 1
+   
+   _uniform_order_medians
 
 
 

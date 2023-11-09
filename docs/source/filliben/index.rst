@@ -22,6 +22,7 @@ Others functions
    :maxdepth: 1
    
    _normal_order_medians
+   _statistic
    _uniform_order_medians
 
 

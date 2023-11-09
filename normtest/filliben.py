@@ -282,11 +282,9 @@ def _statistic(x_data, zi, safe=False):
 
     .. math::
 
-            r = \\frac{{\\sum_{{i=1}}^n \\left(x_i - \\overline{{x}}\\right) \\left(y_i - \\overline{{y}}\\right)}}{{\\sqrt{{\\sum_{{i=1}}^n \\left( x_i - \\overline{{x}}\\right)^2 \\sum_{{i=1}}^n \\left( y_i - \\overline{{y}}\\right)^2}}}}
+            F_p = \\frac{{\\sum_{{i=1}}^n \\left(x_i - \\overline{{x}}\\right) \\left(z_i - \\overline{{z}}\\right)}}{{\\sqrt{{\\sum_{{i=1}}^n \\left( x_i - \\overline{{x}}\\right)^2 \\sum_{{i=1}}^n \\left( z_i - \\overline{{z}}\\right)^2}}}}
 
-    where:
-
-    * :math:`n` is the sample size;
+    where :math:`z_{{i}}` values are the z-score values of the corresponding experimental data (:math:`x_{{{{i}}}}`) value, and :math:`n` is the sample size.
 
     The correlation is estimated using :doc:`scipy.stats.pearsonr() <scipy:reference/generated/scipy.stats.pearsonr>`.
 
@@ -295,6 +293,17 @@ def _statistic(x_data, zi, safe=False):
     .. [1] {fi_ref}
 
 
+    Examples
+    --------
+    >>> from normtest import filliben
+    >>> import numpy as np
+    >>> x_data = np.array([6, 1, -4, 8, -2, 5, 0])
+    >>> uniform_order = filliben._uniform_order_medians(x_data.size)
+    >>> normal_order = filliben._normal_order_medians(uniform_order)
+    >>> x_data = np.sort(x_data)
+    >>> statistic = filliben._statistic(x_data, normal_order)
+    >>> print(statistic)
+    0.9854095718708367
 
 
     """

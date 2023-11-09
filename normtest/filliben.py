@@ -6,7 +6,7 @@
 
 
 ## Functions WITH some TESTS ###
-
+- citation()
 
 
 ## Functions WITHOUT tests ###
@@ -21,7 +21,7 @@ Author: Anderson Marcos Dias Canteli <andersonmdcanteli@gmail.com>
 
 Created : November 08, 2023
 
-Last update: November 08, 2023
+Last update: November 09, 2023
 """
 
 ##### IMPORTS #####

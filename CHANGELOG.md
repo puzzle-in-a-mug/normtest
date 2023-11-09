@@ -4,6 +4,8 @@
 ## v0.0.2 (09/11/2023)
 
 ### Module filliben
+
+- Added ``_uniform_order_medians`` (09/11/2023);
 - Added ``citation`` (09/11/2023);
 
 

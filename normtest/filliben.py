@@ -93,20 +93,27 @@ def citation(export=False):
     return reference
 
 
+@docs.docstring_parameter(
+    sample_size=docs.SAMPLE_SIZE["type"],
+    samp_size_desc=docs.SAMPLE_SIZE["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    fi_ref=Filliben1975,
+)
 def _uniform_order_medians(sample_size, safe=False):
-    """This function estimates the uniform order statistic median (:math:`m_{i}`) used in the Filliben normality test [1]_.
+    """This function estimates the uniform order statistic median (:math:`m_{{i}}`) used in the Filliben normality test [1]_.
 
     Parameters
     ----------
-    sample_size : int
-        The sample size (greater than ``3``);
-    safe : bool, optional
-        Whether to check the inputs before performing the calculations (*True*) or not (*False*, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+    {sample_size}
+        {samp_size_desc}
+    {safe}
+        {safe_desc}
 
     Returns
     -------
     mi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
-        The estimated the uniform order statistic median (:math:`m_{i}`)
+        The estimated the uniform order statistic median (:math:`m_{{i}}`)
 
     See Also
     --------
@@ -119,7 +126,7 @@ def _uniform_order_medians(sample_size, safe=False):
 
     .. math::
 
-            m_{i} = \\begin{cases}1-0.5^{1/n} & i = 1\\\ \\frac{i-0.3175}{n+0.365} & i = 2, 3,  \\ldots , n-1 \\\ 0.5^{1/n}& i=n \\end{cases}
+            m_{{i}} = \\begin{{cases}}1-0.5^{{1/n}} & i = 1\\\ \\frac{{i-0.3175}}{{n+0.365}} & i = 2, 3,  \\ldots , n-1 \\\ 0.5^{{1/n}}& i=n \\end{{cases}}
 
     where :math:`n` is the sample size and :math:`i` is the ith observation.
 
@@ -145,7 +152,7 @@ def _uniform_order_medians(sample_size, safe=False):
         )
         numbers.is_greater_than(
             value=sample_size,
-            lower=3,
+            lower=4,
             param_name="sample_size",
             func_name="normal_medians",
             inclusive=True,

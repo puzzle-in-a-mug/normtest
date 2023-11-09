@@ -47,6 +47,15 @@ class Test_uniform_order_medians(unittest.TestCase):
             np.allclose(result, self.filliben, atol=4), msg="arrays does not match"
         )
 
+    def test_small_n(self):
+        n_values = [-5, 0, 3]
+        for n in n_values:
+            with self.assertRaises(
+                ValueError,
+                msg=f"Does not raised ValueError when sample size is small",
+            ):
+                result = _uniform_order_medians(n, safe=True)
+
 
 if __name__ == "__main__":
     unittest.main()

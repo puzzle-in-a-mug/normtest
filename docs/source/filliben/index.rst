@@ -21,6 +21,7 @@ Others functions
 .. toctree:: 
    :maxdepth: 1
    
+   _normal_order_medians
    _uniform_order_medians
 
 

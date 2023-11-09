@@ -210,29 +210,13 @@ def _normal_order_medians(mi, safe=False):
 
     Examples
     --------
-    The first example uses `weighted=False`:
+    >>> from normtest import filliben
+    >>> uniform_order = filliben._uniform_order_medians(7)
+    >>> normal_order = filliben._normal_order_medians(uniform_order)
+    >>> print(normal_order)
+    [-1.31487275 -0.74397649 -0.3471943   0.          0.3471943   0.74397649
+    1.31487275]
 
-    >>> import numpy as np
-    >>> from normtest import ryan_joiner
-    >>> data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
-    >>> result = ryan_joiner._normal_order_statistic(data, weighted=False)
-    >>> print(result)
-    [-1.67293739 -1.16188294 -0.84837993 -0.6020065  -0.38786869 -0.19032227
-    0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
-    1.67293739]
-
-    The second example uses `weighted=True`, with the same data set:
-
-    >>> result = ryan_joiner._normal_order_statistic(data, weighted=True)
-    >>> print(result)
-    [-1.37281032 -1.37281032 -0.84837993 -0.4921101  -0.4921101  -0.19032227
-    0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
-    1.67293739]
-
-
-    Note that the results are only different for positions where we have repeated values. Using `weighted=True`, the normal statistical order is obtained with the average of the order statistic values.
-
-    The results will be identical if the data set does not contain repeated values.
 
     """
     func_name = "_normal_order_medians"

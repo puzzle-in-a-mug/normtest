@@ -14,7 +14,7 @@ def docstring_parameter(*args, **kwargs):
 
 ALPHA = {
     "type": "alpha : float, optional",
-    "description": "The level of significance (:math:`\\alpha`). Must be ``0.01``, ``0.05`` (default) or ``0.10``;",
+    "description": "The level of significance (:math:`\\alpha`). Default is ``0.05``;",
 }
 
 AXES = {

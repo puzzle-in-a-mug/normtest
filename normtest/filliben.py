@@ -811,15 +811,15 @@ def _make_line_up_data(x_data, safe):
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
 )
-def line_up(x_data, seed=42, correct=False, safe=False):
+def line_up(x_data, seed=None, correct=False, safe=False):
     """This function exports the figure with the correlation graphs for the line up method [1]_.
 
     Parameters
     ----------
     {x_data}
         {x_data_desc}
-    seed : int, optional
-        A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``42``;
+    seed : int or None, optional
+        A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``None`` what generates a random seed;
     correct : bool, optional
         Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
     {safe}
@@ -858,18 +858,18 @@ def line_up(x_data, seed=42, correct=False, safe=False):
     The line-up method must be conducted in two steps. The first step involves generating a figure with 20 graphs from the data, without indicating which graph is the true one.
 
 
-    >>> from normtest import ryan_joiner
+    >>> from normtest import filliben
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
     >>> x_exp = np.array([5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, 4.9, 5.4])
-    >>> fig = ryan_joiner.line_up(x_exp, seed=42, correct=False)
+    >>> fig = filliben.line_up(x_exp, seed=42, correct=False)
     >>> fig.tight_layout()
     >>> # plt.savefig("line_up.png", bbox_inches="tight")
     >>> plt.show()
 
 
     .. image:: img/line_up.png
-        :alt: Line-up method chart for Ryan-Joiner test Normality test
+        :alt: Line-up method chart for Filliben Normality test
         :align: center
 
     The researcher must identify which of the 20 graphs deviates most significantly from what is expected for a Normal distribution. For instance, the graph located in the first row and second column.
@@ -877,13 +877,13 @@ def line_up(x_data, seed=42, correct=False, safe=False):
     The second step involves determining which graph corresponds to the true data set. This can be accomplished by simply changing parameter `correct` from `False` to `True`:
 
 
-    >>> fig = ryan_joiner.line_up(x_exp, seed=42, correct=True)
+    >>> fig = filliben.line_up(x_exp, seed=42, correct=True)
     >>> fig.tight_layout()
-    >>> # plt.savefig("line_up_true.png", bbox_inches="tight")
+    >>> # plt.savefig("line_up.png", bbox_inches="tight")
     >>> plt.show()
 
 
-    .. dropdown:: click to reveal output
+    .. dropdown:: Click to reveal output
         :animate: fade-in
 
         .. image:: img/line_up_true.png
@@ -894,6 +894,12 @@ def line_up(x_data, seed=42, correct=False, safe=False):
         Given that the true data corresponds to the graph in the second row and first column, which was not identified as deviating from the others, we can conclude that the data set follows the Normal distribution, at least approximately.
 
 
+
+    .. admonition:: unicode:: U+2615
+
+        Note that the same seed must be used in both steps
+
+
     """
     func_name = "line_up"
     if safe:
@@ -901,8 +907,14 @@ def line_up(x_data, seed=42, correct=False, safe=False):
         numpy_arrays.n_dimensions(
             arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
         )
-        numbers.is_positive(value=seed, param_name="seed", func_name=func_name)
+        if seed is not None:
+            numbers.is_positive(value=seed, param_name="seed", func_name=func_name)
     constants.warning_plot()
+
+    # getting a properly seed
+    if seed is None:
+        seed = int(np.random.rand() * (2**32 - 1))
+
     # creating a list of 20 integers and shuffling
     position = np.arange(20)
     rng = np.random.default_rng(seed)
@@ -953,7 +965,7 @@ def line_up(x_data, seed=42, correct=False, safe=False):
             i += 1
             ax[col, row].tick_params(axis="both", which="major", labelsize=5)
 
-    fig.text(0.5, 0.0, "Normal order statistical medians", ha="center")
+    fig.text(0.5, 0.0, f"Normal order statistical medians (seed={seed})", ha="center")
     fig.text(0.0, 0.5, "Ordered data", va="center", rotation="vertical")
     fig.patch.set_facecolor("white")
 

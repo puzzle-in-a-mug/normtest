@@ -14,7 +14,7 @@ Main functions
    correlation_plot
    citation
    dist_plot
-   
+   line_up
 
 
 Others functions

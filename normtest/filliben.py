@@ -370,12 +370,14 @@ def _critical(sample_size, alpha=0.05, safe=False):
 
     """
     func_name = "_critical"
+    # makeing a copy from original critical values
+    critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+
     if safe:
         types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
-        numbers.is_between_a_and_b(
+        numbers.is_greater_than(
             value=sample_size,
-            a=4,
-            b=100,
+            lower=4,
             param_name="sample_size",
             func_name=func_name,
             inclusive=True,
@@ -389,18 +391,25 @@ def _critical(sample_size, alpha=0.05, safe=False):
             func_name=func_name,
             inclusive=True,
         )
-
-    # makeing a copy from original critical values
-    critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+        parameters.param_options(
+            option=alpha,
+            param_options=list(critical.keys())[1:],
+            param_name="alpha",
+            func_name=func_name,
+        )
 
     if sample_size not in critical["n"]:
-        constants.user_warning(
-            "The Filliben critical value may not be accurate as it was obtained with linear interpolation."
-        )
-    if alpha not in list(critical.keys())[1:]:
-        print("alpha not found")
+        if sample_size < 100:
+            constants.user_warning(
+                "The Filliben critical value may not be accurate as it was obtained with linear interpolation."
+            )
+        else:
+            constants.user_warning(
+                "The Filliben critical value may not be accurate as it was obtained with linear *extrapolation*."
+            )
 
-    if sample_size > 100:
-        print("Os resultados podem não ser confiaveis devido a erros de extrapolação.")
+    f = interpolate.interp1d(
+        critical["n"][3:], critical[alpha][3:], fill_value="extrapolate"
+    )
 
-    return "filliben_critical[alpha][sample_size]"
+    return f(sample_size)

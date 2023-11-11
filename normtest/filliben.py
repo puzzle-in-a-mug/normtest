@@ -11,6 +11,7 @@
 - _statistic(x_data, zi, safe=False)
 - _uniform_order_medians(sample_size, safe=False)
 - _p_value(statistic, sample_size, safe=False)
+- correlation_plot(axes, x_data, safe=False)
 - citation()
 - dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False)
 

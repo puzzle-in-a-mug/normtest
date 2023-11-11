@@ -426,20 +426,32 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
     return float(f(sample_size))
 
 
+@docs.docstring_parameter(
+    axes=docs.AXES["type"],
+    axes_desc=docs.AXES["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    sample_size=docs.SAMPLE_SIZE["type"],
+    sample_size_desc=docs.SAMPLE_SIZE["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    fi_ref=Filliben1975,
+)
 def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False):
     """This function generates axis with critical data from the Filliben Normality test [1]_.
 
     Parameters
     ----------
-    axes : matplotlib.axes.SubplotBase
-        The axes to plot
+    {axes}
+        {axes_desc}
     test : tuple (optional), with two elements:
-        statistic : float
-            The test statistic
-        sample_size : int
-            The sample size
+        {statistic}
+            {statistic_desc}
+        {sample_size}
+            {sample_size_desc}
     alphas : list of floats, optional
         The significance level (:math:`\\alpha`) to draw the critical lines. Default is `[0.10, 0.05, 0.01]`. It can be a combination of:
+
         * ``0.005``;
         * ``0.01``;
         * ``0.025``;
@@ -454,28 +466,32 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False):
         * ``0.99``;
         * ``0.995``;
 
-    safe : bool, optional
-        Whether to check the inputs before performing the calculations (*True*) or not (*False*, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+    {safe}
+        {safe_desc}
 
     Returns
     -------
-    axes : matplotlib.axes.SubplotBase
-        The axis of the graph.
+    {axes}
+        {axes_desc}
 
+
+    References
+    ----------
+    .. [1] {fi_ref}
 
 
     Examples
     --------
     >>> from normtest import filliben
     >>> import matplotlib.pyplot as plt
-    >>> fig, ax = plt.subplots(figsize=(6,4))
-    >>> filliben.plot_distribution(axes=ax)
-    >>> # plt.savefig("filliben_dist.png")
+    >>> >>> fig, ax = plt.subplots(figsize=(6, 4))
+    >>> filliben.dist_plot(axes=ax, test=(0.98538, 7))
+    >>> # plt.savefig("filliben_paper.png")
     >>> plt.show()
 
 
-    .. image:: img/filliben_dist.png
-        :alt: Defautl critical chart for Filliben Normality test
+    .. image:: img/filliben_paper.png
+        :alt: Default critical chart for Filliben Normality test
         :align: center
 
 

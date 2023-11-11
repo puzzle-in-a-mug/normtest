@@ -12,6 +12,7 @@ Main functions
    :maxdepth: 1
    
    citation
+   dist_plot
    
 
 

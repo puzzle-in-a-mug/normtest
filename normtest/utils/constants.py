@@ -15,3 +15,12 @@ def warning_plot():
     warnings.warn(
         "This function is experimental and its behavior may not be ideal.", stacklevel=3
     )
+
+
+def user_warning(text):
+    def warning_on_one_line(message, category, filename, lineno, file=None, line=None):
+        return "%s:%s: %s: %s\n" % (filename, lineno, category.__name__, message)
+
+    warnings.formatwarning = warning_on_one_line
+
+    warnings.warn(text, stacklevel=3)

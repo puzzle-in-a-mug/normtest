@@ -712,6 +712,7 @@ def correlation_plot(axes, x_data, safe=False):
 
 
     """
+    constants.warning_plot()
     func_name = "correlation_plot"
     if safe:
         types.is_subplots(value=axes, param_name="axes", func_name=func_name)
@@ -750,3 +751,210 @@ def correlation_plot(axes, x_data, safe=False):
     axes.set_ylabel("Ordered data")
 
     return axes
+
+
+# this function does not have documentation on purpose (private)
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    zi=docs.ZI["type"],
+    zi_desc=docs.ZI["description"],
+)
+def _make_line_up_data(x_data, safe):
+    """Tthis function prepares the data for the Filliben test `line_up` function.
+
+    Parameters
+    ----------
+    {x_data}
+        {x_data_desc}
+    {safe}
+        {safe_desc}
+
+    Returns
+    -------
+    {x_data}
+        The input data *ordered*
+    {zi}
+        {zi_desc}
+    y_pred : :doc:`numpy array <numpy:reference/generated/numpy.array>`
+        The predicted values for the linear regression between `x_data` and `zi`;
+
+    """
+    func_name = "_make_line_up_data"
+    if safe:
+        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
+        numpy_arrays.greater_than_n(
+            array=x_data,
+            param_name="x_data",
+            func_name=func_name,
+            minimum=4,
+            inclusive=True,
+        )
+    # ordering the sample
+    x_data = np.sort(x_data)
+    uniform_order = _uniform_order_medians(x_data.size)
+    zi = _normal_order_medians(uniform_order)
+
+    # performing regression
+    reg = stats.linregress(zi, x_data)
+    # pred data
+    y_pred = zi * reg.slope + reg.intercept
+
+    return x_data, zi, y_pred
+
+
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+)
+def line_up(x_data, seed=42, correct=False, safe=False):
+    """This function exports the figure with the correlation graphs for the line up method [1]_.
+
+    Parameters
+    ----------
+    {x_data}
+        {x_data_desc}
+    seed : int, optional
+        A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``42``;
+    correct : bool, optional
+        Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
+    {safe}
+        {safe_desc}
+
+
+    Returns
+    -------
+    fig : matplotlib.figure.Figure
+        A figure with the generated graphics;
+
+
+    Notes
+    -----
+    This function is based on the line up method, where ``20`` correlation graphs are generated. One of these graphs contains the graph obtained with the true data (`x_data`). The other `19` graphs are drawn from pseudo-random data obtained from the Normal distribution with a mean and standard deviation similar to `x_data`.
+
+    The objective is to observe the 20 graphs at the same time and discover *which graph is the *least similar* to the behavior expected for the Normal distribution*.
+
+    * If the identified graph corresponds to the true data, it can be concluded that the data set is not similar to a Normal distribution (with 95% confidence);
+    * If the identified graph does not correspond to that obtained with real data, it can be concluded that the data set is similar to a Normal distribution (with 95% confidence);
+
+
+    See Also
+    --------
+    fi_test
+    dist_plot
+
+
+    References
+    ----------
+    .. [1] BUJA, A. et al. Statistical inference for exploratory data analysis and model diagnostics. Philosophical Transactions of the Royal Society A: Mathematical, Physical and Engineering Sciences, v. 367, n. 1906, p. 4361-4383, 13 nov. 2009
+
+
+    Examples
+    --------
+    The line-up method must be conducted in two steps. The first step involves generating a figure with 20 graphs from the data, without indicating which graph is the true one.
+
+
+    >>> from normtest import ryan_joiner
+    >>> import numpy as np
+    >>> import matplotlib.pyplot as plt
+    >>> x_exp = np.array([5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, 4.9, 5.4])
+    >>> fig = ryan_joiner.line_up(x_exp, seed=42, correct=False)
+    >>> fig.tight_layout()
+    >>> # plt.savefig("line_up.png", bbox_inches="tight")
+    >>> plt.show()
+
+
+    .. image:: img/line_up.png
+        :alt: Line-up method chart for Ryan-Joiner test Normality test
+        :align: center
+
+    The researcher must identify which of the 20 graphs deviates most significantly from what is expected for a Normal distribution. For instance, the graph located in the first row and second column.
+
+    The second step involves determining which graph corresponds to the true data set. This can be accomplished by simply changing parameter `correct` from `False` to `True`:
+
+
+    >>> fig = ryan_joiner.line_up(x_exp, seed=42, correct=True)
+    >>> fig.tight_layout()
+    >>> # plt.savefig("line_up_true.png", bbox_inches="tight")
+    >>> plt.show()
+
+
+    .. dropdown:: click to reveal output
+        :animate: fade-in
+
+        .. image:: img/line_up_true.png
+            :alt: Line-up method chart for Ryan-Joiner test Normality test
+            :align: center
+
+
+        Given that the true data corresponds to the graph in the second row and first column, which was not identified as deviating from the others, we can conclude that the data set follows the Normal distribution, at least approximately.
+
+
+    """
+    func_name = "line_up"
+    if safe:
+        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
+        numpy_arrays.n_dimensions(
+            arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
+        )
+        numbers.is_positive(value=seed, param_name="seed", func_name=func_name)
+    constants.warning_plot()
+    # creating a list of 20 integers and shuffling
+    position = np.arange(20)
+    rng = np.random.default_rng(seed)
+    # sampling one to be the true position
+    real_data_position = rng.choice(position)
+
+    # preparing a list of 1000 seeds to generate Normal data
+    seeds = np.arange(1000)
+    seeds = rng.choice(seeds, 20)
+
+    # making the synthetic data and grouping it with the real data at the random position
+    data = []
+    mean = x_data.mean()
+    std = x_data.std(ddof=1)
+    size = x_data.size
+
+    for pos, sed in zip(position, seeds):
+        if pos == real_data_position:
+            data.append(x_data)
+        else:
+            data.append(
+                stats.norm.rvs(loc=mean, scale=std, size=size, random_state=sed)
+            )
+
+    # creating the figure with the 20 axes
+
+    rows = 5
+    cols = 4
+    fig, ax = plt.subplots(cols, rows, figsize=(10, 7))
+
+    i = 0
+    if correct:
+        color = "r"
+    else:
+        color = "k"
+    for row in range(rows):
+        for col in range(cols):
+            if i == real_data_position:
+                x, zi, y_pred = _make_line_up_data(x_data=data[i], safe=safe)
+                ax[col, row].scatter(zi, x, c=color)
+                ax[col, row].plot(zi, y_pred, ls="--", c=color)
+
+            else:
+                x, zi, y_pred = _make_line_up_data(x_data=data[i], safe=safe)
+                ax[col, row].scatter(zi, x, c="k")
+                ax[col, row].plot(zi, y_pred, ls="--", c="k")
+
+            i += 1
+            ax[col, row].tick_params(axis="both", which="major", labelsize=5)
+
+    fig.text(0.5, 0.0, "Normal order statistical medians", ha="center")
+    fig.text(0.0, 0.5, "Ordered data", va="center", rotation="vertical")
+    fig.patch.set_facecolor("white")
+
+    return fig

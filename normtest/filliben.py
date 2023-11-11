@@ -556,7 +556,7 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False):
     fi_ref=Filliben1975,
 )
 def _p_value(statistic, sample_size, safe=False):
-    """This function estimates the probability associated with the Filliben  Normality test [1]_.
+    """This function estimates the probability associated with the Filliben Normality test [1]_.
 
 
     Parameters

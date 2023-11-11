@@ -367,7 +367,7 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
 
     References
     ----------
-    .. [1] fi_ref
+    .. [1] {fi_ref}
 
 
     Examples

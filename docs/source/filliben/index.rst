@@ -21,6 +21,7 @@ Others functions
 .. toctree:: 
    :maxdepth: 1
    
+   _critical_value
    _normal_order_medians
    _statistic
    _uniform_order_medians

@@ -14,7 +14,7 @@
 - correlation_plot(axes, x_data, safe=False)
 - citation()
 - dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False)
-
+- line_up(x_data, seed=None, correct=False, safe=False)
 
 ## Functions WITHOUT tests ###
 

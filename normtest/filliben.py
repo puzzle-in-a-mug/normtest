@@ -345,7 +345,7 @@ def _statistic(x_data, zi, safe=False):
     critical_desc=docs.CRITICAL["description"],
     fi_ref=Filliben1975,
 )
-def _critical(sample_size, alpha=0.05, safe=False):
+def _critical_value(sample_size, alpha=0.05, safe=False):
     """This function calculates the critical value for the Filliben normality test [1]_.
 
     Parameters
@@ -369,8 +369,8 @@ def _critical(sample_size, alpha=0.05, safe=False):
 
 
     """
-    func_name = "_critical"
-    # makeing a copy from original critical values
+    func_name = "_critical_value"
+    # making a copy from original critical values
     critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
 
     if safe:
@@ -412,4 +412,4 @@ def _critical(sample_size, alpha=0.05, safe=False):
         critical["n"][3:], critical[alpha][3:], fill_value="extrapolate"
     )
 
-    return f(sample_size)
+    return float(f(sample_size))

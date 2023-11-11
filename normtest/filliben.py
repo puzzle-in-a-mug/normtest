@@ -424,3 +424,105 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
     )
 
     return float(f(sample_size))
+
+
+def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False):
+    """This function generates axis with critical data from the Filliben Normality test [1]_.
+
+    Parameters
+    ----------
+    axes : matplotlib.axes.SubplotBase
+        The axes to plot
+    test : tuple (optional), with two elements:
+        statistic : float
+            The test statistic
+        sample_size : int
+            The sample size
+    alphas : list of floats, optional
+        The significance level (:math:`\\alpha`) to draw the critical lines. Default is `[0.10, 0.05, 0.01]`. It can be a combination of:
+        * ``0.005``;
+        * ``0.01``;
+        * ``0.025``;
+        * ``0.05``;
+        * ``0.10``;
+        * ``0.25``;
+        * ``0.50``;
+        * ``0.75``;
+        * ``0.90``;
+        * ``0.95``;
+        * ``0.975``;
+        * ``0.99``;
+        * ``0.995``;
+
+    safe : bool, optional
+        Whether to check the inputs before performing the calculations (*True*) or not (*False*, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time).
+
+    Returns
+    -------
+    axes : matplotlib.axes.SubplotBase
+        The axis of the graph.
+
+
+
+    Examples
+    --------
+    >>> from normtest import filliben
+    >>> import matplotlib.pyplot as plt
+    >>> fig, ax = plt.subplots(figsize=(6,4))
+    >>> filliben.plot_distribution(axes=ax)
+    >>> # plt.savefig("filliben_dist.png")
+    >>> plt.show()
+
+
+    .. image:: img/filliben_dist.png
+        :alt: Defautl critical chart for Filliben Normality test
+        :align: center
+
+
+    """
+    # making a copy from original critical values
+    critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+    if safe:
+        func_name = "dist_plot"
+        types.is_subplots(value=axes, param_name="axes", func_name=func_name)
+
+        if test is not None:
+            types.is_tuple(value=test, param_name="test", func_name=func_name)
+            numbers.is_float_or_int(
+                value=test[0], param_name="test[0]", func_name=func_name
+            )
+            numbers.between_a_and_b(
+                value=test[0],
+                a=0,
+                b=1,
+                param_name="test[0]",
+                func_name=func_name,
+                inclusive=False,
+            )
+            types.is_int(value=test[1], param_name=test[1], func_name=func_name)
+            numbers.is_greater_than(
+                value=test[1],
+                lower=3,
+                param_name="test[1]",
+                func_name=func_name,
+                inclusive=True,
+            )
+
+        for alpha in alphas:
+            parameters.param_options(
+                option=alpha,
+                param_options=list(critical.keys())[1:],
+                param_name="alphas",
+                func_name=func_name,
+            )
+
+    if test is not None:
+        axes.scatter(test[1], test[0], c="r", label="statistic")
+
+    for alpha in alphas:
+        axes.scatter(critical["n"], critical[alpha], label=alpha)
+    axes.set_xlabel("Sample size")
+    axes.set_ylabel("Filliben critical values")
+    axes.legend(loc=4)
+
+    return axes

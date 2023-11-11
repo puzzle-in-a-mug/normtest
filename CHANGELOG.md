@@ -4,7 +4,7 @@
 ## v0.0.2 (09/11/2023)
 
 ### Module filliben
-
+- Added ``_critical_value`` (11/11/2023);
 - Added ``_statistic`` (09/11/2023);
 - Added ``_normal_order_medians`` (09/11/2023);
 - Added ``_uniform_order_medians`` (09/11/2023);

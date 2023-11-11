@@ -11,6 +11,7 @@ Main functions
 .. toctree:: 
    :maxdepth: 1
    
+   correlation_plot
    citation
    dist_plot
    

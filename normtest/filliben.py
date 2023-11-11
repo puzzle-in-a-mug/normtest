@@ -6,9 +6,14 @@
 
 
 ## Functions WITH some TESTS ###
-- citation()
-- _uniform_order_medians(sample_size, safe=False)
+- _critical_value(sample_size, alpha=0.05, safe=False)
 - _normal_order_medians(mi, safe=False)
+- _statistic(x_data, zi, safe=False)
+- _uniform_order_medians(sample_size, safe=False)
+- _p_value(statistic, sample_size, safe=False)
+- citation()
+- dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False)
+
 
 ## Functions WITHOUT tests ###
 

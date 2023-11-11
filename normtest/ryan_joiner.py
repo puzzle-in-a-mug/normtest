@@ -813,7 +813,7 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
         :align: center
 
     """
-    func_name = "rj_correlation_plot"
+    func_name = "correlation_plot"
     if safe:
         types.is_subplots(value=axes, param_name="axes", func_name=func_name)
 

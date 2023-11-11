@@ -348,6 +348,7 @@ def _statistic(x_data, zi, safe=False):
 def _critical_value(sample_size, alpha=0.05, safe=False):
     """This function calculates the critical value for the Filliben normality test [1]_.
 
+
     Parameters
     ----------
     {sample_size}
@@ -356,6 +357,7 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
         {alpha_desc}
     {safe}
         {safe_desc}
+
 
     Returns
     -------
@@ -366,6 +368,15 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
     References
     ----------
     .. [1] fi_ref
+
+
+    Examples
+    --------
+    >>> from normtest import filliben
+    >>> sample_size = 7
+    >>> critical = filliben._critical_value(sample_size, alpha=0.05)
+    >>> print(critical)
+    0.899
 
 
     """

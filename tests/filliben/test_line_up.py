@@ -53,7 +53,7 @@ class Test_line_up(unittest.TestCase):
     def test_basic_plot(self):
         fig1_base_path = Path("tests/filliben/figs_line_up/line_up.png")
 
-        result = line_up(self.x_data)
+        result = line_up(self.x_data, seed=42)
         fig1_file = Path("tests/filliben/figs_line_up/fig1_test.png")
         result.tight_layout()
         plt.savefig(fig1_file, bbox_inches="tight")
@@ -67,7 +67,7 @@ class Test_line_up(unittest.TestCase):
 
         fig1_base_path = Path("tests/filliben/figs_line_up/line_up_true.png")
 
-        result = line_up(self.x_data, correct=True)
+        result = line_up(self.x_data, correct=True, seed=42)
         fig1_file = Path("tests/filliben/figs_line_up/fig1_test.png")
         result.tight_layout()
         plt.savefig(fig1_file, bbox_inches="tight")

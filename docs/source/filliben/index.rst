@@ -24,6 +24,7 @@ Others functions
    
    _critical_value
    _normal_order_medians
+   _p_value
    _statistic
    _uniform_order_medians
 

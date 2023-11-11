@@ -542,3 +542,109 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False):
     axes.legend(loc=4)
 
     return axes
+
+
+@docs.docstring_parameter(
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    samp_size=docs.SAMPLE_SIZE["type"],
+    samp_size_desc=docs.SAMPLE_SIZE["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    p_value=docs.P_VALUE["type"],
+    p_value_desc=docs.P_VALUE["description"],
+    fi_ref=Filliben1975,
+)
+def _p_value(statistic, sample_size, safe=False):
+    """This function estimates the probability associated with the Filliben  Normality test [1]_.
+
+
+    Parameters
+    ----------
+    {statistic}
+        {statistic_desc}
+    {samp_size}
+        {samp_size_desc}
+    {safe}
+        {safe_desc}
+
+
+    Returns
+    -------
+    {p_value}
+        {p_value_desc}
+
+
+    See Also
+    --------
+    fi_test
+
+
+    Notes
+    -----
+    The test probability is estimated through linear interpolation of the test statistic with critical values from the Filliben test [1]_. The Interpolation is performed using the :doc:`scipy.interpolate.interp1d() <scipy:reference/generated/scipy.interpolate.interp1d>` function.
+
+    * If the test statistic is greater than the critical value for :math:`\\alpha=0.995`, the result is always *"p > 0.995"*.
+    * If the test statistic is lower than the critical value for :math:`\\alpha=0.005`, the result is always *"p < 0.005"*.
+
+
+    References
+    ----------
+    .. [1] {fi_ref}
+
+
+    Examples
+    --------
+    >>> from normtest import filliben
+    >>> p_value = filliben._p_value(0.98538, 7)
+    >>> print(p_value)
+    0.8883750000000009
+
+    """
+    func_name = "_p_value"
+    if safe:
+        numbers.is_between_a_and_b(
+            value=statistic,
+            a=0,
+            b=1,
+            param_name="statistic",
+            func_name=func_name,
+            inclusive=False,
+        )
+        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
+        numbers.is_greater_than(
+            value=sample_size,
+            lower=4,
+            param_name="sample_size",
+            func_name=func_name,
+            inclusive=True,
+        )
+
+    alphas = [
+        0.005,
+        0.01,
+        0.025,
+        0.05,
+        0.1,
+        0.25,
+        0.5,
+        0.75,
+        0.9,
+        0.95,
+        0.975,
+        0.99,
+        0.995,
+    ]
+    criticals = []
+    for alpha in alphas:
+        criticals.append(
+            _critical_value(sample_size=sample_size, alpha=alpha, safe=False),
+        )
+    f = interpolate.interp1d(criticals, alphas)
+    if statistic > max(criticals):
+        return "p > 0.995"
+    elif statistic < min(criticals):
+        return "p < 0.005"
+    else:
+        p_value = f(statistic)
+        return p_value

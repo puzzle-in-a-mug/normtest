@@ -653,3 +653,99 @@ def _p_value(statistic, sample_size, safe=False):
     else:
         p_value = f(statistic)
         return p_value
+
+
+@docs.docstring_parameter(
+    axes=docs.AXES["type"],
+    axes_desc=docs.AXES["description"],
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    fi_ref=Filliben1975,
+)
+def correlation_plot(axes, x_data, safe=False):
+    """This function creates an `axis` with the Filliben test [1]_ correlation graph.
+
+    Parameters
+    ----------
+    {axes}
+        {axes_desc}
+    {x_data}
+        {x_data_desc}
+    {safe}
+        {safe_desc}
+
+    Returns
+    -------
+    {axes}
+        {axes_desc}
+
+
+    See Also
+    --------
+    fi_test
+    dist_plot
+
+
+    References
+    ----------
+    .. [1] {fi_ref}
+
+
+    Examples
+    --------
+    >>> from normtest import filliben
+    >>> import matplotlib.pyplot as plt
+    >>> import numpy as np
+    >>> x_data = np.array([6, 1, -4, 8, -2, 5, 0])
+    >>> fig, ax = plt.subplots()
+    >>> ax = filliben.correlation_plot(ax, x_data)
+    >>> # plt.savefig("correlation_plot.png")
+    >>> plt.show()
+
+
+    .. image:: img/correlation_plot.png
+        :alt: Correlation chart for Filliben Normality test
+        :align: center
+
+
+    """
+    func_name = "correlation_plot"
+    if safe:
+        types.is_subplots(value=axes, param_name="axes", func_name=func_name)
+        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
+        numpy_arrays.greater_than_n(
+            array=x_data,
+            param_name="x_data",
+            func_name=func_name,
+            minimum=4,
+            inclusive=True,
+        )
+    uniform_order = _uniform_order_medians(x_data.size)
+    zi = _normal_order_medians(uniform_order)
+
+    x_data = np.sort(x_data)
+
+    # performing regression
+    reg = stats.linregress(zi, x_data)
+    # pred data
+    y_pred = zi * reg.slope + reg.intercept
+
+    ## making the plot
+
+    # adding the data
+    axes.scatter(zi, x_data, fc="none", ec="k")
+
+    # adding the trend line
+    axes.plot(zi, y_pred, c="r")
+
+    # adding the statistic
+    text = "$R_{p}=" + str(round(reg.rvalue, 4)) + "$"
+    axes.text(0.1, 0.9, text, ha="left", va="center", transform=axes.transAxes)
+
+    # perfuming
+    axes.set_xlabel("Normal order statistical medians")
+    axes.set_ylabel("Ordered data")
+
+    return axes

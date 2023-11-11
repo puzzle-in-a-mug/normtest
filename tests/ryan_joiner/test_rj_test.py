@@ -97,17 +97,17 @@ class Test_rj_test(unittest.TestCase):
         self.assertIsInstance(
             result[1],
             float,
-            msg="not a float for met={self.cte_alpha}, alpha={self.alpha}, data={self.data}",
+            msg=f"not a float for met={self.cte_alpha}, alpha={self.alpha}, data={self.data}",
         )
         self.assertIsInstance(
             result[2],
             (float, str),
-            msg="not a float or for met={self.cte_alpha}, alpha={self.alpha}, data={self.data}",
+            msg=f"not a float or for met={self.cte_alpha}, alpha={self.alpha}, data={self.data}",
         )
         self.assertIsInstance(
             result[3],
             str,
-            msg="not str for met={self.cte_alpha}, alpha={self.alpha}, data={self.data}",
+            msg=f"not str for met={self.cte_alpha}, alpha={self.alpha}, data={self.data}",
         )
 
     def test_statext(self):

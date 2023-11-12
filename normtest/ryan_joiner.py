@@ -90,11 +90,9 @@ def citation(export=False):
         title="Normal Probability Plots and Tests for Normality",
         institution="The Pennsylvania State University, Statistics Department",
         year="1976",
-        export=False,
+        url="https://api.semanticscholar.org/CorpusID:9233652",
+        export=export,
     )
-    if export:
-        with open("ryan-joiner.bib", "w") as my_bib:
-            my_bib.write(reference)
     return reference
 
 

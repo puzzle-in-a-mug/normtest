@@ -16,6 +16,8 @@
 - Added ``citation`` (09/11/2023);
 
 
+### Fix
+- Improve the citation for Ryan-Joiner test (12/11/2023)
 
 ## v0.0.1 (05/10/2023)
 

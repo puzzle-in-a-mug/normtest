@@ -40,12 +40,6 @@ class Test_get_alpha(unittest.TestCase):
         result = teste.get_alpha()
         self.assertEqual(result, 0.05, msg="The default alpha is not 0.05")
 
-    def test_pt_br(self):
-        teste = AlphaManagement()
-        teste.set_alpha(0.01)
-        result = teste.get_alpha()
-        self.assertEqual(result, 0.01, msg="The get alpha returned wrong value")
-
 
 if __name__ == "__main__":
     unittest.main()

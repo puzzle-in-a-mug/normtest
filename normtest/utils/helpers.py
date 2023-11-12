@@ -5,7 +5,16 @@ from normtest.utils import documentation as docs
 
 
 class SafeManagement:
-    """Instanciates a class for `safe` managment. It is primarily for internal use."""
+    """Instanciates a class for `safe` managment. It is primarily for internal use.
+
+
+    Parameters
+    ----------
+    safe : bool, optional
+        Whether to check the inputs before performing the calculations (`True`, default) or not (`False`). Useful for beginners to identify problems in data entry (may reduce algorithm execution time);
+
+
+    """
 
     def __init__(self, safe=True, **kwargs):
         super().__init__(**kwargs)
@@ -69,7 +78,21 @@ class SafeManagement:
 
 
 class AlphaManagement:
-    """Instanciates a class for ``alpha`` managment. It is primarily for internal use."""
+    """Instanciates a class for ``alpha`` managment. It is primarily for internal use.
+
+
+    Parameters
+    ----------
+    alpha : float, optional
+        The significance level (default is ``0.05``);
+
+
+    Notes
+    -----
+    This method only allows input of type `float` and between ``0.0`` and ``1.0``.
+
+
+    """
 
     def __init__(self, alpha=0.05, **kwargs):
         super().__init__(**kwargs)
@@ -77,12 +100,12 @@ class AlphaManagement:
 
         Parameters
         ----------
-        alpha : ``float``
+        alpha : `float`
             The significance level (default is ``0.05``);
 
         Notes
         -----
-        This method only allows input of type ``float`` and between ``0.0`` and ``1.0``.
+        This method only allows input of type `float` and between ``0.0`` and ``1.0``.
 
         """
         self.func_name = "AlphaManagement"
@@ -91,16 +114,24 @@ class AlphaManagement:
             types.is_float(value=alpha, param_name="alpha", func_name=self.func_name)
             numbers.is_between_a_and_b(
                 value=alpha,
-                a=0.005,
-                b=0.995,
+                a=0,
+                b=1,
                 param_name="alpha",
                 func_name=self.func_name,
-                inclusive=True,
+                inclusive=False,
             )
         self.alpha = alpha
 
     def get_alpha(self):
-        """Returns the current ``alpha`` value"""
+        """Returns the current `alpha` value
+
+
+        Returns
+        -------
+        alpha : float
+            The level of significance (:math:`\\alpha`).
+
+        """
         return self.alpha
 
     def set_alpha(self, alpha):
@@ -108,8 +139,8 @@ class AlphaManagement:
 
         Parameters
         ----------
-        alpha : ``float``
-            The new significance level
+        alpha : float
+            The level of significance (:math:`\\alpha`).
 
         Notes
         -----
@@ -119,11 +150,11 @@ class AlphaManagement:
         types.is_float(value=alpha, param_name="alpha", func_name=self.func_name)
         numbers.is_between_a_and_b(
             value=alpha,
-            a=0.005,
-            b=0.995,
+            a=0,
+            b=1,
             param_name="alpha",
             func_name=self.func_name,
-            inclusive=True,
+            inclusive=False,
         )
         self.alpha = alpha
 

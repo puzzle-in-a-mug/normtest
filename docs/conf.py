@@ -125,7 +125,7 @@ html_theme_options = {
     ],
 }
 
-numpydoc_show_class_members = True  # set False to remove mebers
+numpydoc_show_class_members = False  # set False to remove mebers
 #
 
 language = "en"

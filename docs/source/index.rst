@@ -9,7 +9,7 @@ Documentation
 
    filliben/index
    ryan_joiner/index
-
+   helpers/index
 
 
 |

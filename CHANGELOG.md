@@ -4,6 +4,7 @@
 ## v0.0.2 (09/11/2023)
 
 ### Module filliben
+- Added ``fi_test`` function (11/11/2023);
 - Added ``line_up`` function (11/11/2023);
 - Added ``correlation_plot`` function (11/11/2023);
 - Added ``_p_value`` function (11/11/2023);

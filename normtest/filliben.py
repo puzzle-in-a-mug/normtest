@@ -64,7 +64,7 @@ Filliben1975 = "FILLIBEN, J. J. The Probability Plot Correlation Coefficient Tes
 
 
 ##### CLASS #####
-
+from normtest.utils.helpers import AlphaManagement
 
 ##### FUNCTIONS #####
 
@@ -1165,3 +1165,153 @@ def fi_test(x_data, alpha=0.05, safe=False, **kwargs):
 
     result = namedtuple("Filliben", ("statistic", "critical", "p_value", "conclusion"))
     return result(statistic, critical_value, p_value, conclusion)
+
+
+class Filliben(AlphaManagement):
+    """
+    This class instantiates an object to perform the Filliben Normality test [1]_.
+
+    Attributes
+    ----------
+    alfa : ``float``
+        The level of significance.
+    msg : ``str``
+        The test result expressed in text.
+    p_value : ``float``
+        The estimated p-value for the data set.
+    statistic : ``float``
+        The calculated value of the test statistic.
+    critical : ``float``
+        The test critical value (tabulated).
+    x_exp : ``np.ndarray``
+        The experimental data where the test was applied.
+
+
+    Methods
+    -------
+
+
+
+    """
+
+    def __init__(self, alpha=0.05, **kwargs):
+        super().__init__(alpha=alpha, **kwargs)
+
+        self.conclusion = None
+        if alpha != 0.05:
+            types.is_float(value=alpha, param_name="alpha", func_name="Filliben")
+            numbers.is_between_a_and_b(
+                value=alpha,
+                a=0.005,
+                b=0.995,
+                param_name="alpha",
+                func_name="Filliben",
+                inclusive=True,
+            )
+
+    # with test, with text, with database, with docstring
+    def fit(self, x_data, alpha=0.05, safe=True):
+        """
+
+        Parameters
+        ----------
+        x_exp : ``numpy array``
+            One dimension :doc:`numpy array <numpy:reference/generated/numpy.array>` with at least ``4`` sample data.
+        alfa : ``float``, optional
+            The level of significance (``ɑ``). Default is ``None`` which results in ``0.05`` (``ɑ = 5%``).
+        details : ``str``, optional
+            The ``details`` parameter determines the amount of information presented about the hypothesis test.
+
+            * If ``details = "short"`` (or ``None``), a simplified version of the test result is returned.
+            * If ``details = "full"``, a detailed version of the hypothesis test result is returned.
+            * if ``details = "binary"``, the conclusion will be ``1`` (:math:`H_0` is rejected) or ``0`` (:math:`H_0` is accepted).
+
+
+        Returns
+        -------
+        result : ``tuple`` with
+            statistic : ``float``
+                The test statistic.
+            critical : ``float`` or ``None``
+                The critical value for alpha equal to ``1%``, ``5%``, ``10%``, ``15%`` or ``20%``. Other values will raise ``ValueError``.
+            p_value : ``None``
+                The p-value for the hypothesis test (always ``None``).
+        conclusion : ``str``
+            The test conclusion (e.g, Normal/ not Normal).
+
+
+        See Also
+        --------
+
+
+        Notes
+        References
+        ----------
+
+
+        Examples
+        --------
+
+
+        """
+        func_name = "fit"
+        if safe:
+            types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
+            numpy_arrays.n_dimensions(
+                arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
+            )
+            numpy_arrays.greater_than_n(
+                array=x_data,
+                param_name="x_data",
+                func_name=func_name,
+                minimum=4,
+                inclusive=True,
+            )
+            if alpha != 0.05:
+                types.is_float(value=alpha, param_name="alpha", func_name=func_name)
+                numbers.is_between_a_and_b(
+                    value=alpha,
+                    a=0.005,
+                    b=0.995,
+                    param_name="alpha",
+                    func_name=func_name,
+                    inclusive=True,
+                )
+
+        result = fi_test(x_data=x_data, alpha=self.alpha)
+        self.x_data = x_data
+        self.statistic = result.statistic
+        self.critical = result.critical
+        self.p_value = result.p_value
+        self.conclusion = result.conclusion
+        self.result = result
+
+    def dist_plot(self, axes, alphas=[0.10, 0.05, 0.01], safe=False):
+        if self.conclusion is None:
+            return "The Filliben Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+        else:
+            return dist_plot(
+                axes,
+                test=(self.statistic, self.x_data.size),
+                alphas=alphas,
+                safe=safe,
+                func_name="dist_plot",
+            )
+
+    def correl_plot(self, axes, safe=False):
+        if self.conclusion is None:
+            return "The Filliben Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+        else:
+            return correlation_plot(
+                axes, self.x_data, safe=safe, func_name="correl_plot"
+            )
+
+    def __str__(self):
+        if self.conclusion is None:
+            text = "The Filliben Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+            return text
+        else:
+            return self.conclusion
+
+    def __repr__(self):
+        return "Filliben Normality test"

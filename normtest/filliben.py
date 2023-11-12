@@ -110,7 +110,7 @@ def citation(export=False):
     mi_desc=docs.MI["description"],
     fi_ref=Filliben1975,
 )
-def _uniform_order_medians(sample_size, safe=False):
+def _uniform_order_medians(sample_size, safe=False, **kwargs):
     """This function estimates the uniform order statistic median (:math:`m_{{i}}`) used in the Filliben normality test [1]_.
 
     Parameters
@@ -155,16 +155,17 @@ def _uniform_order_medians(sample_size, safe=False):
     array([0.09427634, 0.22844535, 0.36422267, 0.5       , 0.63577733,
            0.77155465, 0.90572366])
     """
-
+    if "func_name" in kwargs.keys():
+        func_name = kwargs["func_name"]
+    else:
+        func_name = "_uniform_order_medians"
     if safe:
-        types.is_int(
-            value=sample_size, param_name="sample_size", func_name="normal_medians"
-        )
+        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
         numbers.is_greater_than(
             value=sample_size,
             lower=4,
             param_name="sample_size",
-            func_name="normal_medians",
+            func_name=func_name,
             inclusive=True,
         )
 
@@ -184,7 +185,7 @@ def _uniform_order_medians(sample_size, safe=False):
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
-def _normal_order_medians(mi, safe=False):
+def _normal_order_medians(mi, safe=False, **kwargs):
     """This function transforms the uniform order median to normal order median using the standard Normal distribution (:math:`z_{{i}}`).
 
     Parameters
@@ -226,7 +227,11 @@ def _normal_order_medians(mi, safe=False):
 
 
     """
-    func_name = "_normal_order_medians"
+    if "func_name" in kwargs.keys():
+        func_name = kwargs["func_name"]
+    else:
+        func_name = "_normal_order_medians"
+
     if safe:
         types.is_numpy(value=mi, param_name="mi", func_name=func_name)
         numpy_arrays.n_dimensions(
@@ -259,7 +264,7 @@ def _normal_order_medians(mi, safe=False):
     statistic_desc=docs.STATISTIC["description"],
     fi_ref=Filliben1975,
 )
-def _statistic(x_data, zi, safe=False):
+def _statistic(x_data, zi, safe=False, **kwargs):
     """This function estimates the statistic of the Filliben normality test [1]_
 
     Parameters
@@ -314,8 +319,12 @@ def _statistic(x_data, zi, safe=False):
 
 
     """
-    if safe:
+    if "func_name" in kwargs.keys():
+        func_name = kwargs["func_name"]
+    else:
         func_name = "_statistic"
+
+    if safe:
         types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
         numpy_arrays.n_dimensions(
             arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
@@ -354,7 +363,7 @@ def _statistic(x_data, zi, safe=False):
     critical_desc=docs.CRITICAL["description"],
     fi_ref=Filliben1975,
 )
-def _critical_value(sample_size, alpha=0.05, safe=False):
+def _critical_value(sample_size, alpha=0.05, safe=False, **kwargs):
     """This function calculates the critical value for the Filliben normality test [1]_.
 
 
@@ -389,7 +398,11 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
 
 
     """
-    func_name = "_critical_value"
+    if "func_name" in kwargs.keys():
+        func_name = kwargs["func_name"]
+    else:
+        func_name = "_critical_value"
+
     # making a copy from original critical values
     critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
 
@@ -446,7 +459,7 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
     safe_desc=docs.SAFE["description"],
     fi_ref=Filliben1975,
 )
-def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False):
+def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False, **kwargs):
     """This function generates axis with critical data from the Filliben Normality test [1]_.
 
     Parameters
@@ -505,10 +518,14 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False):
 
 
     """
+    if "func_name" in kwargs.keys():
+        func_name = kwargs["func_name"]
+    else:
+        func_name = "dist_plot"
+
     # making a copy from original critical values
     critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
     if safe:
-        func_name = "dist_plot"
         types.is_subplots(value=axes, param_name="axes", func_name=func_name)
 
         if test is not None:
@@ -564,7 +581,7 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False):
     p_value_desc=docs.P_VALUE["description"],
     fi_ref=Filliben1975,
 )
-def _p_value(statistic, sample_size, safe=False):
+def _p_value(statistic, sample_size, safe=False, **kwargs):
     """This function estimates the probability associated with the Filliben Normality test [1]_.
 
 
@@ -610,7 +627,11 @@ def _p_value(statistic, sample_size, safe=False):
     0.8883750000000009
 
     """
-    func_name = "_p_value"
+    if "func_name" in kwargs.keys():
+        func_name = kwargs["func_name"]
+    else:
+        func_name = "_p_value"
+
     if safe:
         numbers.is_between_a_and_b(
             value=statistic,
@@ -668,7 +689,7 @@ def _p_value(statistic, sample_size, safe=False):
     safe_desc=docs.SAFE["description"],
     fi_ref=Filliben1975,
 )
-def correlation_plot(axes, x_data, safe=False):
+def correlation_plot(axes, x_data, safe=False, **kwargs):
     """This function creates an `axis` with the Filliben test [1]_ correlation graph.
 
     Parameters
@@ -715,8 +736,11 @@ def correlation_plot(axes, x_data, safe=False):
 
 
     """
-    constants.warning_plot()
-    func_name = "correlation_plot"
+    if "func_name" in kwargs.keys():
+        func_name = kwargs["func_name"]
+    else:
+        func_name = "correlation_plot"
+
     if safe:
         types.is_subplots(value=axes, param_name="axes", func_name=func_name)
         types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
@@ -730,8 +754,10 @@ def correlation_plot(axes, x_data, safe=False):
             minimum=4,
             inclusive=True,
         )
-    uniform_order = _uniform_order_medians(x_data.size)
-    zi = _normal_order_medians(uniform_order)
+
+    constants.warning_plot()
+    uniform_order = _uniform_order_medians(x_data.size, safe=safe, func_name=func_name)
+    zi = _normal_order_medians(uniform_order, safe=safe, func_name=func_name)
 
     x_data = np.sort(x_data)
 
@@ -768,7 +794,7 @@ def correlation_plot(axes, x_data, safe=False):
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
-def _make_line_up_data(x_data, safe):
+def _make_line_up_data(x_data, safe=False, **kwargs):
     """Tthis function prepares the data for the Filliben test `line_up` function.
 
     Parameters
@@ -788,7 +814,11 @@ def _make_line_up_data(x_data, safe):
         The predicted values for the linear regression between `x_data` and `zi`;
 
     """
-    func_name = "_make_line_up_data"
+    if "func_name" in kwargs.keys():
+        func_name = kwargs["func_name"]
+    else:
+        func_name = "_make_line_up_data"
+
     if safe:
         types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
         numpy_arrays.n_dimensions(
@@ -803,8 +833,8 @@ def _make_line_up_data(x_data, safe):
         )
     # ordering the sample
     x_data = np.sort(x_data)
-    uniform_order = _uniform_order_medians(x_data.size)
-    zi = _normal_order_medians(uniform_order)
+    uniform_order = _uniform_order_medians(x_data.size, safe=safe, func_name=func_name)
+    zi = _normal_order_medians(uniform_order, safe=safe, func_name=func_name)
 
     # performing regression
     reg = stats.linregress(zi, x_data)
@@ -820,7 +850,7 @@ def _make_line_up_data(x_data, safe):
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
 )
-def line_up(x_data, seed=None, correct=False, safe=False):
+def line_up(x_data, seed=None, correct=False, safe=False, **kwargs):
     """This function exports the figure with the correlation graphs for the line up method [1]_.
 
     Parameters
@@ -910,7 +940,11 @@ def line_up(x_data, seed=None, correct=False, safe=False):
 
 
     """
-    func_name = "line_up"
+    if "func_name" in kwargs.keys():
+        func_name = kwargs["func_name"]
+    else:
+        func_name = "line_up"
+
     if safe:
         types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
         numpy_arrays.n_dimensions(
@@ -970,12 +1004,16 @@ def line_up(x_data, seed=None, correct=False, safe=False):
     for row in range(rows):
         for col in range(cols):
             if i == real_data_position:
-                x, zi, y_pred = _make_line_up_data(x_data=data[i], safe=safe)
+                x, zi, y_pred = _make_line_up_data(
+                    x_data=data[i], safe=safe, func_name=func_name
+                )
                 ax[col, row].scatter(zi, x, c=color)
                 ax[col, row].plot(zi, y_pred, ls="--", c=color)
 
             else:
-                x, zi, y_pred = _make_line_up_data(x_data=data[i], safe=safe)
+                x, zi, y_pred = _make_line_up_data(
+                    x_data=data[i], safe=safe, func_name=func_name
+                )
                 ax[col, row].scatter(zi, x, c="k")
                 ax[col, row].plot(zi, y_pred, ls="--", c="k")
 
@@ -1006,7 +1044,7 @@ def line_up(x_data, seed=None, correct=False, safe=False):
     conclusion_desc=docs.CONCLUSION["description"],
     fi_ref=Filliben1975,
 )
-def fi_test(x_data, alpha=0.05, safe=False):
+def fi_test(x_data, alpha=0.05, safe=False, **kwargs):
     """This function applies the Filliben Normality test [1]_.
 
     Parameters
@@ -1081,7 +1119,11 @@ def fi_test(x_data, alpha=0.05, safe=False):
 
 
     """
-    func_name = "fi_test"
+    if "func_name" in kwargs.keys():
+        func_name = kwargs["func_name"]
+    else:
+        func_name = "fi_test"
+
     if safe:
         types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
         numpy_arrays.n_dimensions(
@@ -1104,12 +1146,16 @@ def fi_test(x_data, alpha=0.05, safe=False):
             inclusive=True,
         )
 
-    uniform_order = _uniform_order_medians(x_data.size)
-    zi = _normal_order_medians(uniform_order)
+    uniform_order = _uniform_order_medians(x_data.size, func_name=func_name)
+    zi = _normal_order_medians(uniform_order, func_name=func_name)
     x_data = np.sort(x_data)
-    statistic = _statistic(x_data=x_data, zi=zi, safe=safe)
-    critical_value = _critical_value(sample_size=x_data.size, alpha=alpha, safe=safe)
-    p_value = _p_value(statistic=statistic, sample_size=x_data.size, safe=safe)
+    statistic = _statistic(x_data=x_data, zi=zi, safe=safe, func_name=func_name)
+    critical_value = _critical_value(
+        sample_size=x_data.size, alpha=alpha, safe=safe, func_name=func_name
+    )
+    p_value = _p_value(
+        statistic=statistic, sample_size=x_data.size, safe=safe, func_name=func_name
+    )
 
     # conclusion
     if statistic < critical_value:

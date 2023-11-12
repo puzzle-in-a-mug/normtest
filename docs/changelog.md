@@ -3,6 +3,12 @@
 
 ## v0.0.2 (09/11/2023)
 
+### Module utils
+
+#### helpers
+- Added ``AlphaManagement`` class (12/11/2023);
+- Added ``SafeManagement`` class (12/11/2023);
+
 ### Module filliben
 - Added ``fi_test`` function (11/11/2023);
 - Added ``line_up`` function (11/11/2023);

@@ -1,11 +1,52 @@
+"""This module contains helpers functions and classes
+
+##### List of functions (cte_alphabetical order) #####
+
+## Functions WITH good TESTS ###
+
+## Functions WITH some TESTS ###
+
+## Functions WITHOUT tests ###
+
+
+
+##### List of CLASS (alphabetical order) #####
+## Functions WITH good TESTS ###
+
+## Functions WITH some TESTS ###
+
+## Functions WITHOUT tests ###
+
+
+Author: Anderson Marcos Dias Canteli <andersonmdcanteli@gmail.com>
+
+Created : November 12, 2023
+
+Last update: November 12, 2023
+"""
+
+##### IMPORTS #####
+
+### Standard ###
+
+
+### Third part ###
+
 ### self made ###
 from paramcheckup import types, numbers
 
+##### DOCUMENTATION #####
 from normtest.utils import documentation as docs
 
 
+#### CONSTANTS ####
+
+
+##### CLASS #####
+
+
 class SafeManagement:
-    """Instanciates a class for `safe` managment. It is primarily for internal use.
+    """Instanciates a class for `safe` management. It is primarily for internal use.
 
 
     Parameters
@@ -78,7 +119,7 @@ class SafeManagement:
 
 
 class AlphaManagement:
-    """Instanciates a class for ``alpha`` managment. It is primarily for internal use.
+    """Instanciates a class for ``alpha`` management. It is primarily for internal use.
 
 
     Parameters
@@ -163,3 +204,6 @@ class AlphaManagement:
 
     def __str__(self):
         return f"The current significance level is '{self.alpha}'"
+
+
+##### FUNCTIONS #####

@@ -11,9 +11,10 @@
 - _statistic(x_data, zi, safe=False)
 - _uniform_order_medians(sample_size, safe=False)
 - _p_value(statistic, sample_size, safe=False)
-- correlation_plot(axes, x_data, safe=False)
 - citation()
+- correlation_plot(axes, x_data, safe=False)
 - dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False)
+- fi_test(x_data, alpha=0.05, safe=False, **kwargs)
 - line_up(x_data, seed=None, correct=False, safe=False)
 
 ## Functions WITHOUT tests ###

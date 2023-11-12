@@ -41,5 +41,33 @@ class Test_get_alpha(unittest.TestCase):
         self.assertEqual(result, 0.05, msg="The default alpha is not 0.05")
 
 
+class Test_raises(unittest.TestCase):
+    def test_alpha_0(self):
+        with self.assertRaises(
+            TypeError,
+            msg=f"Does not raised ValueError when alpha=0",
+        ):
+            teste = AlphaManagement(0)
+
+        with self.assertRaises(
+            ValueError,
+            msg=f"Does not raised ValueError when alpha=0.0",
+        ):
+            teste = AlphaManagement(0.0)
+
+    def test_alpha_1(self):
+        with self.assertRaises(
+            TypeError,
+            msg=f"Does not raised ValueError when alpha=1",
+        ):
+            teste = AlphaManagement(1)
+
+        with self.assertRaises(
+            ValueError,
+            msg=f"Does not raised ValueError when alpha=1.0",
+        ):
+            teste = AlphaManagement(1.0)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -686,7 +686,7 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
        :math:`H_1:` The data was sampled from a distribution other than the Normal distribution.
 
 
-    The conclusion of the test is based on the comparison between the *critical* value (at :math:`\\alpha` significance level) and `statistic` of the test:
+    The conclusion of the test is based on the comparison between the `critical` value (at :math:`\\alpha` significance level) and `statistic` of the test:
 
     .. admonition:: \u2615
 

@@ -61,7 +61,6 @@ from .utils import documentation as docs
 
 #### CONSTANTS ####
 Filliben1975 = "FILLIBEN, J. J. The Probability Plot Correlation Coefficient Test for Normality. Technometrics, v. 17, n. 1, p. 111-117, 1975."
-Blom1958 = "BLOM, G. Statistical Estimates and Transformed Beta-Variables. New York: John Wiley and Sons, Inc, p. 71-72, 1958."
 
 
 ##### CLASS #####

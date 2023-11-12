@@ -7,10 +7,6 @@ from normtest.utils import documentation as docs
 class SafeManagement:
     """Instanciates a class for `safe` managment. It is primarily for internal use."""
 
-    # @docs.docstring_parameter(
-    #     safe=docs.SAFE["type"],
-    #     safe_desc=docs.SAFE["description"],
-    # )
     def __init__(self, safe=True, **kwargs):
         super().__init__(**kwargs)
         """Constructs the parameter `safe`
@@ -18,8 +14,8 @@ class SafeManagement:
 
         Parameters
         ----------
-        {safe}
-            {safe_desc}
+        safe : bool, optional
+            Whether to check the inputs before performing the calculations (`True`, default) or not (`False`). Useful for beginners to identify problems in data entry (may reduce algorithm execution time);
 
 
         """
@@ -29,10 +25,10 @@ class SafeManagement:
             types.is_bool(value=safe, param_name="safe", func_name=self.func_name)
         self.safe = safe
 
-    # @docs.docstring_parameter(
-    #     safe=docs.SAFE["type"],
-    #     safe_desc=docs.SAFE["description"],
-    # )
+    @docs.docstring_parameter(
+        safe=docs.SAFE["type"],
+        safe_desc=docs.SAFE["description"],
+    )
     def get_safe(self):
         """Returns the current status of parameter `safe`
 
@@ -46,10 +42,10 @@ class SafeManagement:
         """
         return self.safe
 
-    # @docs.docstring_parameter(
-    #     safe=docs.SAFE["type"],
-    #     safe_desc=docs.SAFE["description"],
-    # )
+    @docs.docstring_parameter(
+        safe=docs.SAFE["type"],
+        safe_desc=docs.SAFE["description"],
+    )
     def set_safe(self, safe):
         """Changes the current status of parameter `safe`
 

@@ -58,7 +58,7 @@ P_VALUE = {
 
 SAFE = {
     "type": "safe : bool, optional",
-    "description": "Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time);",
+    "description": "Whether to check the inputs before performing the calculations (`True`, default) or not (`False`). Useful for beginners to identify problems in data entry (may reduce algorithm execution time);",
 }
 
 

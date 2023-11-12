@@ -1,8 +1,77 @@
 ### self made ###
 from paramcheckup import types, numbers
 
+from normtest.utils import documentation as docs
 
-# with test, with database, with docstring
+
+class SafeManagement:
+    """Instanciates a class for `safe` managment. It is primarily for internal use."""
+
+    @docs.docstring_parameter(
+        safe=docs.SAFE["type"],
+        safe_desc=docs.SAFE["description"],
+    )
+    def __init__(self, safe=True, **kwargs):
+        super().__init__(**kwargs)
+        """Constructs the parameter `safe`
+
+
+        Parameters
+        ----------
+        {safe}
+            {safe_desc}
+
+
+        """
+        self.func_name = "SafeManagement"
+
+        if safe is not True:
+            types.is_bool(value=safe, param_name="safe", func_name=self.func_name)
+        self.safe = safe
+
+    @docs.docstring_parameter(
+        safe=docs.SAFE["type"],
+        safe_desc=docs.SAFE["description"],
+    )
+    def get_safe(self):
+        """Returns the current status of parameter `safe`
+
+
+        Returns
+        -------
+        {safe}
+            {safe_desc}
+
+
+        """
+        return self.safe
+
+    @docs.docstring_parameter(
+        safe=docs.SAFE["type"],
+        safe_desc=docs.SAFE["description"],
+    )
+    def set_safe(self, safe):
+        """Changes the current status of parameter `safe`
+
+
+        Parameters
+        ----------
+        {safe}
+            {safe_desc}
+
+
+        """
+        if safe is not True:
+            types.is_bool(value=safe, param_name="safe", func_name=self.func_name)
+        self.safe = safe
+
+    def __repr__(self):
+        return self.safe
+
+    def __str__(self):
+        return f"The current state of parameter `safe` is '{self.safe}'"
+
+
 class AlphaManagement:
     """Instanciates a class for ``alpha`` managment. It is primarily for internal use."""
 

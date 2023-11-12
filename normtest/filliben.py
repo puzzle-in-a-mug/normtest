@@ -1031,9 +1031,53 @@ def fi_test(x_data, alpha=0.05, safe=False):
             {conclusion_desc}
 
 
+    Notes
+    -----
+    The test statistic (:math:`F_{{p}}`) is estimated through the correlation between the ordered data and the Normal statistical order:
+
+
+    .. math::
+
+            F_p = \\frac{{\\sum_{{i=1}}^n \\left(x_i - \\overline{{x}}\\right) \\left(z_i - \\overline{{z}}\\right)}}{{\\sqrt{{\\sum_{{i=1}}^n \\left( x_i - \\overline{{x}}\\right)^2 \\sum_{{i=1}}^n \\left( z_i - \\overline{{z}}\\right)^2}}}}
+
+    where :math:`z_{{i}}` values are the z-score values of the corresponding experimental data (:math:`x_{{{{i}}}}`) value, and :math:`n` is the sample size.
+
+    The correlation is estimated using :doc:`scipy.stats.pearsonr() <scipy:reference/generated/scipy.stats.pearsonr>`.
+
+    The Normality test has the following assumptions:
+
+    .. admonition:: \u2615
+
+       :math:`H_0:` Data was sampled from a Normal distribution.
+
+       :math:`H_1:` The data was sampled from a distribution other than the Normal distribution.
+
+
+    The conclusion of the test is based on the comparison between the `critical` value (at :math:`\\alpha` significance level) and `statistic` of the test:
+
+    .. admonition:: \u2615
+
+       if critical :math:`\\leq` statistic:
+           Fail to reject :math:`H_0:` (e.g., data is Normal)
+       else:
+           Reject :math:`H_0:` (e.g., data is not Normal)
+
+    The critical values are obtained using :func:`_critical_value`.
+
+
     References
     ----------
     .. [1] {fi_ref}
+
+
+    Examples
+    --------
+    >>> import normtest as nm
+    >>> from scipy import stats
+    >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
+    >>> result = nm.fi_test(data)
+    >>> print(result)
+    Filliben(statistic=0.9905837698603658, critical=0.964, p_value=0.7791884930182895, conclusion='Fail to reject H₀')
 
 
     """

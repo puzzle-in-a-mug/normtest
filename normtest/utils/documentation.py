@@ -22,6 +22,11 @@ AXES = {
     "description": "The axis of the graph;",
 }
 
+CONCLUSION = {
+    "type": "conclusion : str",
+    "description": "The test conclusion (e.g, Normal/Not Normal).",
+}
+
 
 CRITICAL = {
     "type": "critical : float",

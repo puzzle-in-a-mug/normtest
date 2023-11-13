@@ -1274,9 +1274,8 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         """
         super().__init__(alpha=alpha, safe=safe, **kwargs)
         self.class_name = "RyanJoiner"
-        self.conclusion = None  # for cheking if the fit was applied
-        if alpha != 0.05:
-            types.is_float(value=alpha, param_name="alpha", func_name=self.class_name)
+        self.conclusion = None  # for checking if the fit was applied
+        if self.safe:
             parameters.param_options(
                 option=alpha,
                 param_options=[0.01, 0.05, 0.10],

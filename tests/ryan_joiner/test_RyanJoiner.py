@@ -36,6 +36,13 @@ class Test_init(unittest.TestCase):
         self.assertFalse(teste.safe, msg="wrong safe")
         self.assertEqual(teste.alpha, 0.10, msg="wrong alpha")
 
+    def test_alpha_not_allowed(self):
+        with self.assertRaises(
+            ValueError,
+            msg=f"Does not raised ValueError when alpha is not allowed",
+        ):
+            teste = RyanJoiner(alpha=0.101)
+
 
 # class Test_fit_applied(unittest.TestCase):
 #     @classmethod

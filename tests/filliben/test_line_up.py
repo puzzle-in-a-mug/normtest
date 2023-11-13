@@ -32,7 +32,6 @@ class Test_line_up(unittest.TestCase):
             x_data=self.x_data,
             seed=42,
             correct=False,
-            safe=False,
         )
 
         self.assertIsInstance(
@@ -42,7 +41,6 @@ class Test_line_up(unittest.TestCase):
         result = line_up(
             self.x_data,
             42,
-            False,
             False,
         )
 

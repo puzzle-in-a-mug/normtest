@@ -634,10 +634,8 @@ def _make_line_up_data(x_data):
 @docs.docstring_parameter(
     x_data=docs.X_DATA["type"],
     x_data_desc=docs.X_DATA["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
 )
-def line_up(x_data, seed=None, correct=False, safe=False, **kwargs):
+def line_up(x_data, seed=None, correct=False):
     """This function exports the figure with the correlation graphs for the line up method [1]_.
 
     Parameters
@@ -648,8 +646,6 @@ def line_up(x_data, seed=None, correct=False, safe=False, **kwargs):
         A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``None`` what generates a random seed;
     correct : bool, optional
         Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -727,25 +723,6 @@ def line_up(x_data, seed=None, correct=False, safe=False, **kwargs):
 
 
     """
-    if "func_name" in kwargs.keys():
-        func_name = kwargs["func_name"]
-    else:
-        func_name = "line_up"
-
-    if safe:
-        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
-        )
-        numpy_arrays.greater_than_n(
-            array=x_data,
-            param_name="x_data",
-            func_name=func_name,
-            minimum=4,
-            inclusive=True,
-        )
-        if seed is not None:
-            numbers.is_positive(value=seed, param_name="seed", func_name=func_name)
 
     constants.warning_plot()
 
@@ -792,14 +769,14 @@ def line_up(x_data, seed=None, correct=False, safe=False, **kwargs):
         for col in range(cols):
             if i == real_data_position:
                 x, zi, y_pred = _make_line_up_data(
-                    x_data=data[i], safe=safe, func_name=func_name
+                    x_data=data[i],
                 )
                 ax[col, row].scatter(zi, x, c=color)
                 ax[col, row].plot(zi, y_pred, ls="--", c=color)
 
             else:
                 x, zi, y_pred = _make_line_up_data(
-                    x_data=data[i], safe=safe, func_name=func_name
+                    x_data=data[i],
                 )
                 ax[col, row].scatter(zi, x, c="k")
                 ax[col, row].plot(zi, y_pred, ls="--", c="k")

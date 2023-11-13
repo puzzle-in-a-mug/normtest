@@ -363,13 +363,11 @@ def _order_statistic(sample_size, cte_alpha="3/8"):
     statistic_desc=docs.STATISTIC["description"],
     samp_size=docs.SAMPLE_SIZE["type"],
     samp_size_desc=docs.SAMPLE_SIZE["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     p_value=docs.P_VALUE["type"],
     p_value_desc=docs.P_VALUE["description"],
     rj_ref=RyanJoiner1976,
 )
-def _p_value(statistic, sample_size, safe=False):
+def _p_value(statistic, sample_size):
     """This function estimates the probability associated with the Ryan-Joiner Normality test [1]_.
 
 
@@ -379,8 +377,6 @@ def _p_value(statistic, sample_size, safe=False):
         {statistic_desc}
     {samp_size}
         {samp_size_desc}
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -415,31 +411,13 @@ def _p_value(statistic, sample_size, safe=False):
     0.030930589077996555
 
     """
-    func_name = "_p_value"
-    if safe:
-        numbers.is_between_a_and_b(
-            value=statistic,
-            a=0,
-            b=1,
-            param_name="statistic",
-            func_name=func_name,
-            inclusive=False,
-        )
-        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
-        numbers.is_greater_than(
-            value=sample_size,
-            lower=4,
-            param_name="sample_size",
-            func_name=func_name,
-            inclusive=True,
-        )
 
     alphas = np.array([0.10, 0.05, 0.01])
     criticals = np.array(
         [
-            _critical_value(sample_size=sample_size, alpha=alphas[0], safe=False),
-            _critical_value(sample_size=sample_size, alpha=alphas[1], safe=False),
-            _critical_value(sample_size=sample_size, alpha=alphas[2], safe=False),
+            _critical_value(sample_size=sample_size, alpha=alphas[0]),
+            _critical_value(sample_size=sample_size, alpha=alphas[1]),
+            _critical_value(sample_size=sample_size, alpha=alphas[2]),
         ]
     )
     f = interpolate.interp1d(criticals, alphas)

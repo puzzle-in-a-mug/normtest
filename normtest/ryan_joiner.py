@@ -101,13 +101,11 @@ def citation(export=False):
     samp_size_desc=docs.SAMPLE_SIZE["description"],
     alpha=docs.ALPHA["type"],
     alpha_desc=docs.ALPHA["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     critical=docs.CRITICAL["type"],
     critical_desc=docs.CRITICAL["description"],
     rj_ref=RyanJoiner1976,
 )
-def _critical_value(sample_size, alpha=0.05, safe=False):
+def _critical_value(sample_size, alpha=0.05):
     """This function calculates the critical value of the Ryan-Joiner test [1]_.
 
     Parameters
@@ -116,8 +114,6 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
         {samp_size_desc}
     {alpha}
         {alpha_desc}
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -159,22 +155,6 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
     0.9178948637370312
 
     """
-    func_name = "_critical_value"
-    if safe:
-        parameters.param_options(
-            option=alpha,
-            param_options=[0.01, 0.05, 0.10],
-            param_name="alpha",
-            func_name=func_name,
-        )
-        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
-        numbers.is_greater_than(
-            value=sample_size,
-            lower=4,
-            param_name="sample_size",
-            func_name=func_name,
-            inclusive=True,
-        )
 
     if alpha == 0.1:
         return (
@@ -1526,7 +1506,6 @@ class RyanJoiner(AlphaManagement, SafeManagement):
                 seed=seed,
                 correct=correct,
             )
-
 
     def citation(self, export=False):
         """This method returns the reference from Ryan-Joiner's test, with the option to export the reference in `.bib` format.

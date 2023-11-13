@@ -1239,17 +1239,29 @@ class Filliben(AlphaManagement, SafeManagement):
     """
 
     def __init__(self, alpha=0.05, safe=True, **kwargs):
-        super().__init__(alpha=alpha, **kwargs)
-        self.func_name = "Filliben"
+        """Initiates Filliben class inheriting the AlphaManagement and SafeManagement classes
+
+        Attributes
+        ----------
+        class_name : "Filliben"
+        conclusion : None
+            This attribute is used to check whether the fit method was applied or not
+        alpha : float
+        safe : bool
+
+
+        """
+        super().__init__(alpha=alpha, safe=safe, **kwargs)
+        self.class_name = "Filliben"
         self.conclusion = None  # for cheking if the fit was applied
         if alpha != 0.05:
-            types.is_float(value=alpha, param_name="alpha", func_name=self.func_name)
+            types.is_float(value=alpha, param_name="alpha", func_name=self.class_name)
             numbers.is_between_a_and_b(
                 value=alpha,
                 a=0.005,
                 b=0.995,
                 param_name="alpha",
-                func_name=self.func_name,
+                func_name=self.class_name,
                 inclusive=True,
             )
         self.set_safe(safe=safe)

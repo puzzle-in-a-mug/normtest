@@ -1226,6 +1226,16 @@ class Filliben(AlphaManagement, SafeManagement):
     .. [1] {fi_ref}
 
 
+    Examples
+    --------
+    >>> from normtest import Filliben
+    >>> import numpy as np
+    >>> x = np.array([6, 1, -4, 8, -2, 5, 0])
+    >>> test = Filliben()
+    >>> test.fit(x)
+    >>> print(test.normality)
+    Filliben(statistic=0.9854095718708367, critical=0.899, p_value=0.8889294725781878, conclusion='Fail to reject H₀')
+
     """
 
     def __init__(self, alpha=0.05, safe=True, **kwargs):

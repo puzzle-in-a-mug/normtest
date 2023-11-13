@@ -186,12 +186,10 @@ def _critical_value(sample_size, alpha=0.05):
     weighted_desc=docs.WEIGHTED["description"],
     cte_alpha=docs.CTE_ALPHA["type"],
     cte_alpha_desc=docs.CTE_ALPHA["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
-def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
+def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8"):
     """This function transforms the statistical order to the standard Normal distribution scale (:math:`z_{{i}}`).
 
     Parameters
@@ -203,8 +201,6 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
 
     {weighted}
         {weighted_desc}
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -258,26 +254,6 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
     The results will be identical if the data set does not contain repeated values.
 
     """
-    if safe:
-        types.is_numpy(
-            value=x_data, param_name="x_data", func_name="normal_order_statistic"
-        )
-        numpy_arrays.n_dimensions(
-            arr=x_data,
-            param_name="x_data",
-            func_name="normal_order_statistic",
-            n_dimensions=1,
-        )
-        numpy_arrays.greater_than_n(
-            array=x_data,
-            param_name="x_data",
-            func_name="normal_order_statistic",
-            minimum=4,
-            inclusive=True,
-        )
-        types.is_bool(
-            value=weighted, param_name="weighted", func_name="normal_order_statistic"
-        )
 
     # ordering
     x_data = np.sort(x_data)
@@ -286,13 +262,15 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
         # getting mi values
         df["Rank"] = np.arange(1, df.shape[0] + 1)
         df["Ui"] = _order_statistic(
-            sample_size=x_data.size, cte_alpha=cte_alpha, safe=safe
+            sample_size=x_data.size,
+            cte_alpha=cte_alpha,
         )
         df["Mi"] = df.groupby(["x_data"])["Ui"].transform("mean")
         normal_ordered = stats.norm.ppf(df["Mi"])
     else:
         ordered = _order_statistic(
-            sample_size=x_data.size, cte_alpha=cte_alpha, safe=safe
+            sample_size=x_data.size,
+            cte_alpha=cte_alpha,
         )
         normal_ordered = stats.norm.ppf(ordered)
 

@@ -1387,15 +1387,18 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         axes=docs.AXES["type"],
         axes_desc=docs.AXES["description"],
     )
-    def dist_plot(self, axes, x_range=(4, 50)):
-        """This method  generates axis with critical data from the Ryan-Joiner Normality test.
+    def dist_plot(self, axes, critical_range=(4, 50)):
+        """This method generates an axis with the critical data from the Ryan-Joiner Normality test.
 
         Parameters
         ----------
         {axes}
             {axes_desc}
-        x_range : tuple, optional
-            A tuple with the minimum (default is ``4``) and maximum (default is ``50``)  value for the critical values of the test. Both must be of type `int`;
+        critical_range : tuple (optional), with two elements:
+            x_min : int, optional
+                The lower range of the number of observations for the critical values (default is ``4``).
+            x_max : int, optional
+                The upper range of the number of observations for the critical values (default is ``50``).
 
 
         Returns
@@ -1409,18 +1412,29 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         dist_plot
 
 
-
-
         """
         func_name = "dist_plot"
         if self.safe:
             types.is_subplots(value=axes, param_name="axes", func_name=func_name)
-            types.is_tuple(value=x_range, param_name="x_range", func_name=func_name)
-            types.is_int(value=x_range[0], param_name="x_range[0]", func_name=func_name)
-            types.is_int(value=x_range[1], param_name="x_range[1]", func_name=func_name)
+            types.is_tuple(
+                value=critical_range, param_name="critical_range", func_name=func_name
+            )
+            types.is_int(
+                value=critical_range[0], param_name="x_min", func_name=func_name
+            )
+            types.is_int(
+                value=critical_range[1], param_name="x_max", func_name=func_name
+            )
+            numbers.is_greater_than(
+                value=critical_range[0],
+                param_name="x_min",
+                lower=4,
+                inclusive=True,
+                func_name=func_name,
+            )
 
-        # return dist_plot(
-        #     axes=axes,
-        #     test=(self.statistic, self.x_data.size),
-        #     x_range=x_range,
-        # )
+        return dist_plot(
+            axes=axes,
+            critical_range=critical_range,
+            test=(self.statistic, self.x_data.size),
+        )

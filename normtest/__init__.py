@@ -6,4 +6,4 @@ from .version import __version__
 
 
 from .ryan_joiner import rj_test
-from .filliben import fi_test
+from .filliben import Filliben

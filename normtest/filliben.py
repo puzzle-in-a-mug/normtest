@@ -1273,6 +1273,8 @@ class Filliben(AlphaManagement, SafeManagement):
             {p_value_desc}
         {conclusion}
             {conclusion_desc}
+        normality : named tuple
+            A tuple with the main test results summarized
 
 
         See Also
@@ -1313,7 +1315,7 @@ class Filliben(AlphaManagement, SafeManagement):
         self.critical = result.critical
         self.p_value = result.p_value
         self.conclusion = result.conclusion
-        self.result = result
+        self.normality = result
 
     @docs.docstring_parameter(
         axes=docs.AXES["type"],

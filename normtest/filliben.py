@@ -895,6 +895,9 @@ def fi_test(x_data, alpha=0.05):
     return result(statistic, critical_value, p_value, conclusion)
 
 
+##### CLASS #####
+
+
 @docs.docstring_parameter(
     x_data=docs.X_DATA["type"],
     x_data_desc=docs.X_DATA["description"],
@@ -912,11 +915,6 @@ def fi_test(x_data, alpha=0.05):
     safe_desc=docs.SAFE["description"],
     fi_ref=Filliben1975,
 )
-
-
-##### CLASS #####
-
-
 class Filliben(AlphaManagement, SafeManagement):
     """This class instantiates an object to perform the Filliben Normality test [1]_.
 

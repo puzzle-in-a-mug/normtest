@@ -512,11 +512,9 @@ def _p_value(statistic, sample_size):
     axes_desc=docs.AXES["description"],
     x_data=docs.X_DATA["type"],
     x_data_desc=docs.X_DATA["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     fi_ref=Filliben1975,
 )
-def correlation_plot(axes, x_data, safe=False, **kwargs):
+def correlation_plot(axes, x_data):
     """This function creates an `axis` with the Filliben test [1]_ correlation graph.
 
     Parameters
@@ -525,8 +523,7 @@ def correlation_plot(axes, x_data, safe=False, **kwargs):
         {axes_desc}
     {x_data}
         {x_data_desc}
-    {safe}
-        {safe_desc}
+
 
     Returns
     -------
@@ -563,28 +560,10 @@ def correlation_plot(axes, x_data, safe=False, **kwargs):
 
 
     """
-    if "func_name" in kwargs.keys():
-        func_name = kwargs["func_name"]
-    else:
-        func_name = "correlation_plot"
-
-    if safe:
-        types.is_subplots(value=axes, param_name="axes", func_name=func_name)
-        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
-        )
-        numpy_arrays.greater_than_n(
-            array=x_data,
-            param_name="x_data",
-            func_name=func_name,
-            minimum=4,
-            inclusive=True,
-        )
 
     constants.warning_plot()
-    uniform_order = _uniform_order_medians(x_data.size, safe=safe, func_name=func_name)
-    zi = _normal_order_medians(uniform_order, safe=safe, func_name=func_name)
+    uniform_order = _uniform_order_medians(x_data.size)
+    zi = _normal_order_medians(uniform_order)
 
     x_data = np.sort(x_data)
 

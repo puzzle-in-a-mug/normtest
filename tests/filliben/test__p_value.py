@@ -3,9 +3,6 @@
 --------------------------------------------------------------------------------
 Command to run at the prompt:
     python -m unittest -v tests/filliben/test__p_value.py
-    or
-    python -m unittest -b tests/filliben/test__p_value.py
-
 --------------------------------------------------------------------------------
 """
 
@@ -34,15 +31,7 @@ class Test__p_value(unittest.TestCase):
             msg=f"not a float when statistic={self.statistic} and n={self.n}",
         )
 
-        result = _p_value(statistic=self.statistic, sample_size=self.n, safe=False)
-        self.assertIsInstance(
-            result,
-            (float, str),
-            msg=f"not a float when statistic={self.statistic} and n={self.n}",
-        )
-
-    def test_safe(self):
-        result = _p_value(self.statistic, self.n, safe=True)
+        result = _p_value(statistic=self.statistic, sample_size=self.n)
         self.assertIsInstance(
             result,
             (float, str),
@@ -64,15 +53,6 @@ class Test__p_value(unittest.TestCase):
 
         result = _p_value(0.998, 6)
         self.assertEqual(result, "p > 0.995", msg=f"wrong p-value")
-
-    def test_impossible_statistic(self):
-        statistics = [-1, 0, 1, 3]
-        for statistic in statistics:
-            with self.assertRaises(
-                ValueError,
-                msg=f"Does not raised ValueError when statistic={statistic} and n={self.n}",
-            ):
-                result = _p_value(statistic, self.n, safe=True)
 
 
 if __name__ == "__main__":

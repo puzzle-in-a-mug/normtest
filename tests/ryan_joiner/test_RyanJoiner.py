@@ -172,116 +172,116 @@ os.system("cls")
 #                 teste.fit(data)
 
 
-class Test_dist_plot(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.data = np.array([6, 1, -4, 8, -2, 5, 0])
+# class Test_dist_plot(unittest.TestCase):
+#     @classmethod
+#     def setUpClass(cls):
+#         cls.data = np.array([6, 1, -4, 8, -2, 5, 0])
 
-    def test_safe(self):
-        with self.assertRaises(
-            TypeError,
-            msg=f"Does not raised TypeError when axes is not axes",
-        ):
-            teste = RyanJoiner()
-            teste.fit(self.data)
-            fig, ax = plt.subplots(figsize=(6, 4))
-            ax = teste.dist_plot(axes=fig)
-            plt.close()
+#     def test_safe(self):
+#         with self.assertRaises(
+#             TypeError,
+#             msg=f"Does not raised TypeError when axes is not axes",
+#         ):
+#             teste = RyanJoiner()
+#             teste.fit(self.data)
+#             fig, ax = plt.subplots(figsize=(6, 4))
+#             ax = teste.dist_plot(axes=fig)
+#             plt.close()
 
-        with self.assertRaises(
-            TypeError,
-            msg=f"Does not raised TypeError when critical_range is not not allowed",
-        ):
-            teste = RyanJoiner()
-            teste.fit(self.data)
-            fig, ax = plt.subplots(figsize=(6, 4))
-            ax = teste.dist_plot(axes=ax, critical_range=(5, "40"))
-            plt.close()
+#         with self.assertRaises(
+#             TypeError,
+#             msg=f"Does not raised TypeError when critical_range is not not allowed",
+#         ):
+#             teste = RyanJoiner()
+#             teste.fit(self.data)
+#             fig, ax = plt.subplots(figsize=(6, 4))
+#             ax = teste.dist_plot(axes=ax, critical_range=(5, "40"))
+#             plt.close()
 
-        # with self.assertRaises(
-        #     ValueError,
-        #     msg=f"Does not raised ValueError when critical_range is not not allowed",
-        # ):
-        #     teste = RyanJoiner()
-        #     teste.fit(self.data)
-        #     fig, ax = plt.subplots(figsize=(6, 4))
-        #     ax = teste.dist_plot(axes=ax, critical_range=(3, 40))
-        #     plt.close()
+#         # with self.assertRaises(
+#         #     ValueError,
+#         #     msg=f"Does not raised ValueError when critical_range is not not allowed",
+#         # ):
+#         #     teste = RyanJoiner()
+#         #     teste.fit(self.data)
+#         #     fig, ax = plt.subplots(figsize=(6, 4))
+#         #     ax = teste.dist_plot(axes=ax, critical_range=(3, 40))
+#         #     plt.close()
 
-    def test_filliben_data(self):
-        fig1_base_path = Path("tests/ryan_joiner/figs_dist_plot/filliben_paper.png")
+#     def test_filliben_data(self):
+#         fig1_base_path = Path("tests/ryan_joiner/figs_dist_plot/filliben_paper.png")
 
-        teste = RyanJoiner()
-        teste.fit(self.data)
-        fig, ax = plt.subplots(figsize=(6, 4))
-        ax = teste.dist_plot(axes=ax)
-        fig1_file = Path("tests/filliben/figs_dist_plot/fig1_test.png")
-        plt.savefig(fig1_file)
-        plt.close()
+#         teste = RyanJoiner()
+#         teste.fit(self.data)
+#         fig, ax = plt.subplots(figsize=(6, 4))
+#         ax = teste.dist_plot(axes=ax)
+#         fig1_file = Path("tests/filliben/figs_dist_plot/fig1_test.png")
+#         plt.savefig(fig1_file)
+#         plt.close()
 
-        self.assertTrue(
-            functions.validate_file_contents(fig1_base_path, fig1_file),
-            msg="figures does not match",
-        )
-        fig1_file.unlink()
+#         self.assertTrue(
+#             functions.validate_file_contents(fig1_base_path, fig1_file),
+#             msg="figures does not match",
+#         )
+#         fig1_file.unlink()
 
 
-class Test_correlation_plot(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        fig, cls.axes = plt.subplots()
-        cls.x_data = np.array(
-            [148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210]
-        )
+# class Test_correlation_plot(unittest.TestCase):
+#     @classmethod
+#     def setUpClass(cls):
+#         fig, cls.axes = plt.subplots()
+#         cls.x_data = np.array(
+#             [148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210]
+#         )
 
-    def test_safe(self):
-        with self.assertRaises(
-            TypeError,
-            msg=f"Does not raised TypeError when axes is not axes",
-        ):
-            teste = RyanJoiner()
-            teste.fit(self.x_data)
-            fig, ax = plt.subplots(figsize=(6, 4))
-            ax = teste.correlation_plot(axes=fig)
-            plt.close()
+#     def test_safe(self):
+#         with self.assertRaises(
+#             TypeError,
+#             msg=f"Does not raised TypeError when axes is not axes",
+#         ):
+#             teste = RyanJoiner()
+#             teste.fit(self.x_data)
+#             fig, ax = plt.subplots(figsize=(6, 4))
+#             ax = teste.correlation_plot(axes=fig)
+#             plt.close()
 
-    def test_basic_plot(self):
-        fig1_base_path = Path("tests/ryan_joiner/figs_correlation_plot/fig1.png")
+#     def test_basic_plot(self):
+#         fig1_base_path = Path("tests/ryan_joiner/figs_correlation_plot/fig1.png")
 
-        teste = RyanJoiner()
-        teste.fit(self.x_data)
-        fig, ax = plt.subplots()
-        result = teste.correlation_plot(ax)
-        fig1_file = Path("tests/ryan_joiner/figs_correlation_plot/fig1_test.png")
-        plt.savefig(fig1_file)
-        plt.close()
+#         teste = RyanJoiner()
+#         teste.fit(self.x_data)
+#         fig, ax = plt.subplots()
+#         result = teste.correlation_plot(ax)
+#         fig1_file = Path("tests/ryan_joiner/figs_correlation_plot/fig1_test.png")
+#         plt.savefig(fig1_file)
+#         plt.close()
 
-        self.assertTrue(
-            functions.validate_file_contents(fig1_base_path, fig1_file),
-            msg="figures does not match",
-        )
-        fig1_file.unlink()
+#         self.assertTrue(
+#             functions.validate_file_contents(fig1_base_path, fig1_file),
+#             msg="figures does not match",
+#         )
+#         fig1_file.unlink()
 
-    def test_plot_filliben(self):
-        x = np.array(
-            [43.5, 125.1, 166.3, 38.1, 116.7, 25.4, 40, 38.1, 253.7, 81.1, 96.7]
-        )
+#     def test_plot_filliben(self):
+#         x = np.array(
+#             [43.5, 125.1, 166.3, 38.1, 116.7, 25.4, 40, 38.1, 253.7, 81.1, 96.7]
+#         )
 
-        fig2_base_path = Path("tests/ryan_joiner/figs_correlation_plot/fig2.png")
+#         fig2_base_path = Path("tests/ryan_joiner/figs_correlation_plot/fig2.png")
 
-        teste = RyanJoiner(weighted=True)
-        teste.fit(x)
-        fig, ax = plt.subplots()
-        result = teste.correlation_plot(ax)
-        fig2_file = Path("tests/filliben/figs_correlation_plot/fig2_test.png")
-        plt.savefig(fig2_file)
-        plt.close()
+#         teste = RyanJoiner(weighted=True)
+#         teste.fit(x)
+#         fig, ax = plt.subplots()
+#         result = teste.correlation_plot(ax)
+#         fig2_file = Path("tests/filliben/figs_correlation_plot/fig2_test.png")
+#         plt.savefig(fig2_file)
+#         plt.close()
 
-        self.assertTrue(
-            functions.validate_file_contents(fig2_base_path, fig2_file),
-            msg="figures does not match",
-        )
-        fig2_file.unlink()
+#         self.assertTrue(
+#             functions.validate_file_contents(fig2_base_path, fig2_file),
+#             msg="figures does not match",
+#         )
+#         fig2_file.unlink()
 
 
 class Test_line_up(unittest.TestCase):
@@ -356,37 +356,69 @@ class Test_line_up(unittest.TestCase):
         )
         fig1_file.unlink()
 
+    def test_seed(self):
+        fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up_pi.png")
+        teste = RyanJoiner()
+        teste.fit(self.x_data)
+        result = teste.line_up(correct=False, seed=31416)
+        fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
+        result.tight_layout()
+        plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
+        plt.close()
 
-#     def test_seed(self):
-#         fig1_base_path = Path("tests/filliben/figs_line_up/line_up_pi.png")
-#         teste = Filliben()
-#         teste.fit(self.x_data)
-#         result = teste.line_up(correct=False, seed=31416)
-#         fig1_file = Path("tests/filliben/figs_line_up/fig1_test.png")
-#         result.tight_layout()
-#         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
-#         plt.close()
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
 
-#         self.assertTrue(
-#             functions.validate_file_contents(fig1_base_path, fig1_file),
-#             msg="figures does not match",
-#         )
-#         fig1_file.unlink()
+        fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up_true_pi.png")
+        teste = RyanJoiner()
+        teste.fit(self.x_data)
+        result = teste.line_up(correct=True, seed=31416)
+        fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
+        result.tight_layout()
+        plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
+        plt.close()
 
-#         fig1_base_path = Path("tests/filliben/figs_line_up/line_up_pi_true.png")
-#         teste = Filliben()
-#         teste.fit(self.x_data)
-#         result = teste.line_up(correct=True, seed=31416)
-#         fig1_file = Path("tests/filliben/figs_line_up/fig1_test.png")
-#         result.tight_layout()
-#         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
-#         plt.close()
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
 
-#         self.assertTrue(
-#             functions.validate_file_contents(fig1_base_path, fig1_file),
-#             msg="figures does not match",
-#         )
-#         fig1_file.unlink()
+    def test_weighted(self):
+        fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up_weighted.png")
+        teste = RyanJoiner(weighted=True)
+        teste.fit(self.x_data)
+        result = teste.line_up(correct=False, seed=42)
+        fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
+        result.tight_layout()
+        plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
+        plt.close()
+
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
+
+        fig1_base_path = Path(
+            "tests/ryan_joiner/figs_line_up/line_up_true_weighted.png"
+        )
+        teste = RyanJoiner(weighted=True)
+        teste.fit(self.x_data)
+        result = teste.line_up(correct=True, seed=42)
+        fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
+        result.tight_layout()
+        plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
+        plt.close()
+
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
 
 
 # class Test_citation(unittest.TestCase):

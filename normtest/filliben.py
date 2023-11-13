@@ -796,8 +796,6 @@ def line_up(x_data, seed=None, correct=False):
     x_data_desc=docs.X_DATA["description"],
     alpha=docs.ALPHA["type"],
     alpha_desc=docs.ALPHA["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     statistic=docs.STATISTIC["type"],
     statistic_desc=docs.STATISTIC["description"],
     critical=docs.CRITICAL["type"],
@@ -808,7 +806,7 @@ def line_up(x_data, seed=None, correct=False):
     conclusion_desc=docs.CONCLUSION["description"],
     fi_ref=Filliben1975,
 )
-def fi_test(x_data, alpha=0.05, safe=False, **kwargs):
+def fi_test(x_data, alpha=0.05):
     """This function applies the Filliben Normality test [1]_.
 
     Parameters
@@ -817,8 +815,7 @@ def fi_test(x_data, alpha=0.05, safe=False, **kwargs):
         {x_data_desc}
     {alpha}
         {alpha_desc}
-    {safe}
-        {safe_desc}
+
 
     Returns
     -------
@@ -883,43 +880,13 @@ def fi_test(x_data, alpha=0.05, safe=False, **kwargs):
 
 
     """
-    if "func_name" in kwargs.keys():
-        func_name = kwargs["func_name"]
-    else:
-        func_name = "fi_test"
 
-    if safe:
-        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
-        )
-        numpy_arrays.greater_than_n(
-            array=x_data,
-            param_name="x_data",
-            func_name=func_name,
-            minimum=4,
-            inclusive=True,
-        )
-        types.is_float(value=alpha, param_name="alpha", func_name=func_name)
-        numbers.is_between_a_and_b(
-            value=alpha,
-            a=0.005,
-            b=0.995,
-            param_name="alpha",
-            func_name=func_name,
-            inclusive=True,
-        )
-
-    uniform_order = _uniform_order_medians(x_data.size, func_name=func_name)
-    zi = _normal_order_medians(uniform_order, func_name=func_name)
+    uniform_order = _uniform_order_medians(x_data.size)
+    zi = _normal_order_medians(uniform_order)
     x_data = np.sort(x_data)
-    statistic = _statistic(x_data=x_data, zi=zi, safe=safe, func_name=func_name)
-    critical_value = _critical_value(
-        sample_size=x_data.size, alpha=alpha, safe=safe, func_name=func_name
-    )
-    p_value = _p_value(
-        statistic=statistic, sample_size=x_data.size, safe=safe, func_name=func_name
-    )
+    statistic = _statistic(x_data=x_data, zi=zi)
+    critical_value = _critical_value(sample_size=x_data.size, alpha=alpha)
+    p_value = _p_value(statistic=statistic, sample_size=x_data.size)
 
     # conclusion
     if statistic < critical_value:

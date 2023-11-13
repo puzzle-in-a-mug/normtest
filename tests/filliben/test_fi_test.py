@@ -26,7 +26,7 @@ class Test_rj_test(unittest.TestCase):
         cls.alpha = random.sample(alphas, 1)[0]
 
     def test_inputs(self):
-        result = fi_test(self.data, self.alpha, False)
+        result = fi_test(self.data, self.alpha)
         self.assertIsInstance(result, tuple, msg=f"not a tuple")
         self.assertEqual(len(result), 4, msg="Incorrect number of outputs")
         self.assertIsInstance(
@@ -53,33 +53,7 @@ class Test_rj_test(unittest.TestCase):
         result = fi_test(
             x_data=self.data,
             alpha=self.alpha,
-            safe=False,
         )
-        self.assertIsInstance(result, tuple, msg=f"not a tuple")
-        self.assertEqual(len(result), 4, msg="Incorrect number of outputs")
-        self.assertIsInstance(
-            result[0],
-            float,
-            msg=f"not a float for alpha={self.alpha}, data={self.data}",
-        )
-        self.assertIsInstance(
-            result[1],
-            float,
-            msg=f"not a float for alpha={self.alpha}, data={self.data}",
-        )
-        self.assertIsInstance(
-            result[2],
-            (float, str),
-            msg=f"not a float for alpha={self.alpha}, data={self.data}",
-        )
-        self.assertIsInstance(
-            result[3],
-            str,
-            msg=f"not a float for alpha={self.alpha}, data={self.data}",
-        )
-
-    def test_safe(self):
-        result = fi_test(self.data, alpha=self.alpha, safe=True)
         self.assertIsInstance(result, tuple, msg=f"not a tuple")
         self.assertEqual(len(result), 4, msg="Incorrect number of outputs")
         self.assertIsInstance(

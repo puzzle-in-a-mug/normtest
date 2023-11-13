@@ -435,6 +435,8 @@ def _p_value(statistic, sample_size):
     x_data_desc=docs.X_DATA["description"],
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
     rj_ref=RyanJoiner1976,
 )
 def _statistic(x_data, zi):

@@ -5,6 +5,18 @@ filliben
 This module contains the relevant functions to apply the Filliben Normality test [1]_.
 
 
+Class
+-----
+
+.. toctree:: 
+   :maxdepth: 1
+   
+   Filliben
+   
+
+|
+
+
 Main functions
 --------------
 
@@ -16,6 +28,8 @@ Main functions
    dist_plot
    fi_test
    line_up
+
+|
 
 
 Others functions

@@ -3,15 +3,11 @@
 --------------------------------------------------------------------------------
 Command to run at the prompt:
     python -m unittest -v tests/filliben/test_dist_plot.py
-    or
-    python -m unittest -b tests/filliben/test_dist_plot.py
-
 --------------------------------------------------------------------------------
 """
 ### GENERAL IMPORTS ###
 import os
 import unittest
-import numpy as np
 from matplotlib.axes import SubplotBase
 import matplotlib.pyplot as plt
 from pathlib import Path
@@ -33,7 +29,6 @@ class Test_dist_plot(unittest.TestCase):
             self.axes,
             None,
             [0.10, 0.05, 0.01],
-            False,
         )
         self.assertIsInstance(result, SubplotBase, msg="not a SubplotBase")
         plt.close()
@@ -42,13 +37,7 @@ class Test_dist_plot(unittest.TestCase):
             axes=self.axes,
             test=None,
             alphas=[0.10, 0.05, 0.01],
-            safe=False,
         )
-        self.assertIsInstance(result, SubplotBase, msg="not a SubplotBase")
-        plt.close()
-
-    def test_safe(self):
-        result = dist_plot(self.axes, safe=True)
         self.assertIsInstance(result, SubplotBase, msg="not a SubplotBase")
         plt.close()
 

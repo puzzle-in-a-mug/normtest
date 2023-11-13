@@ -349,11 +349,9 @@ def _critical_value(sample_size, alpha=0.05):
     statistic_desc=docs.STATISTIC["description"],
     sample_size=docs.SAMPLE_SIZE["type"],
     sample_size_desc=docs.SAMPLE_SIZE["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     fi_ref=Filliben1975,
 )
-def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False, **kwargs):
+def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01]):
     """This function generates axis with critical data from the Filliben Normality test [1]_.
 
     Parameters
@@ -382,8 +380,7 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False, **kwargs):
         * ``0.99``;
         * ``0.995``;
 
-    {safe}
-        {safe_desc}
+
 
     Returns
     -------
@@ -412,45 +409,8 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False, **kwargs):
 
 
     """
-    if "func_name" in kwargs.keys():
-        func_name = kwargs["func_name"]
-    else:
-        func_name = "dist_plot"
-
     # making a copy from original critical values
     critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
-    if safe:
-        types.is_subplots(value=axes, param_name="axes", func_name=func_name)
-
-        if test is not None:
-            types.is_tuple(value=test, param_name="test", func_name=func_name)
-            numbers.is_float_or_int(
-                value=test[0], param_name="test[0]", func_name=func_name
-            )
-            numbers.between_a_and_b(
-                value=test[0],
-                a=0,
-                b=1,
-                param_name="test[0]",
-                func_name=func_name,
-                inclusive=False,
-            )
-            types.is_int(value=test[1], param_name=test[1], func_name=func_name)
-            numbers.is_greater_than(
-                value=test[1],
-                lower=3,
-                param_name="test[1]",
-                func_name=func_name,
-                inclusive=True,
-            )
-
-        for alpha in alphas:
-            parameters.param_options(
-                option=alpha,
-                param_options=list(critical.keys())[1:],
-                param_name="alphas",
-                func_name=func_name,
-            )
 
     if test is not None:
         axes.scatter(test[1], test[0], c="r", label="statistic")

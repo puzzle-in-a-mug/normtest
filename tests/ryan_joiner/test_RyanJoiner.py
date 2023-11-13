@@ -226,60 +226,62 @@ class Test_dist_plot(unittest.TestCase):
         fig1_file.unlink()
 
 
-# class Test_correlation_plot(unittest.TestCase):
-#     @classmethod
-#     def setUpClass(cls):
-#         fig, cls.axes = plt.subplots()
-#         cls.x_data = np.array(
-#             [148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210]
-#         )
+class Test_correlation_plot(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        fig, cls.axes = plt.subplots()
+        cls.x_data = np.array(
+            [148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210]
+        )
 
-#     def test_safe(self):
-#         with self.assertRaises(
-#             TypeError,
-#             msg=f"Does not raised TypeError when axes is not axes",
-#         ):
-#             teste = Filliben()
-#             teste.fit(self.x_data)
-#             fig, ax = plt.subplots(figsize=(6, 4))
-#             ax = teste.correlation_plot(axes=fig)
-#             plt.close()
+    def test_safe(self):
+        with self.assertRaises(
+            TypeError,
+            msg=f"Does not raised TypeError when axes is not axes",
+        ):
+            teste = RyanJoiner()
+            teste.fit(self.x_data)
+            fig, ax = plt.subplots(figsize=(6, 4))
+            ax = teste.correlation_plot(axes=fig)
+            plt.close()
 
-#     def test_basic_plot(self):
-#         fig1_base_path = Path("tests/filliben/figs_correlation_plot/fig1.png")
+    def test_basic_plot(self):
+        fig1_base_path = Path("tests/ryan_joiner/figs_correlation_plot/fig1.png")
 
-#         teste = Filliben()
-#         teste.fit(self.x_data)
-#         fig, ax = plt.subplots()
-#         result = teste.correlation_plot(ax)
-#         fig1_file = Path("tests/filliben/figs_correlation_plot/fig1_test.png")
-#         plt.savefig(fig1_file)
-#         plt.close()
+        teste = RyanJoiner()
+        teste.fit(self.x_data)
+        fig, ax = plt.subplots()
+        result = teste.correlation_plot(ax)
+        fig1_file = Path("tests/ryan_joiner/figs_correlation_plot/fig1_test.png")
+        plt.savefig(fig1_file)
+        plt.close()
 
-#         self.assertTrue(
-#             functions.validate_file_contents(fig1_base_path, fig1_file),
-#             msg="figures does not match",
-#         )
-#         fig1_file.unlink()
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
 
-#     def test_plot_filliben(self):
-#         x = np.array([6, 1, -4, 8, -2, 5, 0])
+    def test_plot_filliben(self):
+        x = np.array(
+            [43.5, 125.1, 166.3, 38.1, 116.7, 25.4, 40, 38.1, 253.7, 81.1, 96.7]
+        )
 
-#         fig2_base_path = Path("tests/filliben/figs_correlation_plot/filliben_data.png")
+        fig2_base_path = Path("tests/ryan_joiner/figs_correlation_plot/fig2.png")
 
-#         teste = Filliben()
-#         teste.fit(x)
-#         fig, ax = plt.subplots()
-#         result = teste.correlation_plot(ax)
-#         fig2_file = Path("tests/filliben/figs_correlation_plot/fig2_test.png")
-#         plt.savefig(fig2_file)
-#         plt.close()
+        teste = RyanJoiner(weighted=True)
+        teste.fit(x)
+        fig, ax = plt.subplots()
+        result = teste.correlation_plot(ax)
+        fig2_file = Path("tests/filliben/figs_correlation_plot/fig2_test.png")
+        plt.savefig(fig2_file)
+        plt.close()
 
-#         self.assertTrue(
-#             functions.validate_file_contents(fig2_base_path, fig2_file),
-#             msg="figures does not match",
-#         )
-#         fig2_file.unlink()
+        self.assertTrue(
+            functions.validate_file_contents(fig2_base_path, fig2_file),
+            msg="figures does not match",
+        )
+        fig2_file.unlink()
 
 
 # class Test_line_up(unittest.TestCase):

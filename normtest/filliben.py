@@ -595,20 +595,17 @@ def correlation_plot(axes, x_data):
 @docs.docstring_parameter(
     x_data=docs.X_DATA["type"],
     x_data_desc=docs.X_DATA["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
-def _make_line_up_data(x_data, safe=False, **kwargs):
+def _make_line_up_data(x_data):
     """Tthis function prepares the data for the Filliben test `line_up` function.
 
     Parameters
     ----------
     {x_data}
         {x_data_desc}
-    {safe}
-        {safe_desc}
+
 
     Returns
     -------
@@ -620,27 +617,11 @@ def _make_line_up_data(x_data, safe=False, **kwargs):
         The predicted values for the linear regression between `x_data` and `zi`;
 
     """
-    if "func_name" in kwargs.keys():
-        func_name = kwargs["func_name"]
-    else:
-        func_name = "_make_line_up_data"
 
-    if safe:
-        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
-        )
-        numpy_arrays.greater_than_n(
-            array=x_data,
-            param_name="x_data",
-            func_name=func_name,
-            minimum=4,
-            inclusive=True,
-        )
     # ordering the sample
     x_data = np.sort(x_data)
-    uniform_order = _uniform_order_medians(x_data.size, safe=safe, func_name=func_name)
-    zi = _normal_order_medians(uniform_order, safe=safe, func_name=func_name)
+    uniform_order = _uniform_order_medians(x_data.size)
+    zi = _normal_order_medians(uniform_order)
 
     # performing regression
     reg = stats.linregress(zi, x_data)

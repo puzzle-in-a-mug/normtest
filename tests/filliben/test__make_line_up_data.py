@@ -3,9 +3,6 @@
 --------------------------------------------------------------------------------
 Command to run at the prompt:
     python -m unittest -v tests/filliben/test__make_line_up_data.py
-    or
-    python -m unittest -b tests/filliben/test__make_line_up_data.py
-
 --------------------------------------------------------------------------------
 """
 ### GENERAL IMPORTS ###
@@ -60,24 +57,24 @@ class Test_make_line_up_data(unittest.TestCase):
         )
 
     def test_inputs(self):
-        result = _make_line_up_data(self.x_data, safe=False)
+        result = _make_line_up_data(self.x_data)
         self.assertEqual(len(result), 3, msg="Incorrect number of outputs")
         self.assertIsInstance(result[0], np.ndarray, msg=f"not a numpy array")
         self.assertIsInstance(result[1], np.ndarray, msg=f"not a numpy array")
         self.assertIsInstance(result[2], np.ndarray, msg=f"not a numpy array")
 
     def test_result_x_data(self):
-        result = _make_line_up_data(self.x_data, safe=False)
+        result = _make_line_up_data(self.x_data)
         for pair in zip(result[0], self.sorted_data):
             self.assertAlmostEqual(pair[0], pair[1], places=5, msg=f"pair not match")
 
     def test_result_zi(self):
-        result = _make_line_up_data(self.x_data, safe=False)
+        result = _make_line_up_data(self.x_data)
         for pair in zip(result[1], self.zi):
             self.assertAlmostEqual(pair[0], pair[1], places=5, msg=f"pair not match")
 
     def test_result_y_pred(self):
-        result = _make_line_up_data(self.x_data, safe=False)
+        result = _make_line_up_data(self.x_data)
         for pair in zip(result[2], self.y_pred):
             self.assertAlmostEqual(pair[0], pair[1], places=5, msg=f"pair not match")
 

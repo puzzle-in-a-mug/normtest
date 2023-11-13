@@ -498,8 +498,6 @@ def _statistic(x_data, zi):
     cte_alpha_desc=docs.CTE_ALPHA["description"],
     weighted=docs.WEIGHTED["type"],
     weighted_desc=docs.WEIGHTED["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     statistic=docs.STATISTIC["type"],
     statistic_desc=docs.STATISTIC["description"],
     critical=docs.CRITICAL["type"],
@@ -508,7 +506,7 @@ def _statistic(x_data, zi):
     p_value_desc=docs.P_VALUE["description"],
     rj_ref=RyanJoiner1976,
 )
-def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
+def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
     """This function applies the Ryan-Joiner Normality test [1]_.
 
     Parameters
@@ -521,8 +519,6 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
         {cte_alpha_desc}
     {weighted}
         {weighted_desc}
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -592,26 +588,19 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
     RyanJoiner(statistic=0.990439558451558, critical=0.963891667086667, p_value='p > 0.100', conclusion='Fail to reject H₀')
 
     """
-    func_name = "rj_test"
-    if safe:
-        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
-        )
-
     # ordering
     x_data = np.sort(x_data)
 
     # zi
     zi = _normal_order_statistic(
-        x_data=x_data, weighted=weighted, cte_alpha=cte_alpha, safe=safe
+        x_data=x_data, weighted=weighted, cte_alpha=cte_alpha,
     )
 
     # calculating the stats
-    statistic = _statistic(x_data=x_data, zi=zi, safe=safe)
+    statistic = _statistic(x_data=x_data, zi=zi)
 
     # getting the critical values
-    critical_value = _critical_value(sample_size=x_data.size, alpha=alpha, safe=safe)
+    critical_value = _critical_value(sample_size=x_data.size, alpha=alpha)
 
     # conclusion
     if statistic < critical_value:
@@ -620,7 +609,7 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
         conclusion = constants.ACCEPTATION
 
     # pvalue
-    p_value = _p_value(statistic=statistic, sample_size=x_data.size, safe=safe)
+    p_value = _p_value(statistic=statistic, sample_size=x_data.size)
 
     result = namedtuple(
         "RyanJoiner", ("statistic", "critical", "p_value", "conclusion")

@@ -193,5 +193,61 @@ class Test_dist_plot(unittest.TestCase):
         fig1_file.unlink()
 
 
+class Test_correlation_plot(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        fig, cls.axes = plt.subplots()
+        cls.x_data = np.array(
+            [148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210]
+        )
+
+    def test_safe(self):
+        with self.assertRaises(
+            TypeError,
+            msg=f"Does not raised TypeError when axes is not axes",
+        ):
+            teste = Filliben()
+            teste.fit(self.x_data)
+            fig, ax = plt.subplots(figsize=(6, 4))
+            ax = teste.correlation_plot(axes=fig)
+            plt.close()
+
+    def test_basic_plot(self):
+        fig1_base_path = Path("tests/filliben/figs_correlation_plot/fig1.png")
+
+        teste = Filliben()
+        teste.fit(self.x_data)
+        fig, ax = plt.subplots()
+        result = teste.correlation_plot(ax)
+        fig1_file = Path("tests/filliben/figs_correlation_plot/fig1_test.png")
+        plt.savefig(fig1_file)
+        plt.close()
+
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
+
+    def test_plot_filliben(self):
+        x = np.array([6, 1, -4, 8, -2, 5, 0])
+
+        fig2_base_path = Path("tests/filliben/figs_correlation_plot/filliben_data.png")
+
+        teste = Filliben()
+        teste.fit(x)
+        fig, ax = plt.subplots()
+        result = teste.correlation_plot(ax)
+        fig2_file = Path("tests/filliben/figs_correlation_plot/fig2_test.png")
+        plt.savefig(fig2_file)
+        plt.close()
+
+        self.assertTrue(
+            functions.validate_file_contents(fig2_base_path, fig2_file),
+            msg="figures does not match",
+        )
+        fig2_file.unlink()
+
+
 if __name__ == "__main__":
     unittest.main()

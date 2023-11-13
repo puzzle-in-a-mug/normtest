@@ -3,9 +3,6 @@
 --------------------------------------------------------------------------------
 Command to run at the prompt:
     python -m unittest -v tests/ryan_joiner/test__order_statistic.py
-    or
-    python -m unittest -b tests/ryan_joiner/test__order_statistic.py
-
 --------------------------------------------------------------------------------
 """
 
@@ -27,10 +24,12 @@ class Test__order_statistic(unittest.TestCase):
         cls.n = random.randrange(4, 200)
         methods = ["0", "3/8", "1/2"]
         cls.method = random.sample(methods, 1)[0]
-        cls.safe = True
 
     def test_input(self):
-        result = _order_statistic(self.n, self.method, self.safe)
+        result = _order_statistic(
+            self.n,
+            self.method,
+        )
         self.assertIsInstance(
             result,
             np.ndarray,
@@ -38,7 +37,8 @@ class Test__order_statistic(unittest.TestCase):
         )
 
         result = _order_statistic(
-            sample_size=self.n, cte_alpha=self.method, safe=self.safe
+            sample_size=self.n,
+            cte_alpha=self.method,
         )
         self.assertIsInstance(
             result,
@@ -48,14 +48,6 @@ class Test__order_statistic(unittest.TestCase):
 
     def test_outputs(self):
         result = _order_statistic(self.n, self.method)
-        self.assertIsInstance(
-            result,
-            np.ndarray,
-            msg=f"not a float when method={self.method} and n={self.n}",
-        )
-
-    def test_safe(self):
-        result = _order_statistic(self.n, self.method, safe=True)
         self.assertIsInstance(
             result,
             np.ndarray,
@@ -178,36 +170,6 @@ class Test__order_statistic(unittest.TestCase):
             self.assertAlmostEqual(
                 pair[0], pair[1], places=5, msg=f"wrong statisitc order for 1/2"
             )
-
-    def test_wrong_method(self):
-        with self.assertRaises(
-            ValueError,
-            msg=f"Does not raised ValueError when method={None} and n={self.n}",
-        ):
-            result = _order_statistic(self.n, None, safe=True)
-
-    def test_n_not_int(self):
-        n_values = [
-            5.1,
-            "5",
-            [5],
-            (6,),
-        ]
-        for n in n_values:
-            with self.assertRaises(
-                TypeError,
-                msg=f"Does not raised ValueError when method={self.method} and n={n}",
-            ):
-                result = _order_statistic(n, self.method, safe=True)
-
-    def test_small_n(self):
-        n_values = [-5, 0, 3]
-        for n in n_values:
-            with self.assertRaises(
-                ValueError,
-                msg=f"Does not raised ValueError when method={self.method} and n={n}",
-            ):
-                result = _order_statistic(n, self.method, safe=True)
 
 
 if __name__ == "__main__":

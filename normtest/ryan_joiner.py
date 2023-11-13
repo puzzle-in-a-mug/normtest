@@ -1425,13 +1425,13 @@ class RyanJoiner(AlphaManagement, SafeManagement):
             types.is_int(
                 value=critical_range[1], param_name="x_max", func_name=func_name
             )
-            numbers.is_greater_than(
-                value=critical_range[0],
-                param_name="x_min",
-                lower=4,
-                inclusive=True,
-                func_name=func_name,
-            )
+            # numbers.is_greater_than( <----------------------------------- this needs to be fixed on paramcheckup
+            #     value=critical_range[0], <------------------ there is a test for this
+            #     param_name="x_min",
+            #     lower=4,
+            #     inclusive=True,
+            #     func_name=func_name,
+            # )
 
         return dist_plot(
             axes=axes,

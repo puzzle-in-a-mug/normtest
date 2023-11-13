@@ -1167,29 +1167,60 @@ def fi_test(x_data, alpha=0.05, safe=False, **kwargs):
     return result(statistic, critical_value, p_value, conclusion)
 
 
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    critical=docs.CRITICAL["type"],
+    critical_desc=docs.CRITICAL["description"],
+    p_value=docs.P_VALUE["type"],
+    p_value_desc=docs.P_VALUE["description"],
+    conclusion=docs.CONCLUSION["type"],
+    conclusion_desc=docs.CONCLUSION["description"],
+    alpha=docs.ALPHA["type"],
+    alpha_desc=docs.ALPHA["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    fi_ref=Filliben1975,
+)
 class Filliben(AlphaManagement, SafeManagement):
     """
     This class instantiates an object to perform the Filliben Normality test [1]_.
 
+
     Attributes
     ----------
-    alfa : ``float``
-        The level of significance.
-    msg : ``str``
-        The test result expressed in text.
-    p_value : ``float``
-        The estimated p-value for the data set.
-    statistic : ``float``
-        The calculated value of the test statistic.
-    critical : ``float``
-        The test critical value (tabulated).
-    x_exp : ``np.ndarray``
-        The experimental data where the test was applied.
+    {statistic}
+        {statistic_desc}
+    {critical}
+        {critical_desc}
+    {p_value}
+        {p_value_desc}
+    {conclusion}
+        {conclusion_desc}
+    {alpha}
+        {alpha_desc}
+    {safe}
+        {safe_desc}
 
 
     Methods
     -------
+    fit(x_data)
+        Applies the Filliben Normality test;
+    dist_plot(axes, alphas=[0.10, 0.05, 0.01]):
+        Generates axis with critical data from the Filliben Normality test;
+    correlation_plot(axes)
+        Generates an `axis` with the Filliben test correlation graph;
+    line_up(seed=None, correct=False)
+        Generates a figure with the correlation graphs for the line up method;
+    citation(export=False)
+        Returns the Filliben's test reference;
 
+    References
+    ----------
+    .. [1] {fi_ref}
 
 
     """
@@ -1289,7 +1320,7 @@ class Filliben(AlphaManagement, SafeManagement):
         axes_desc=docs.AXES["description"],
     )
     def dist_plot(self, axes, alphas=[0.10, 0.05, 0.01]):
-        """This function generates axis with critical data from the Filliben Normality test.
+        """This method generates an `axis` with critical data from the Filliben Normality test.
 
         Parameters
         ----------
@@ -1366,7 +1397,7 @@ class Filliben(AlphaManagement, SafeManagement):
             return correlation_plot(axes, self.x_data)
 
     def line_up(self, seed=None, correct=False):
-        """This function exports the figure with the correlation graphs for the line up method [1]_.
+        """This method generates a Figure with the correlation graphs for the line up method.
 
         Parameters
         ----------

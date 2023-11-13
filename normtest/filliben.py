@@ -53,7 +53,7 @@ from scipy import interpolate
 from paramcheckup import parameters, types, numbers, numpy_arrays
 from normtest import bibmaker
 from .utils import critical_values, constants
-
+from .utils.helpers import AlphaManagement, SafeManagement
 
 ##### DOCUMENTATION #####
 from .utils import documentation as docs
@@ -64,7 +64,7 @@ Filliben1975 = "FILLIBEN, J. J. The Probability Plot Correlation Coefficient Tes
 
 
 ##### CLASS #####
-from normtest.utils.helpers import AlphaManagement, SafeManagement
+
 
 ##### FUNCTIONS #####
 
@@ -104,21 +104,18 @@ def citation(export=False):
 @docs.docstring_parameter(
     sample_size=docs.SAMPLE_SIZE["type"],
     samp_size_desc=docs.SAMPLE_SIZE["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     mi=docs.MI["type"],
     mi_desc=docs.MI["description"],
     fi_ref=Filliben1975,
 )
-def _uniform_order_medians(sample_size, safe=False, **kwargs):
+def _uniform_order_medians(sample_size):
     """This function estimates the uniform order statistic median (:math:`m_{{i}}`) used in the Filliben normality test [1]_.
 
     Parameters
     ----------
     {sample_size}
         {samp_size_desc}
-    {safe}
-        {safe_desc}
+
 
     Returns
     -------
@@ -155,19 +152,6 @@ def _uniform_order_medians(sample_size, safe=False, **kwargs):
     array([0.09427634, 0.22844535, 0.36422267, 0.5       , 0.63577733,
            0.77155465, 0.90572366])
     """
-    if "func_name" in kwargs.keys():
-        func_name = kwargs["func_name"]
-    else:
-        func_name = "_uniform_order_medians"
-    if safe:
-        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
-        numbers.is_greater_than(
-            value=sample_size,
-            lower=4,
-            param_name="sample_size",
-            func_name=func_name,
-            inclusive=True,
-        )
 
     i = np.arange(1, sample_size + 1)
     mi = (i - 0.3175) / (sample_size + 0.365)

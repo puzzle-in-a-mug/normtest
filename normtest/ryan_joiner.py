@@ -1477,3 +1477,50 @@ class RyanJoiner(AlphaManagement, SafeManagement):
             cte_alpha=self.cte_alpha,
             weighted=self.weighted,
         )
+
+    def line_up(
+        self,
+        seed=None,
+        correct=False,
+    ):
+        """This method generates a Figure with the correlation graphs for the line up method.
+
+        Parameters
+        ----------
+        seed : int or None, optional
+            A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``None`` what generates a random seed;
+        correct : bool, optional
+            Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
+
+
+        Returns
+        -------
+        fig : matplotlib.figure.Figure
+            A figure with the generated graphics;
+
+
+        See Also
+        --------
+        line_up
+
+
+
+        """
+        if self.conclusion is None:
+            return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+        else:
+            if self.safe:
+                types.is_bool(value=correct, param_name="correct", func_name="line_up")
+                if seed is not None:
+                    types.is_int(value=seed, param_name="seed", func_name="line_up")
+                    numbers.is_positive(
+                        value=seed, param_name="seed", func_name="line_up"
+                    )
+
+            return line_up(
+                x_data=self.x_data,
+                cte_alpha=self.cte_alpha,
+                weighted=self.weighted,
+                seed=seed,
+                correct=correct,
+            )

@@ -34,7 +34,6 @@ class Test_line_up(unittest.TestCase):
             weighted=False,
             seed=42,
             correct=False,
-            safe=False,
         )
 
         self.assertIsInstance(
@@ -46,7 +45,6 @@ class Test_line_up(unittest.TestCase):
             "3/8",
             False,
             42,
-            False,
             False,
         )
 

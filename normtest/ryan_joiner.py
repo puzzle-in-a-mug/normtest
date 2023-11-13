@@ -282,12 +282,10 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8"):
     samp_size_desc=docs.SAMPLE_SIZE["description"],
     cte_alpha=docs.CTE_ALPHA["type"],
     cte_alpha_desc=docs.CTE_ALPHA["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     blom_ref=Blom1958,
     rj_ref=RyanJoiner1976,
 )
-def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
+def _order_statistic(sample_size, cte_alpha="3/8"):
     """This function estimates the normal statistical order (:math:`p_{{i}}`) using approximations [1]_.
 
     Parameters
@@ -301,8 +299,6 @@ def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
         * `"3/8"` (default);
         * `"1/2"`;
 
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -350,22 +346,6 @@ def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
     0.64634146 0.74390244 0.84146341 0.93902439]
 
     """
-    func_name = "_order_statistic"
-    if safe:
-        parameters.param_options(
-            option=cte_alpha,
-            param_options=["0", "3/8", "1/2"],
-            param_name="cte_alpha",
-            func_name=func_name,
-        )
-        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
-        numbers.is_greater_than(
-            value=sample_size,
-            lower=4,
-            param_name="sample_size",
-            func_name=func_name,
-            inclusive=True,
-        )
 
     i = np.arange(1, sample_size + 1)
     if cte_alpha == "1/2":

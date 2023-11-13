@@ -1344,7 +1344,7 @@ class RyanJoiner(AlphaManagement, SafeManagement):
 
         See Also
         --------
-        fi_test
+        rj_test
 
 
         """
@@ -1361,20 +1361,19 @@ class RyanJoiner(AlphaManagement, SafeManagement):
                 minimum=4,
                 inclusive=True,
             )
-            if self.alpha != 0.05:
-                types.is_float(
-                    value=self.alpha, param_name="alpha", func_name=func_name
-                )
-                numbers.is_between_a_and_b(
-                    value=self.alpha,
-                    a=0.005,
-                    b=0.995,
-                    param_name="alpha",
-                    func_name=func_name,
-                    inclusive=True,
-                )
+            parameters.param_options(
+                option=self.alpha,
+                param_options=[0.01, 0.05, 0.10],
+                param_name="alpha",
+                func_name=func_name,
+            )
 
-        result = fi_test(x_data=x_data, alpha=self.alpha)
+        result = rj_test(
+            x_data=x_data,
+            alpha=self.alpha,
+            cte_alpha=self.cte_alpha,
+            weighted=self.weighted,
+        )
         self.x_data = x_data
         self.statistic = result.statistic
         self.critical = result.critical

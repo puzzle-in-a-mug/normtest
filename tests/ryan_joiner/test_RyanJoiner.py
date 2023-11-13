@@ -62,50 +62,50 @@ class Test_init(unittest.TestCase):
             teste = RyanJoiner(weighted="ponderado")
 
 
-# class Test_fit_applied(unittest.TestCase):
-#     @classmethod
-#     def setUpClass(cls):
-#         cls.data = stats.norm.rvs(size=random.randint(5, 30))
-#         alphas = [0.01, 0.05, 0.1]
-#         cls.alpha = random.sample(alphas, 1)[0]
+class Test_fit_applied(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.data = stats.norm.rvs(size=random.randint(5, 30))
+        alphas = [0.01, 0.05, 0.1]
+        cls.alpha = random.sample(alphas, 1)[0]
 
-#     def test_not_applied(self):
-#         teste = Filliben()
-#         self.assertIsNone(teste.conclusion, msg="wrong conclusion")
+    def test_not_applied(self):
+        teste = RyanJoiner()
+        self.assertIsNone(teste.conclusion, msg="wrong conclusion")
 
-#     def test_applied(self):
-#         teste = Filliben()
-#         teste.fit(self.data)
-#         self.assertIsInstance(teste.conclusion, str, msg="wrong conclusion type")
+    def test_applied(self):
+        teste = RyanJoiner()
+        teste.fit(self.data)
+        self.assertIsInstance(teste.conclusion, str, msg="wrong conclusion type")
 
-#     def test_safe(self):
-#         with self.assertRaises(
-#             TypeError,
-#             msg=f"Does not raised TypeError when alpha = 0",
-#         ):
-#             teste = Filliben(alpha=0)
+    def test_safe(self):
+        with self.assertRaises(
+            TypeError,
+            msg=f"Does not raised TypeError when alpha = 0",
+        ):
+            teste = RyanJoiner(alpha=0)
 
-#         with self.assertRaises(
-#             TypeError,
-#             msg=f"Does not raised TypeError when alpha = 1",
-#         ):
-#             teste = Filliben(alpha=1)
-#         with self.assertRaises(
-#             ValueError,
-#             msg=f"Does not raised ValuError when alpha = 0.004",
-#         ):
-#             teste = Filliben(alpha=0.004)
-#         with self.assertRaises(
-#             ValueError,
-#             msg=f"Does not raised ValuError when alpha = 0.996",
-#         ):
-#             teste = Filliben(alpha=0.996)
+        with self.assertRaises(
+            TypeError,
+            msg=f"Does not raised TypeError when alpha = 1",
+        ):
+            teste = RyanJoiner(alpha=1)
+        with self.assertRaises(
+            ValueError,
+            msg=f"Does not raised ValuError when alpha = 0.004",
+        ):
+            teste = RyanJoiner(alpha=0.004)
+        with self.assertRaises(
+            ValueError,
+            msg=f"Does not raised ValuError when alpha = 0.996",
+        ):
+            teste = RyanJoiner(alpha=0.996)
 
-#         with self.assertRaises(
-#             TypeError,
-#             msg=f"Does not raised TypeError when safe=0.996",
-#         ):
-#             teste = Filliben(safe=0.996)
+        with self.assertRaises(
+            TypeError,
+            msg=f"Does not raised TypeError when safe=0.996",
+        ):
+            teste = RyanJoiner(safe=0.996)
 
 
 # class Test_fit(unittest.TestCase):

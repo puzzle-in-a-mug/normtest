@@ -593,7 +593,9 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
 
     # zi
     zi = _normal_order_statistic(
-        x_data=x_data, weighted=weighted, cte_alpha=cte_alpha,
+        x_data=x_data,
+        weighted=weighted,
+        cte_alpha=cte_alpha,
     )
 
     # calculating the stats
@@ -626,11 +628,9 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
     cte_alpha_desc=docs.CTE_ALPHA["description"],
     weighted=docs.WEIGHTED["type"],
     weighted_desc=docs.WEIGHTED["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     rj_ref=RyanJoiner1976,
 )
-def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
+def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False):
     """This function creates an `axis` with the Ryan-Joiner test [1]_ correlation graph.
 
     Parameters
@@ -644,8 +644,7 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
 
     {weighted}
         {weighted_desc}
-    {safe}
-        {safe_desc}
+
 
 
     Returns
@@ -681,15 +680,14 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
         :align: center
 
     """
-    func_name = "correlation_plot"
-    if safe:
-        types.is_subplots(value=axes, param_name="axes", func_name=func_name)
 
     constants.warning_plot()
 
     # ordering the sample
     zi = _normal_order_statistic(
-        x_data=x_data, weighted=weighted, cte_alpha=cte_alpha, safe=safe
+        x_data=x_data,
+        weighted=weighted,
+        cte_alpha=cte_alpha,
     )
     x_data = np.sort(x_data)
 

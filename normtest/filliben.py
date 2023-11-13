@@ -1296,21 +1296,7 @@ class Filliben(AlphaManagement, SafeManagement):
         {axes}
             {axes_desc}
         alphas : list of floats, optional
-            The significance level (:math:`\\alpha`) to draw the critical lines. Default is `[0.10, 0.05, 0.01]`. It can be a combination of:
-
-            * ``0.005``;
-            * ``0.01``;
-            * ``0.025``;
-            * ``0.05``;
-            * ``0.10``;
-            * ``0.25``;
-            * ``0.50``;
-            * ``0.75``;
-            * ``0.90``;
-            * ``0.95``;
-            * ``0.975``;
-            * ``0.99``;
-            * ``0.995``;
+            The significance level (:math:`\\alpha`) to draw the critical lines. Default is `[0.10, 0.05, 0.01]`;
 
 
         Returns
@@ -1413,6 +1399,23 @@ class Filliben(AlphaManagement, SafeManagement):
                     )
 
             return line_up(self.x_data, seed=seed, correct=correct)
+
+    def citation(self, export=False):
+        """This method returns the reference from Filliben's test, with the option to export the reference in `.bib` format.
+
+        Parameters
+        ----------
+        export : bool
+            Whether to export the reference as `Filliben1975.bib` file (`True`) or not (`False`, default);
+
+
+        Returns
+        -------
+        reference : str
+            The Filliben Test reference
+
+        """
+        return citation(export=export)
 
     def __str__(self):
         if self.conclusion is None:

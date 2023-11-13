@@ -435,13 +435,9 @@ def _p_value(statistic, sample_size):
     x_data_desc=docs.X_DATA["description"],
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
-    statistic=docs.STATISTIC["type"],
-    statistic_desc=docs.STATISTIC["description"],
     rj_ref=RyanJoiner1976,
 )
-def _statistic(x_data, zi, safe=False):
+def _statistic(x_data, zi):
     """This function estimates the Ryan-Joiner test statistic [1]_.
 
     Parameters
@@ -450,8 +446,6 @@ def _statistic(x_data, zi, safe=False):
         {x_data_desc}
     {zi}
         {zi_desc}
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -490,37 +484,6 @@ def _statistic(x_data, zi, safe=False):
     0.9225156050800545
 
     """
-    func_name = "statistic"
-    if safe:  # missing equal size test
-        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=x_data,
-            param_name="x_data",
-            func_name=func_name,
-            n_dimensions=1,
-        )
-        numpy_arrays.greater_than_n(
-            array=x_data,
-            param_name="x_data",
-            func_name=func_name,
-            minimum=4,
-            inclusive=True,
-        )
-        types.is_numpy(value=zi, param_name="zi", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=zi,
-            param_name="zi",
-            func_name=func_name,
-            n_dimensions=1,
-        )
-        numpy_arrays.greater_than_n(
-            array=zi,
-            param_name="zi",
-            func_name=func_name,
-            minimum=4,
-            inclusive=True,
-        )
-
     return stats.pearsonr(zi, x_data)[0]
 
 

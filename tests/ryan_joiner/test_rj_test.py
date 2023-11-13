@@ -3,9 +3,6 @@
 --------------------------------------------------------------------------------
 Command to run at the prompt:
     python -m unittest -v tests/ryan_joiner/test_rj_test.py
-    or
-    python -m unittest -b tests/ryan_joiner/test_rj_test.py
-
 --------------------------------------------------------------------------------
 """
 ### GENERAL IMPORTS ###
@@ -31,7 +28,12 @@ class Test_rj_test(unittest.TestCase):
         cls.cte_alpha = random.sample(cte_alphas, 1)[0]
 
     def test_inputs(self):
-        result = rj_test(self.data, 0.05, self.cte_alpha, False, False)
+        result = rj_test(
+            self.data,
+            0.05,
+            self.cte_alpha,
+            False,
+        )
         self.assertIsInstance(result, tuple, msg=f"not a tuple")
         self.assertEqual(len(result), 4, msg="Incorrect number of outputs")
         self.assertIsInstance(
@@ -60,7 +62,6 @@ class Test_rj_test(unittest.TestCase):
             alpha=0.05,
             cte_alpha=self.cte_alpha,
             weighted=False,
-            safe=False,
         )
         self.assertIsInstance(result, tuple, msg=f"not a tuple")
         self.assertEqual(len(result), 4, msg="Incorrect number of outputs")
@@ -83,31 +84,6 @@ class Test_rj_test(unittest.TestCase):
             result[3],
             str,
             msg="not str for met={self.cte_alpha}, alpha={self.alpha}, data={self.data}",
-        )
-
-    def test_safe(self):
-        result = rj_test(self.data, alpha=0.05, cte_alpha=self.cte_alpha, safe=True)
-        self.assertIsInstance(result, tuple, msg=f"not a tuple")
-        self.assertEqual(len(result), 4, msg="Incorrect number of outputs")
-        self.assertIsInstance(
-            result[0],
-            float,
-            msg=f"not a float for met={self.cte_alpha}, alpha={self.alpha}, data={self.data}",
-        )
-        self.assertIsInstance(
-            result[1],
-            float,
-            msg=f"not a float for met={self.cte_alpha}, alpha={self.alpha}, data={self.data}",
-        )
-        self.assertIsInstance(
-            result[2],
-            (float, str),
-            msg=f"not a float or for met={self.cte_alpha}, alpha={self.alpha}, data={self.data}",
-        )
-        self.assertIsInstance(
-            result[3],
-            str,
-            msg=f"not str for met={self.cte_alpha}, alpha={self.alpha}, data={self.data}",
         )
 
     def test_statext(self):

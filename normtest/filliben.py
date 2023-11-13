@@ -164,12 +164,10 @@ def _uniform_order_medians(sample_size):
 @docs.docstring_parameter(
     mi=docs.MI["type"],
     mi_desc=docs.MI["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
-def _normal_order_medians(mi, safe=False, **kwargs):
+def _normal_order_medians(mi):
     """This function transforms the uniform order median to normal order median using the standard Normal distribution (:math:`z_{{i}}`).
 
     Parameters
@@ -211,29 +209,7 @@ def _normal_order_medians(mi, safe=False, **kwargs):
 
 
     """
-    if "func_name" in kwargs.keys():
-        func_name = kwargs["func_name"]
-    else:
-        func_name = "_normal_order_medians"
-
-    if safe:
-        types.is_numpy(value=mi, param_name="mi", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=mi,
-            param_name="mi",
-            func_name=func_name,
-            n_dimensions=1,
-        )
-        numpy_arrays.greater_than_n(
-            array=mi,
-            param_name="mi",
-            func_name=func_name,
-            minimum=4,
-            inclusive=True,
-        )
-
     normal_ordered = stats.norm.ppf(mi)
-
     return normal_ordered
 
 

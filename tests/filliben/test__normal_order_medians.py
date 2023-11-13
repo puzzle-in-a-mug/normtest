@@ -29,17 +29,11 @@ class Test__normal_order_medians(unittest.TestCase):
         )
 
     def test_outputs(self):
-        result = _normal_order_medians(self.uniform, False)
+        result = _normal_order_medians(self.uniform)
         self.assertTrue(isinstance(result, np.ndarray), msg=f"not numpy type")
 
-        result = _normal_order_medians(mi=self.uniform, safe=False)
+        result = _normal_order_medians(mi=self.uniform)
         self.assertTrue(isinstance(result, np.ndarray), msg=f"not numpy type")
-
-    def test_safe(self):
-        result = _normal_order_medians(self.uniform, safe=True)
-        self.assertTrue(
-            np.allclose(result, self.normal, atol=4), msg="arrays does not match"
-        )
 
 
 if __name__ == "__main__":

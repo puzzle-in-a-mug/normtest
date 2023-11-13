@@ -28,14 +28,14 @@ class Test__statistic(unittest.TestCase):
         cls.statistic = 0.98538
 
     def test_outputs(self):
-        result = _statistic(self.x_data, self.normal, False)
+        result = _statistic(self.x_data, self.normal)
         self.assertTrue(isinstance(result, float), msg=f"not float")
 
-        result = _statistic(x_data=self.x_data, zi=self.normal, safe=False)
+        result = _statistic(x_data=self.x_data, zi=self.normal)
         self.assertTrue(isinstance(result, float), msg=f"not float")
 
     def test_pass(self):
-        result = _statistic(x_data=self.x_data, zi=self.normal, safe=False)
+        result = _statistic(x_data=self.x_data, zi=self.normal)
         self.assertAlmostEqual(
             result, self.statistic, msg="statistic does not match", places=4
         )

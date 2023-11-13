@@ -5,6 +5,9 @@ import warnings
 REJECTION = "Reject H₀"
 ACCEPTATION = "Fail to reject H₀"
 
+HYPOTESES = """`H₀`: Data was sampled from a Normal distribution.
+`H₁`: The data was sampled from a distribution other than the Normal distribution."""
+
 
 def warning_plot():
     def warning_on_one_line(message, category, filename, lineno, file=None, line=None):

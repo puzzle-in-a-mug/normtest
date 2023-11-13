@@ -1241,6 +1241,7 @@ class Filliben(AlphaManagement, SafeManagement):
             )
         self.alpha = alpha
         self.safe = safe
+        self.normality_hypothesis = constants.HYPOTESES
 
     @docs.docstring_parameter(
         x_data=docs.X_DATA["type"],

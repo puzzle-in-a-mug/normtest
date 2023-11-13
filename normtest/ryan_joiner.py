@@ -902,23 +902,28 @@ def dist_plot(
     >>> import matplotlib.pyplot as plt
     >>> from scipy import stats
     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
+
+
+    Apply the Ryan Joiner test
+
+
+    >>> result = ryan_joiner.rj_test(data)
+
+
+    Create the distribution graph using the test result
+
+
     >>> fig, ax = plt.subplots(figsize=(6, 4))
-    >>> ryan_joiner.dist_plot(axes=ax, x_data=data)
+    >>> ryan_joiner.dist_plot(axes=ax, test=(result.statistic, data.size))
     >>> # plt.savefig("rj_dist_plot.png")
     >>> plt.show()
+
 
     .. image:: img/dist_plot.png
         :alt: Critical chart for Ryan-Joiner test Normality test
         :align: center
 
     """
-    func_name = "dist_plot"
-    # if safe:
-    #     types.is_subplots(value=axes, param_name="axes", func_name=func_name)
-    #     types.is_int(value=min, param_name="min", func_name=func_name)
-    #     types.is_int(value=max, param_name="max", func_name=func_name)
-    #     # _check_a_lower_than_b(value_a, value_b, param_a_name, param_b_name)  # not implemented yet
-
     constants.warning_plot()
 
     n_samples = np.arange(critical_range[0], critical_range[1] + 1)
@@ -933,12 +938,12 @@ def dist_plot(
     # main test
     if test is not None:
         if test[1] > critical_range[1]:
-            print(
-                f"The graphical visualization is best suited if the sample size is smaller ({test[1]}) than the max value ({critical_range[1]})."
+            constants.user_warning(
+                f"The graphical visualization is best suited if the sample size ({test[1]}) is smaller than the max value ({critical_range[1]})."
             )
         if test[1] < critical_range[0]:
-            print(
-                f"The graphical visualization is best suited if the sample size is greater ({test[1]}) than the min value ({critical_range[0]})."
+            constants.user_warning(
+                f"The graphical visualization is best suited if the sample size ({test[1]}) is greater than the min value ({critical_range[0]})."
             )
 
         axes.scatter(test[1], test[0], color="r", label="$R_{p}$", marker="^")

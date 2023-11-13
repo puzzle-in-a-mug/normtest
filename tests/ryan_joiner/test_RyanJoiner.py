@@ -421,29 +421,29 @@ class Test_line_up(unittest.TestCase):
         fig1_file.unlink()
 
 
-# class Test_citation(unittest.TestCase):
-#     def test_input(self):
-#         teste = Filliben()
-#         result = teste.citation()
-#         self.assertIsInstance(
-#             result,
-#             str,
-#             msg="citation is not a str",
-#         )
-#         teste = Filliben()
-#         result = teste.citation(export=False)
-#         self.assertIsInstance(
-#             result,
-#             str,
-#             msg="citation is not a str",
-#         )
+class Test_citation(unittest.TestCase):
+    def test_input(self):
+        teste = RyanJoiner()
+        result = teste.citation()
+        self.assertIsInstance(
+            result,
+            str,
+            msg="citation is not a str",
+        )
+        teste = RyanJoiner()
+        result = teste.citation(export=False)
+        self.assertIsInstance(
+            result,
+            str,
+            msg="citation is not a str",
+        )
 
-#     def test_export_true(self):
-#         file_path = Path("Filliben1975.bib")
-#         teste = Filliben()
-#         result = teste.citation(export=True)
-#         self.assertTrue(file_path.is_file(), msg="citation not found")
-#         file_path.unlink()
+    def test_export_true(self):
+        file_path = Path("RyanJoiner1976.bib")
+        teste = RyanJoiner()
+        result = teste.citation(export=True)
+        self.assertTrue(file_path.is_file(), msg="citation not found")
+        file_path.unlink()
 
 
 if __name__ == "__main__":

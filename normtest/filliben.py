@@ -1185,8 +1185,7 @@ def fi_test(x_data, alpha=0.05, safe=False, **kwargs):
     fi_ref=Filliben1975,
 )
 class Filliben(AlphaManagement, SafeManagement):
-    """
-    This class instantiates an object to perform the Filliben Normality test [1]_.
+    """This class instantiates an object to perform the Filliben Normality test [1]_.
 
 
     Attributes
@@ -1227,20 +1226,21 @@ class Filliben(AlphaManagement, SafeManagement):
 
     def __init__(self, alpha=0.05, safe=True, **kwargs):
         super().__init__(alpha=alpha, **kwargs)
-
-        self.conclusion = None
+        self.func_name = "Filliben"
+        self.conclusion = None  # for cheking if the fit was applied
         if alpha != 0.05:
-            types.is_float(value=alpha, param_name="alpha", func_name="Filliben")
+            types.is_float(value=alpha, param_name="alpha", func_name=self.func_name)
             numbers.is_between_a_and_b(
                 value=alpha,
                 a=0.005,
                 b=0.995,
                 param_name="alpha",
-                func_name="Filliben",
+                func_name=self.func_name,
                 inclusive=True,
             )
+        self.set_safe(safe=safe)
         self.alpha = alpha
-        self.safe = safe
+
         self.normality_hypothesis = constants.HYPOTESES
 
     @docs.docstring_parameter(

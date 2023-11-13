@@ -1202,6 +1202,10 @@ class Filliben(AlphaManagement, SafeManagement):
         {alpha_desc}
     {safe}
         {safe_desc}
+    normality : named tuple
+        A tuple with the main test results summarized
+    normality_hypothesis : str
+        Description of the Normality test
 
 
     Methods
@@ -1266,6 +1270,8 @@ class Filliben(AlphaManagement, SafeManagement):
 
         Returns
         -------
+        {x_data}
+            {x_data_desc}
         {statistic}
             {statistic_desc}
         {critical}

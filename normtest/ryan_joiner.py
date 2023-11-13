@@ -1526,3 +1526,31 @@ class RyanJoiner(AlphaManagement, SafeManagement):
                 seed=seed,
                 correct=correct,
             )
+
+
+    def citation(self, export=False):
+        """This method returns the reference from Ryan-Joiner's test, with the option to export the reference in `.bib` format.
+
+        Parameters
+        ----------
+        export : bool
+            Whether to export the reference as `RyanJoiner1976.bib` file (`True`) or not (`False`, default);
+
+
+        Returns
+        -------
+        reference : str
+            The Ryan-Joiner Test reference
+
+        """
+        return citation(export=export)
+
+    def __str__(self):
+        if self.conclusion is None:
+            text = "The Ryan-Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+            return text
+        else:
+            return self.conclusion
+
+    def __repr__(self):
+        return "Ryan-Joiner Normality test"

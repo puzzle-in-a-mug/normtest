@@ -285,13 +285,11 @@ def _statistic(x_data, zi):
     sample_size_desc=docs.SAMPLE_SIZE["description"],
     alpha=docs.ALPHA["type"],
     alpha_desc=docs.ALPHA["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     critical=docs.CRITICAL["type"],
     critical_desc=docs.CRITICAL["description"],
     fi_ref=Filliben1975,
 )
-def _critical_value(sample_size, alpha=0.05, safe=False, **kwargs):
+def _critical_value(sample_size, alpha=0.05):
     """This function calculates the critical value for the Filliben normality test [1]_.
 
 
@@ -301,8 +299,6 @@ def _critical_value(sample_size, alpha=0.05, safe=False, **kwargs):
         {sample_size_desc}
     {alpha}
         {alpha_desc}
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -326,38 +322,8 @@ def _critical_value(sample_size, alpha=0.05, safe=False, **kwargs):
 
 
     """
-    if "func_name" in kwargs.keys():
-        func_name = kwargs["func_name"]
-    else:
-        func_name = "_critical_value"
-
     # making a copy from original critical values
     critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
-
-    if safe:
-        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
-        numbers.is_greater_than(
-            value=sample_size,
-            lower=4,
-            param_name="sample_size",
-            func_name=func_name,
-            inclusive=True,
-        )
-        types.is_float(value=alpha, param_name="alpha", func_name=func_name)
-        numbers.is_between_a_and_b(
-            value=alpha,
-            a=0.005,
-            b=0.995,
-            param_name="alpha",
-            func_name=func_name,
-            inclusive=True,
-        )
-        parameters.param_options(
-            option=alpha,
-            param_options=list(critical.keys())[1:],
-            param_name="alpha",
-            func_name=func_name,
-        )
 
     if sample_size not in critical["n"]:
         if sample_size < 100:

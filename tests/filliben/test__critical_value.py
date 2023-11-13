@@ -3,9 +3,6 @@
 --------------------------------------------------------------------------------
 Command to run at the prompt:
     python -m unittest -v tests/filliben/test__critical_value.py
-    or
-    python -m unittest -b tests/filliben/test__critical_value.py
-
 --------------------------------------------------------------------------------
 """
 
@@ -29,12 +26,6 @@ class Test__critical_value(unittest.TestCase):
 
     def test_outputs(self):
         result = _critical_value(self.n, self.alpha)
-        self.assertIsInstance(
-            result, float, msg=f"not a float when alpha={self.alpha} and n={self.n}"
-        )
-
-    def test_safe(self):
-        result = _critical_value(self.n, self.alpha, safe=True)
         self.assertIsInstance(
             result, float, msg=f"not a float when alpha={self.alpha} and n={self.n}"
         )
@@ -79,36 +70,6 @@ class Test__critical_value(unittest.TestCase):
                 places=3,
                 msg=f"wrong critical for Filliben test",
             )
-
-    def test_alpha_value(self):
-        alpha = random.uniform(0, 1)
-        with self.assertRaises(
-            ValueError,
-            msg=f"Does not raised ValueError when alpha={alpha} and n={self.n}",
-        ):
-            result = _critical_value(self.n, alpha, safe=True)
-
-    def test_n_not_int(self):
-        n_values = [
-            5.1,
-            "5",
-            [5],
-            (6,),
-        ]
-        for n in n_values:
-            with self.assertRaises(
-                TypeError, msg=f"Does not raised ValueError when alpha={0.05} and n={n}"
-            ):
-                result = _critical_value(n, 0.05, safe=True)
-
-    def test_small_n(self):
-        n_values = [-5, 0, 3]
-        for n in n_values:
-            with self.assertRaises(
-                ValueError,
-                msg=f"Does not raised ValueError when alpha={0.05} and n={n}",
-            ):
-                result = _critical_value(n, 0.05, safe=True)
 
 
 if __name__ == "__main__":

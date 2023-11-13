@@ -978,7 +978,7 @@ def dist_plot(
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
-def _make_line_up_data(x_data, weighted, cte_alpha, safe):
+def _make_line_up_data(x_data, weighted, cte_alpha, safe=False):
     """Tthis function prepares the data for the Ryan Joiner test `line_up` function.
 
     Parameters
@@ -1023,13 +1023,15 @@ def _make_line_up_data(x_data, weighted, cte_alpha, safe):
     cte_alpha_desc=docs.CTE_ALPHA["description"],
     weighted=docs.WEIGHTED["type"],
     weighted_desc=docs.WEIGHTED["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
 def line_up(
-    x_data, cte_alpha="3/8", weighted=False, seed=42, correct=False, safe=False
+    x_data,
+    cte_alpha="3/8",
+    weighted=False,
+    seed=42,
+    correct=False,
 ):
     """This function exports the figure with the correlation graphs for the line up method [1]_.
 
@@ -1046,8 +1048,6 @@ def line_up(
         A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``42``;
     correct : bool, optional
         Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -1119,14 +1119,12 @@ def line_up(
 
 
     """
-    func_name = "line_up"
-    if safe:
-        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
-        )
-        numbers.is_positive(value=seed, param_name="seed", func_name=func_name)
     constants.warning_plot()
+
+    # getting a properly seed
+    if seed is None:
+        seed = int(np.random.rand() * (2**32 - 1))
+
     # creating a list of 20 integers and shuffling
     position = np.arange(20)
     rng = np.random.default_rng(seed)
@@ -1166,14 +1164,18 @@ def line_up(
         for col in range(cols):
             if i == real_data_position:
                 x, zi, y_pred = _make_line_up_data(
-                    x_data=data[i], weighted=weighted, cte_alpha=cte_alpha, safe=safe
+                    x_data=data[i],
+                    weighted=weighted,
+                    cte_alpha=cte_alpha,
                 )
                 ax[col, row].scatter(zi, x, c=color)
                 ax[col, row].plot(zi, y_pred, ls="--", c=color)
 
             else:
                 x, zi, y_pred = _make_line_up_data(
-                    x_data=data[i], weighted=weighted, cte_alpha=cte_alpha, safe=safe
+                    x_data=data[i],
+                    weighted=weighted,
+                    cte_alpha=cte_alpha,
                 )
                 ax[col, row].scatter(zi, x, c="k")
                 ax[col, row].plot(zi, y_pred, ls="--", c="k")
@@ -1181,7 +1183,7 @@ def line_up(
             i += 1
             ax[col, row].tick_params(axis="both", which="major", labelsize=5)
 
-    fig.text(0.5, 0.0, "Normal statistical order", ha="center")
+    fig.text(0.5, 0.0, f"Normal statistical order (seed={seed})", ha="center")
     fig.text(0.0, 0.5, "Ordered data", va="center", rotation="vertical")
     fig.patch.set_facecolor("white")
 

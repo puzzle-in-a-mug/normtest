@@ -10,6 +10,7 @@
 - Added ``SafeManagement`` class (12/11/2023);
 
 ### Module filliben
+- Added ``Filliben`` class (13/11/2023);
 - Added ``fi_test`` function (11/11/2023);
 - Added ``line_up`` function (11/11/2023);
 - Added ``correlation_plot`` function (11/11/2023);

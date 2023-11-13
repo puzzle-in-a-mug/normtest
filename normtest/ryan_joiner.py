@@ -850,35 +850,33 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
 @docs.docstring_parameter(
     axes=docs.AXES["type"],
     axes_desc=docs.AXES["description"],
-    x_data=docs.X_DATA["type"],
-    x_data_desc=docs.X_DATA["description"],
-    cte_alpha=docs.CTE_ALPHA["type"],
-    cte_alpha_desc=docs.CTE_ALPHA["description"],
-    weighted=docs.WEIGHTED["type"],
-    weighted_desc=docs.WEIGHTED["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    sample_size=docs.SAMPLE_SIZE["type"],
+    sample_size_desc=docs.AXES["description"],
     rj_ref=RyanJoiner1976,
 )
-def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe=False):
+def dist_plot(
+    axes,
+    critical_range=(4, 50),
+    test=None,
+):
     """This function generates axis with critical data from the Ryan-Joiner Normality test [1]_.
 
     Parameters
     ----------
     {axes}
         {axes_desc}
-    {x_data}
-        {x_data_desc}
-    {cte_alpha}
-        {cte_alpha_desc}
-    min : int, optional
-        The lower range of the number of observations for the critical values (default is ``4``).
-    max : int, optional
-        The upper range of the number of observations for the critical values (default is ``50``).
-    {weighted}
-        {weighted_desc}
-    {safe}
-        {safe_desc}
+    critical_range : tuple (optional), with two elements:
+        x_min : int, optional
+            The lower range of the number of observations for the critical values (default is ``4``).
+        x_max : int, optional
+            The upper range of the number of observations for the critical values (default is ``50``).
+    test : tuple (optional), with two elements:
+        {statistic}
+            {statistic_desc}
+        {sample_size}
+            {sample_size_desc}
 
 
     Returns
@@ -915,26 +913,17 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
 
     """
     func_name = "dist_plot"
-    if safe:
-        types.is_subplots(value=axes, param_name="axes", func_name=func_name)
-        types.is_int(value=min, param_name="min", func_name=func_name)
-        types.is_int(value=max, param_name="max", func_name=func_name)
-        # _check_a_lower_than_b(value_a, value_b, param_a_name, param_b_name)  # not implemented yet
+    # if safe:
+    #     types.is_subplots(value=axes, param_name="axes", func_name=func_name)
+    #     types.is_int(value=min, param_name="min", func_name=func_name)
+    #     types.is_int(value=max, param_name="max", func_name=func_name)
+    #     # _check_a_lower_than_b(value_a, value_b, param_a_name, param_b_name)  # not implemented yet
 
     constants.warning_plot()
 
-    if x_data.size > max:
-        print(
-            f"The graphical visualization is best suited if the sample size is smaller ({x_data.size}) than the max value ({max})."
-        )
-    if x_data.size < min:
-        print(
-            f"The graphical visualization is best suited if the sample size is greater ({x_data.size}) than the min value ({min})."
-        )
-
-    n_samples = np.arange(min, max + 1)
+    n_samples = np.arange(critical_range[0], critical_range[1] + 1)
     alphas = [0.10, 0.05, 0.01]
-    alphas_label = ["$R_{p;10\\%}^{'}$", "$R_{p;5\\%}^{'}$", "$R_{p;1\\%}^{'}$"]
+    alphas_label = ["$10\\%$", "$5\\%$", "$1\\%$"]
     colors = [
         (0.2980392156862745, 0.4470588235294118, 0.6901960784313725),
         (0.8666666666666667, 0.5176470588235295, 0.3215686274509804),
@@ -942,8 +931,17 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
     ]
 
     # main test
-    result = rj_test(x_data=x_data, cte_alpha=cte_alpha, weighted=weighted, safe=safe)
-    axes.scatter(x_data.size, result[0], color="r", label="$R_{p}$")
+    if test is not None:
+        if test[1] > critical_range[1]:
+            print(
+                f"The graphical visualization is best suited if the sample size is smaller ({test[1]}) than the max value ({critical_range[1]})."
+            )
+        if test[1] < critical_range[0]:
+            print(
+                f"The graphical visualization is best suited if the sample size is greater ({test[1]}) than the min value ({critical_range[0]})."
+            )
+
+        axes.scatter(test[1], test[0], color="r", label="$R_{p}$", marker="^")
 
     # adding critical values
     for alp, color, alp_label in zip(alphas, colors, alphas_label):
@@ -952,7 +950,7 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
             criticals.append(_critical_value(sample_size=sample, alpha=alp, safe=False))
         axes.scatter(n_samples, criticals, label=alp_label, color=color, s=10)
 
-    axes.set_title("Ryan-Joiner Normality test")
+    axes.set_title("Ryan-Joiner")
 
     # adding details
     axes.legend(loc=4)
@@ -1379,3 +1377,45 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         self.p_value = result.p_value
         self.conclusion = result.conclusion
         self.normality = result
+
+    @docs.docstring_parameter(
+        axes=docs.AXES["type"],
+        axes_desc=docs.AXES["description"],
+    )
+    def dist_plot(self, axes, x_range=(4, 50)):
+        """This method  generates axis with critical data from the Ryan-Joiner Normality test.
+
+        Parameters
+        ----------
+        {axes}
+            {axes_desc}
+        x_range : tuple, optional
+            A tuple with the minimum (default is ``4``) and maximum (default is ``50``)  value for the critical values of the test. Both must be of type `int`;
+
+
+        Returns
+        -------
+        {axes}
+            {axes_desc}
+
+
+        See Also
+        --------
+        dist_plot
+
+
+
+
+        """
+        func_name = "dist_plot"
+        if self.safe:
+            types.is_subplots(value=axes, param_name="axes", func_name=func_name)
+            types.is_tuple(value=x_range, param_name="x_range", func_name=func_name)
+            types.is_int(value=x_range[0], param_name="x_range[0]", func_name=func_name)
+            types.is_int(value=x_range[1], param_name="x_range[1]", func_name=func_name)
+
+        # return dist_plot(
+        #     axes=axes,
+        #     test=(self.statistic, self.x_data.size),
+        #     x_range=x_range,
+        # )

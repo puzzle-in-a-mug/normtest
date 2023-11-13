@@ -510,7 +510,7 @@ def _p_value(statistic, sample_size, safe=False):
     elif statistic < min(criticals):
         return "p < 0.010"
     else:
-        p_value = f(statistic)
+        p_value = float(f(statistic))
         return p_value
 
 
@@ -1299,7 +1299,6 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         self.weighted = weighted
         self.set_safe(safe=safe)
         self.alpha = alpha
-
         self.normality_hypothesis = constants.HYPOTESES
 
     @docs.docstring_parameter(

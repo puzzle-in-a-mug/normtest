@@ -108,70 +108,68 @@ class Test_fit_applied(unittest.TestCase):
             teste = RyanJoiner(safe=0.996)
 
 
-# class Test_fit(unittest.TestCase):
-#     @classmethod
-#     def setUpClass(cls):
-#         cls.data = np.array([6, 1, -4, 8, -2, 5, 0])
-#         cls.alpha = 0.05
+class Test_fit(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.x_data = np.array([44.1, -33.1, 243.1, -25.2, 11])
+        cls.alpha = 0.05
 
-#     def test_applied(self):
-#         teste = Filliben()
-#         teste.fit(self.data)
-#         self.assertAlmostEqual(
-#             teste.statistic, 0.98538, places=3, msg="wrong statistic"
-#         )
-#         self.assertAlmostEqual(teste.critical, 0.899, places=3, msg="wrong critical")
-#         self.assertEqual(teste.conclusion, "Fail to reject H₀", msg="wrong conclusion")
-#         self.assertEqual(len(teste.normality), 4, msg="wrong number of outputs")
-#         self.assertIsInstance(
-#             teste.normality.statistic, float, msg="wrong type for statistic"
-#         )
-#         self.assertIsInstance(
-#             teste.normality.critical, float, msg="wrong type for critical"
-#         )
-#         self.assertIsInstance(
-#             teste.normality.p_value, float, msg="wrong type for pvalor"
-#         )
-#         self.assertIsInstance(
-#             teste.normality.conclusion, str, msg="wrong type for conclusion"
-#         )
+    def test_applied(self):
+        teste = RyanJoiner()
+        teste.fit(self.x_data)
+        self.assertAlmostEqual(teste.statistic, 0.878, places=3, msg="wrong statistic")
+        self.assertAlmostEqual(teste.p_value, 0.048, places=2, msg="wrong p-value")
+        self.assertEqual(teste.conclusion, "Reject H₀", msg="wrong conclusion")
+        self.assertEqual(len(teste.normality), 4, msg="wrong number of outputs")
+        self.assertIsInstance(
+            teste.normality.statistic, float, msg="wrong type for statistic"
+        )
+        self.assertIsInstance(
+            teste.normality.critical, float, msg="wrong type for critical"
+        )
+        self.assertIsInstance(
+            teste.normality.p_value, float, msg="wrong type for pvalor"
+        )
+        self.assertIsInstance(
+            teste.normality.conclusion, str, msg="wrong type for conclusion"
+        )
 
-#     def test_safe(self):
-#         data = [
-#             [148, 154, 158, 160, 161, 162, 166, 170, 182, 195, 236],
-#             (148, 154, 158, 160, 161, 162, 166, 170, 182, 195, 236),
-#             148,
-#             148.5,
-#             "148",
-#         ]
-#         for d in data:
-#             with self.assertRaises(
-#                 TypeError,
-#                 msg=f"Does not raised ValueError when type = {type(d).__name__}",
-#             ):
-#                 teste = Filliben()
-#                 teste.fit(d)
+    def test_safe(self):
+        data = [
+            [148, 154, 158, 160, 161, 162, 166, 170, 182, 195, 236],
+            (148, 154, 158, 160, 161, 162, 166, 170, 182, 195, 236),
+            148,
+            148.5,
+            "148",
+        ]
+        for d in data:
+            with self.assertRaises(
+                TypeError,
+                msg=f"Does not raised ValueError when type = {type(d).__name__}",
+            ):
+                teste = RyanJoiner()
+                teste.fit(d)
 
-#         data = np.array([[1, 2, 3, 4, 5]])
-#         with self.assertRaises(
-#             ValueError,
-#             msg=f"Does not raised ValueError when n dim is wrong",
-#         ):
-#             teste = Filliben()
-#             teste.fit(data)
+        data = np.array([[1, 2, 3, 4, 5]])
+        with self.assertRaises(
+            ValueError,
+            msg=f"Does not raised ValueError when n dim is wrong",
+        ):
+            teste = RyanJoiner()
+            teste.fit(data)
 
-#         n_values = [
-#             np.array([1, 2, 3]),
-#             np.array([1, 2]),
-#             np.array([1]),
-#         ]
-#         for n in n_values:
-#             with self.assertRaises(
-#                 ValueError,
-#                 msg=f"Does not raised ValueError when sample size is small",
-#             ):
-#                 teste = Filliben()
-#                 teste.fit(data)
+        n_values = [
+            np.array([1, 2, 3]),
+            np.array([1, 2]),
+            np.array([1]),
+        ]
+        for n in n_values:
+            with self.assertRaises(
+                ValueError,
+                msg=f"Does not raised ValueError when sample size is small",
+            ):
+                teste = RyanJoiner()
+                teste.fit(data)
 
 
 # class Test_dist_plot(unittest.TestCase):

@@ -119,7 +119,7 @@ class SafeManagement:
 
 
 class AlphaManagement:
-    """Instanciates a class for ``alpha`` management. It is primarily for internal use.
+    """Instanciates a class for `alpha` management. It is primarily for internal use.
 
 
     Parameters
@@ -141,7 +141,7 @@ class AlphaManagement:
 
         Parameters
         ----------
-        alpha : `float`
+        alpha : float
             The significance level (default is ``0.05``);
 
         Notes
@@ -176,7 +176,7 @@ class AlphaManagement:
         return self.alpha
 
     def set_alpha(self, alpha):
-        """Changes the ``alpha`` value
+        """Changes the `alpha` value
 
         Parameters
         ----------
@@ -185,7 +185,7 @@ class AlphaManagement:
 
         Notes
         -----
-        This method only allows input of type ``float`` and between ``0.0`` and ``1.0``.
+        This method only allows input of type `float` and between ``0.0`` and ``1.0``.
 
         """
         types.is_float(value=alpha, param_name="alpha", func_name=self.func_name)

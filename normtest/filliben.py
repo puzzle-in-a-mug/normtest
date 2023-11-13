@@ -23,13 +23,22 @@
 
 ##### List of CLASS (alphabetical order) #####
 
-
+## WITH some TESTS ###
+- Filliben(AlphaManagement, SafeManagement)
+    - __init__(self, alpha=0.05, safe=True, **kwargs)
+    - fit(self, x_data)
+    - dist_plot(self, axes, alphas=[0.10, 0.05, 0.01])
+    - correlation_plot(self, axes)
+    - line_up(self, seed=None, correct=False)
+    - citation(self, export=False)
+    - __str__(self)
+    - __repr__(self)
 
 Author: Anderson Marcos Dias Canteli <andersonmdcanteli@gmail.com>
 
 Created : November 08, 2023
 
-Last update: November 11, 2023
+Last update: November 13, 2023
 """
 
 ##### IMPORTS #####
@@ -42,7 +51,6 @@ from copy import deepcopy
 ### Third part ###
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
 from scipy import stats
 from scipy import interpolate
 

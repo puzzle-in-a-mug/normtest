@@ -5,5 +5,5 @@ from .version import __name__
 from .version import __version__
 
 
-from .ryan_joiner import rj_test
+from .ryan_joiner import RyanJoiner
 from .filliben import Filliben

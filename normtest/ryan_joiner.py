@@ -28,9 +28,9 @@
 
 Author: Anderson Marcos Dias Canteli <andersonmdcanteli@gmail.com>
 
-Last update: November 06, 2023
+Created : November 02, 2023
 
-Last update: November 02, 2023
+Last update: November 13, 2023
 """
 
 ##### IMPORTS #####
@@ -53,7 +53,7 @@ from scipy import interpolate
 from paramcheckup import parameters, types, numbers, numpy_arrays
 from . import bibmaker
 from .utils import constants
-
+from .utils.helpers import AlphaManagement, SafeManagement
 
 ##### DOCUMENTATION #####
 from .utils import documentation as docs
@@ -1183,3 +1183,107 @@ def line_up(
     fig.patch.set_facecolor("white")
 
     return fig
+
+
+##### CLASS #####
+
+
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    critical=docs.CRITICAL["type"],
+    critical_desc=docs.CRITICAL["description"],
+    p_value=docs.P_VALUE["type"],
+    p_value_desc=docs.P_VALUE["description"],
+    conclusion=docs.CONCLUSION["type"],
+    conclusion_desc=docs.CONCLUSION["description"],
+    alpha=docs.ALPHA["type"],
+    alpha_desc=docs.ALPHA["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    rj_ref=RyanJoiner1976,
+)
+class RyanJoiner(AlphaManagement, SafeManagement):
+    """This class instantiates an object to perform the Ryan-Joiner Normality test [1]_.
+
+
+    Attributes
+    ----------
+    {statistic}
+        {statistic_desc}
+    {critical}
+        {critical_desc}
+    {p_value}
+        {p_value_desc}
+    {conclusion}
+        {conclusion_desc}
+    {alpha}
+        {alpha_desc}
+    {safe}
+        {safe_desc}
+    normality : named tuple
+        A tuple with the main test results summarized
+    normality_hypothesis : str
+        Description of the Normality test
+
+
+    Methods
+    -------
+    fit(x_data)
+        Applies the Ryan-Joiner Normality test;
+    dist_plot(axes, alphas=[0.10, 0.05, 0.01]):
+        Generates axis with critical data from the Ryan-Joiner Normality test;
+    correlation_plot(axes)
+        Generates an `axis` with the Ryan-Joiner test correlation graph;
+    line_up(seed=None, correct=False)
+        Generates a figure with the correlation graphs for the line up method;
+    citation(export=False)
+        Returns the Ryan-Joiner's test reference;
+
+    References
+    ----------
+    .. [1] {rj_ref}
+
+
+    Examples
+    --------
+    >>> from normtest import RyanJoiner
+    >>> import numpy as np
+    >>> x = np.array([6, 1, -4, 8, -2, 5, 0])
+    >>> test = RyanJoiner()
+    >>> test.fit(x)
+    >>> print(test.normality)
+
+
+    """
+
+    def __init__(self, alpha=0.05, safe=True, **kwargs):
+        """Initiates Filliben class inheriting the AlphaManagement and SafeManagement classes
+
+        Attributes
+        ----------
+        class_name : "RyanJoiner"
+        conclusion : None
+            This attribute is used to check whether the fit method was applied or not
+        alpha : float
+        safe : bool
+
+
+        """
+        super().__init__(alpha=alpha, safe=safe, **kwargs)
+        self.class_name = "RyanJoiner"
+        self.conclusion = None  # for cheking if the fit was applied
+        if alpha != 0.05:
+            types.is_float(value=alpha, param_name="alpha", func_name=self.class_name)
+            parameters.param_options(
+                option=alpha,
+                param_options=[0.01, 0.05, 0.10],
+                param_name="alpha",
+                func_name=self.class_name,
+            )
+        self.set_safe(safe=safe)
+        self.alpha = alpha
+
+        self.normality_hypothesis = constants.HYPOTESES

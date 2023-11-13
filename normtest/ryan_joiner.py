@@ -1438,3 +1438,42 @@ class RyanJoiner(AlphaManagement, SafeManagement):
             critical_range=critical_range,
             test=(self.statistic, self.x_data.size),
         )
+
+    @docs.docstring_parameter(
+        axes=docs.AXES["type"],
+        axes_desc=docs.AXES["description"],
+    )
+    def correlation_plot(
+        self,
+        axes,
+    ):
+        """This method generates an axis with the correlation plotfor the Ryan-Joiner Normality test.
+
+        Parameters
+        ----------
+        {axes}
+            {axes_desc}
+
+
+        Returns
+        -------
+        {axes}
+            {axes_desc}
+
+
+        See Also
+        --------
+        correlation_plot
+
+
+        """
+        func_name = "correlation_plot"
+        if self.safe:
+            types.is_subplots(value=axes, param_name="axes", func_name=func_name)
+
+        return correlation_plot(
+            axes=axes,
+            x_data=self.x_data,
+            cte_alpha=self.cte_alpha,
+            weighted=self.weighted,
+        )

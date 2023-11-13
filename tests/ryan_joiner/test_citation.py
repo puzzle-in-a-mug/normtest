@@ -41,7 +41,7 @@ class Test_citation(unittest.TestCase):
         )
 
     def test_export_true(self):
-        file_path = Path("ryan-joiner.bib")
+        file_path = Path("RyanJoiner1976.bib")
         result = citation(export=True)
         self.assertTrue(file_path.is_file(), msg="citation not found")
         file_path.unlink()

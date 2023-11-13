@@ -1428,6 +1428,7 @@ class Filliben(AlphaManagement, SafeManagement):
             if self.safe:
                 types.is_bool(value=correct, param_name="correct", func_name="line_up")
                 if seed is not None:
+                    types.is_int(value=seed, param_name="seed", func_name="line_up")
                     numbers.is_positive(
                         value=seed, param_name="seed", func_name="line_up"
                     )

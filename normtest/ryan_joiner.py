@@ -820,7 +820,7 @@ def dist_plot(
     for alp, color, alp_label in zip(alphas, colors, alphas_label):
         criticals = []
         for sample in n_samples:
-            criticals.append(_critical_value(sample_size=sample, alpha=alp, safe=False))
+            criticals.append(_critical_value(sample_size=sample, alpha=alp))
         axes.scatter(n_samples, criticals, label=alp_label, color=color, s=10)
 
     axes.set_title("Ryan-Joiner")

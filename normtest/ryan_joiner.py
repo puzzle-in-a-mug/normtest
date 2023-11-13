@@ -1259,7 +1259,9 @@ class RyanJoiner(AlphaManagement, SafeManagement):
 
     """
 
-    def __init__(self, alpha=0.05, safe=True, **kwargs):
+    def __init__(
+        self, alpha=0.05, safe=True, cte_alpha="3/8", weighted=False, **kwargs
+    ):
         """Initiates Filliben class inheriting the AlphaManagement and SafeManagement classes
 
         Attributes
@@ -1269,6 +1271,8 @@ class RyanJoiner(AlphaManagement, SafeManagement):
             This attribute is used to check whether the fit method was applied or not
         alpha : float
         safe : bool
+        cte_alpha : str
+        weighted : bool
 
 
         """
@@ -1282,7 +1286,98 @@ class RyanJoiner(AlphaManagement, SafeManagement):
                 param_name="alpha",
                 func_name=self.class_name,
             )
+            parameters.param_options(
+                option=cte_alpha,
+                param_options=["0", "3/8", "1/2"],
+                param_name="cte_alpha",
+                func_name=self.class_name,
+            )
+            types.is_bool(
+                value=weighted, param_name="weighted", func_name=self.class_name
+            )
+        self.cte_alpha = cte_alpha
+        self.weighted = weighted
         self.set_safe(safe=safe)
         self.alpha = alpha
 
         self.normality_hypothesis = constants.HYPOTESES
+
+    @docs.docstring_parameter(
+        x_data=docs.X_DATA["type"],
+        x_data_desc=docs.X_DATA["description"],
+        statistic=docs.STATISTIC["type"],
+        statistic_desc=docs.STATISTIC["description"],
+        critical=docs.CRITICAL["type"],
+        critical_desc=docs.CRITICAL["description"],
+        p_value=docs.P_VALUE["type"],
+        p_value_desc=docs.P_VALUE["description"],
+        conclusion=docs.CONCLUSION["type"],
+        conclusion_desc=docs.CONCLUSION["description"],
+    )
+    def fit(
+        self,
+        x_data,
+    ):
+        """This method applies the Ryan-Joiner test.
+
+        Parameters
+        ----------
+        {x_data}
+            {x_data_desc}
+
+
+        Returns
+        -------
+        {x_data}
+            {x_data_desc}
+        {statistic}
+            {statistic_desc}
+        {critical}
+            {critical_desc}
+        {p_value}
+            {p_value_desc}
+        {conclusion}
+            {conclusion_desc}
+        normality : named tuple
+            A tuple with the main test results summarized
+
+
+        See Also
+        --------
+        fi_test
+
+
+        """
+        func_name = "fit"
+        if self.safe:
+            types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
+            numpy_arrays.n_dimensions(
+                arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
+            )
+            numpy_arrays.greater_than_n(
+                array=x_data,
+                param_name="x_data",
+                func_name=func_name,
+                minimum=4,
+                inclusive=True,
+            )
+            if self.alpha != 0.05:
+                types.is_float(
+                    value=self.alpha, param_name="alpha", func_name=func_name
+                )
+                numbers.is_between_a_and_b(
+                    value=self.alpha,
+                    a=0.005,
+                    b=0.995,
+                    param_name="alpha",
+                    func_name=func_name,
+                    inclusive=True,
+                )
+
+        result = fi_test(x_data=x_data, alpha=self.alpha)
+        self.x_data = x_data
+        self.statistic = result.statistic
+        self.critical = result.critical
+        self.p_value = result.p_value
+        self.conclusion = result.conclusion
+        self.normality = result

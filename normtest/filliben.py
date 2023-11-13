@@ -64,7 +64,7 @@ Filliben1975 = "FILLIBEN, J. J. The Probability Plot Correlation Coefficient Tes
 
 
 ##### CLASS #####
-from normtest.utils.helpers import AlphaManagement
+from normtest.utils.helpers import AlphaManagement, SafeManagement
 
 ##### FUNCTIONS #####
 
@@ -1167,7 +1167,7 @@ def fi_test(x_data, alpha=0.05, safe=False, **kwargs):
     return result(statistic, critical_value, p_value, conclusion)
 
 
-class Filliben(AlphaManagement):
+class Filliben(AlphaManagement, SafeManagement):
     """
     This class instantiates an object to perform the Filliben Normality test [1]_.
 
@@ -1194,7 +1194,7 @@ class Filliben(AlphaManagement):
 
     """
 
-    def __init__(self, alpha=0.05, **kwargs):
+    def __init__(self, alpha=0.05, safe=True, **kwargs):
         super().__init__(alpha=alpha, **kwargs)
 
         self.conclusion = None
@@ -1208,54 +1208,50 @@ class Filliben(AlphaManagement):
                 func_name="Filliben",
                 inclusive=True,
             )
+        self.alpha = alpha
+        self.safe = safe
 
-    # with test, with text, with database, with docstring
-    def fit(self, x_data, alpha=0.05, safe=True):
-        """
+    @docs.docstring_parameter(
+        x_data=docs.X_DATA["type"],
+        x_data_desc=docs.X_DATA["description"],
+        statistic=docs.STATISTIC["type"],
+        statistic_desc=docs.STATISTIC["description"],
+        critical=docs.CRITICAL["type"],
+        critical_desc=docs.CRITICAL["description"],
+        p_value=docs.P_VALUE["type"],
+        p_value_desc=docs.P_VALUE["description"],
+        conclusion=docs.CONCLUSION["type"],
+        conclusion_desc=docs.CONCLUSION["description"],
+    )
+    def fit(self, x_data):
+        """This method applies the Filliben test.
 
         Parameters
         ----------
-        x_exp : ``numpy array``
-            One dimension :doc:`numpy array <numpy:reference/generated/numpy.array>` with at least ``4`` sample data.
-        alfa : ``float``, optional
-            The level of significance (``ɑ``). Default is ``None`` which results in ``0.05`` (``ɑ = 5%``).
-        details : ``str``, optional
-            The ``details`` parameter determines the amount of information presented about the hypothesis test.
-
-            * If ``details = "short"`` (or ``None``), a simplified version of the test result is returned.
-            * If ``details = "full"``, a detailed version of the hypothesis test result is returned.
-            * if ``details = "binary"``, the conclusion will be ``1`` (:math:`H_0` is rejected) or ``0`` (:math:`H_0` is accepted).
+        {x_data}
+            {x_data_desc}
 
 
         Returns
         -------
-        result : ``tuple`` with
-            statistic : ``float``
-                The test statistic.
-            critical : ``float`` or ``None``
-                The critical value for alpha equal to ``1%``, ``5%``, ``10%``, ``15%`` or ``20%``. Other values will raise ``ValueError``.
-            p_value : ``None``
-                The p-value for the hypothesis test (always ``None``).
-        conclusion : ``str``
-            The test conclusion (e.g, Normal/ not Normal).
+        {statistic}
+            {statistic_desc}
+        {critical}
+            {critical_desc}
+        {p_value}
+            {p_value_desc}
+        {conclusion}
+            {conclusion_desc}
 
 
         See Also
         --------
-
-
-        Notes
-        References
-        ----------
-
-
-        Examples
-        --------
+        fi_test
 
 
         """
         func_name = "fit"
-        if safe:
+        if self.safe:
             types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
             numpy_arrays.n_dimensions(
                 arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
@@ -1267,10 +1263,12 @@ class Filliben(AlphaManagement):
                 minimum=4,
                 inclusive=True,
             )
-            if alpha != 0.05:
-                types.is_float(value=alpha, param_name="alpha", func_name=func_name)
+            if self.alpha != 0.05:
+                types.is_float(
+                    value=self.alpha, param_name="alpha", func_name=func_name
+                )
                 numbers.is_between_a_and_b(
-                    value=alpha,
+                    value=self.alpha,
                     a=0.005,
                     b=0.995,
                     param_name="alpha",
@@ -1286,25 +1284,135 @@ class Filliben(AlphaManagement):
         self.conclusion = result.conclusion
         self.result = result
 
-    def dist_plot(self, axes, alphas=[0.10, 0.05, 0.01], safe=False):
+    @docs.docstring_parameter(
+        axes=docs.AXES["type"],
+        axes_desc=docs.AXES["description"],
+    )
+    def dist_plot(self, axes, alphas=[0.10, 0.05, 0.01]):
+        """This function generates axis with critical data from the Filliben Normality test.
+
+        Parameters
+        ----------
+        {axes}
+            {axes_desc}
+        alphas : list of floats, optional
+            The significance level (:math:`\\alpha`) to draw the critical lines. Default is `[0.10, 0.05, 0.01]`. It can be a combination of:
+
+            * ``0.005``;
+            * ``0.01``;
+            * ``0.025``;
+            * ``0.05``;
+            * ``0.10``;
+            * ``0.25``;
+            * ``0.50``;
+            * ``0.75``;
+            * ``0.90``;
+            * ``0.95``;
+            * ``0.975``;
+            * ``0.99``;
+            * ``0.995``;
+
+
+        Returns
+        -------
+        {axes}
+            {axes_desc}
+
+
+        See Also
+        --------
+        dist_plot
+
+
+        """
         if self.conclusion is None:
             return "The Filliben Normality test was not performed yet.\nUse the 'fit' method to perform the test."
         else:
+            if self.safe:
+                types.is_subplots(value=axes, param_name="axes", func_name="dist_plot")
+                # making a copy from original critical values
+                critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+                for alpha in alphas:
+                    parameters.param_options(
+                        option=alpha,
+                        param_options=list(critical.keys())[1:],
+                        param_name="alphas",
+                        func_name="dist_plot",
+                    )
             return dist_plot(
                 axes,
                 test=(self.statistic, self.x_data.size),
                 alphas=alphas,
-                safe=safe,
-                func_name="dist_plot",
             )
 
-    def correl_plot(self, axes, safe=False):
+    @docs.docstring_parameter(
+        axes=docs.AXES["type"],
+        axes_desc=docs.AXES["description"],
+    )
+    def correlation_plot(self, axes):
+        """This method creates an `axis` with the Filliben test correlation graph.
+
+        Parameters
+        ----------
+        {axes}
+            {axes_desc}
+
+
+        Returns
+        -------
+        {axes}
+            {axes_desc}
+
+
+        See Also
+        --------
+        correlation_plot
+
+
+        """
         if self.conclusion is None:
             return "The Filliben Normality test was not performed yet.\nUse the 'fit' method to perform the test."
         else:
-            return correlation_plot(
-                axes, self.x_data, safe=safe, func_name="correl_plot"
-            )
+            if self.safe:
+                types.is_subplots(
+                    value=axes, param_name="axes", func_name="correlation_plot"
+                )
+            return correlation_plot(axes, self.x_data)
+
+    def line_up(self, seed=None, correct=False):
+        """This function exports the figure with the correlation graphs for the line up method [1]_.
+
+        Parameters
+        ----------
+        seed : int or None, optional
+            A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``None`` what generates a random seed;
+        correct : bool, optional
+            Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
+
+
+        Returns
+        -------
+        fig : matplotlib.figure.Figure
+            A figure with the generated graphics;
+
+
+        See Also
+        --------
+        line_up
+
+
+        """
+        if self.conclusion is None:
+            return "The Filliben Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+        else:
+            if self.safe:
+                types.is_bool(value=correct, param_name="correct", func_name="line_up")
+                if seed is not None:
+                    numbers.is_positive(
+                        value=seed, param_name="seed", func_name="line_up"
+                    )
+
+            return line_up(self.x_data, seed=seed, correct=correct)
 
     def __str__(self):
         if self.conclusion is None:

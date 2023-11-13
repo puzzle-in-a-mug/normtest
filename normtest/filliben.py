@@ -63,9 +63,6 @@ from .utils import documentation as docs
 Filliben1975 = "FILLIBEN, J. J. The Probability Plot Correlation Coefficient Test for Normality. Technometrics, v. 17, n. 1, p. 111-117, 1975."
 
 
-##### CLASS #####
-
-
 ##### FUNCTIONS #####
 
 
@@ -915,6 +912,11 @@ def fi_test(x_data, alpha=0.05):
     safe_desc=docs.SAFE["description"],
     fi_ref=Filliben1975,
 )
+
+
+##### CLASS #####
+
+
 class Filliben(AlphaManagement, SafeManagement):
     """This class instantiates an object to perform the Filliben Normality test [1]_.
 

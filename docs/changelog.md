@@ -22,6 +22,9 @@
 - Added ``_uniform_order_medians`` (09/11/2023);
 - Added ``citation`` (09/11/2023);
 
+#### Module ryan_joiner
+- Added ``RyanJoiner`` class (13/11/2023);
+
 
 ## v0.0.1 (05/10/2023)
 

@@ -23,6 +23,10 @@
 - Added ``citation`` (09/11/2023);
 
 
+#### Module ryan_joiner
+- Added ``RyanJoiner`` class (13/11/2023);
+
+
 ### Fix
 - Improve the citation for Ryan-Joiner test (12/11/2023)
 

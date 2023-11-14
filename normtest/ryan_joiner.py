@@ -580,10 +580,10 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
 
     Examples
     --------
-    >>> import normtest as nm
+    >>> from normtest import ryan_joiner
     >>> from scipy import stats
     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
-    >>> result = nm.rj_test(data)
+    >>> result = ryan_joiner.rj_test(data)
     >>> print(result)
     RyanJoiner(statistic=0.990439558451558, critical=0.963891667086667, p_value='p > 0.100', conclusion='Fail to reject H₀')
 
@@ -1093,13 +1093,12 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         {conclusion_desc}
     {alpha}
         {alpha_desc}
-    {safe}
-        {safe_desc}
     normality : named tuple
         A tuple with the main test results summarized
     normality_hypothesis : str
         Description of the Normality test
-
+    {safe}
+        {safe_desc}
 
     Methods
     -------
@@ -1127,7 +1126,7 @@ class RyanJoiner(AlphaManagement, SafeManagement):
     >>> test = RyanJoiner()
     >>> test.fit(x)
     >>> print(test.normality)
-
+    RyanJoiner(statistic=0.9844829186140105, critical=0.8977794003662074, p_value='p > 0.100', conclusion='Fail to reject H₀')
 
     """
 
@@ -1257,7 +1256,7 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         axes_desc=docs.AXES["description"],
     )
     def dist_plot(self, axes, critical_range=(4, 50)):
-        """This method generates an axis with the critical data from the Ryan-Joiner Normality test.
+        """This method generates an `axis` with the critical data from the Ryan-Joiner Normality test.
 
         Parameters
         ----------
@@ -1352,7 +1351,7 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         seed=None,
         correct=False,
     ):
-        """This method generates a Figure with the correlation graphs for the line up method.
+        """This method generates a `Figure` with the correlation graphs for the line up method.
 
         Parameters
         ----------
@@ -1406,7 +1405,7 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         Returns
         -------
         reference : str
-            The Ryan-Joiner Test reference
+            The Ryan-Joiner Test reference;
 
         """
         return citation(export=export)

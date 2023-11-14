@@ -5,6 +5,19 @@ ryan_joiner
 This module contains the relevant functions to apply the Ryan-Joiner Normality test [1]_.
 
 
+
+Class
+-----
+
+.. toctree:: 
+   :maxdepth: 1
+   
+   RyanJoiner
+   
+
+|
+
+
 Main functions
 --------------
 
@@ -17,6 +30,7 @@ Main functions
    line_up
    rj_test
 
+|
 
 
 Others functions
@@ -31,6 +45,7 @@ Others functions
    _p_value
    _statistic
 
+|
 
 
 Reference

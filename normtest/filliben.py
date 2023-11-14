@@ -402,7 +402,7 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01]):
     --------
     >>> from normtest import filliben
     >>> import matplotlib.pyplot as plt
-    >>> >>> fig, ax = plt.subplots(figsize=(6, 4))
+    >>> fig, ax = plt.subplots(figsize=(6, 4))
     >>> filliben.dist_plot(axes=ax, test=(0.98538, 7))
     >>> # plt.savefig("filliben_paper.png")
     >>> plt.show()
@@ -722,7 +722,7 @@ def line_up(x_data, seed=None, correct=False):
 
 
 
-    .. admonition:: unicode:: U+2615
+    .. admonition:: \u2615
 
         Note that the same seed must be used in both steps
 
@@ -876,10 +876,10 @@ def fi_test(x_data, alpha=0.05):
 
     Examples
     --------
-    >>> import normtest as nm
+    >>> from normtest import filliben
     >>> from scipy import stats
     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
-    >>> result = nm.fi_test(data)
+    >>> result = filliben.fi_test(data)
     >>> print(result)
     Filliben(statistic=0.9905837698603658, critical=0.964, p_value=0.7791884930182895, conclusion='Fail to reject H₀')
 
@@ -939,24 +939,23 @@ class Filliben(AlphaManagement, SafeManagement):
         {conclusion_desc}
     {alpha}
         {alpha_desc}
-    {safe}
-        {safe_desc}
     normality : named tuple
         A tuple with the main test results summarized
     normality_hypothesis : str
         Description of the Normality test
-
+    {safe}
+        {safe_desc}
 
     Methods
     -------
     fit(x_data)
         Applies the Filliben Normality test;
     dist_plot(axes, alphas=[0.10, 0.05, 0.01]):
-        Generates axis with critical data from the Filliben Normality test;
+        Generates `axis` with critical data from the Filliben Normality test;
     correlation_plot(axes)
         Generates an `axis` with the Filliben test correlation graph;
     line_up(seed=None, correct=False)
-        Generates a figure with the correlation graphs for the line up method;
+        Generates a `Figure` with the correlation graphs for the line up method;
     citation(export=False)
         Returns the Filliben's test reference;
 
@@ -978,7 +977,7 @@ class Filliben(AlphaManagement, SafeManagement):
     """
 
     def __init__(self, alpha=0.05, safe=True, **kwargs):
-        """Initiates Filliben class inheriting the AlphaManagement and SafeManagement classes
+        """Initiates Filliben `class` inheriting the `AlphaManagement` and `SafeManagement` classes
 
         Attributes
         ----------
@@ -1167,7 +1166,7 @@ class Filliben(AlphaManagement, SafeManagement):
             return correlation_plot(axes, self.x_data)
 
     def line_up(self, seed=None, correct=False):
-        """This method generates a Figure with the correlation graphs for the line up method.
+        """This method generates a `Figure` with the correlation graphs for the line up method.
 
         Parameters
         ----------

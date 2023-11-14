@@ -1105,11 +1105,11 @@ class RyanJoiner(AlphaManagement, SafeManagement):
     fit(x_data)
         Applies the Ryan-Joiner Normality test;
     dist_plot(axes, alphas=[0.10, 0.05, 0.01]):
-        Generates axis with critical data from the Ryan-Joiner Normality test;
+        Generates `axis` with critical data from the Ryan-Joiner Normality test;
     correlation_plot(axes)
         Generates an `axis` with the Ryan-Joiner test correlation graph;
     line_up(seed=None, correct=False)
-        Generates a figure with the correlation graphs for the line up method;
+        Generates a `Figure` with the correlation graphs for the line up method;
     citation(export=False)
         Returns the Ryan-Joiner's test reference;
 
@@ -1133,7 +1133,7 @@ class RyanJoiner(AlphaManagement, SafeManagement):
     def __init__(
         self, alpha=0.05, safe=True, cte_alpha="3/8", weighted=False, **kwargs
     ):
-        """Initiates Filliben class inheriting the AlphaManagement and SafeManagement classes
+        """Initiates Filliben `class` inheriting the `AlphaManagement` and `SafeManagement` classes
 
         Attributes
         ----------

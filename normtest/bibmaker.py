@@ -632,3 +632,146 @@ def make_article(
                 my_bib.write(f"{citation[i]}")
 
     return """""".join(citation)
+
+
+### BOOK ###
+
+OPTIONAL_FIELDS_BOOK = {
+    "editor": GENERIC_FIELDS_DESCRIPTION["editor"][1],
+    "editora": GENERIC_FIELDS_DESCRIPTION["editora"][1],
+    "editorb": GENERIC_FIELDS_DESCRIPTION["editorb"][1],
+    "editorc": GENERIC_FIELDS_DESCRIPTION["editorc"][1],
+    "translator": GENERIC_FIELDS_DESCRIPTION["translator"][1],
+    "annotator": GENERIC_FIELDS_DESCRIPTION["annotator"][1],
+    "commentator": GENERIC_FIELDS_DESCRIPTION["commentator"][1],
+    "introduction": GENERIC_FIELDS_DESCRIPTION["introduction"][1],
+    "foreword": GENERIC_FIELDS_DESCRIPTION["foreword"][1],
+    "afterword": GENERIC_FIELDS_DESCRIPTION["afterword"][1],
+    "subtitle": GENERIC_FIELDS_DESCRIPTION["subtitle"][1],
+    "titleaddon": GENERIC_FIELDS_DESCRIPTION["titleaddon"][1],
+    "maintitle": GENERIC_FIELDS_DESCRIPTION["maintitle"][1],
+    "mainsubtitle": GENERIC_FIELDS_DESCRIPTION["mainsubtitle"][1],
+    "maintitleaddon": GENERIC_FIELDS_DESCRIPTION["maintitleaddon"][1],
+    "language": GENERIC_FIELDS_DESCRIPTION["language"][1],
+    "origlanguage": GENERIC_FIELDS_DESCRIPTION["origlanguage"][1],
+    "volume": GENERIC_FIELDS_DESCRIPTION["volume"][1],
+    "part": GENERIC_FIELDS_DESCRIPTION["part"][1],
+    "edition": GENERIC_FIELDS_DESCRIPTION["edition"][1],
+    "volumes": GENERIC_FIELDS_DESCRIPTION["volumes"][1],
+    "series": GENERIC_FIELDS_DESCRIPTION["series"][1],
+    "number": GENERIC_FIELDS_DESCRIPTION["number"][1],
+    "note": GENERIC_FIELDS_DESCRIPTION["note"][1],
+    "publisher": GENERIC_FIELDS_DESCRIPTION["publisher"][1],
+    "location": GENERIC_FIELDS_DESCRIPTION["location"][1],
+    "isbn": GENERIC_FIELDS_DESCRIPTION["isbn"][1],
+    "eid": GENERIC_FIELDS_DESCRIPTION["eid"][1],
+    "chapter": GENERIC_FIELDS_DESCRIPTION["chapter"][1],
+    "pages": GENERIC_FIELDS_DESCRIPTION["pages"][1],
+    "pagetotal": GENERIC_FIELDS_DESCRIPTION["pagetotal"][1],
+    "addendum": GENERIC_FIELDS_DESCRIPTION["addendum"][1],
+    "pubstate": GENERIC_FIELDS_DESCRIPTION["pubstate"][1],
+    "doi": GENERIC_FIELDS_DESCRIPTION["doi"][1],
+    "eprint": GENERIC_FIELDS_DESCRIPTION["eprint"][1],
+    "eprintclass": GENERIC_FIELDS_DESCRIPTION["eprintclass"][1],
+    "eprinttype": GENERIC_FIELDS_DESCRIPTION["eprinttype"][1],
+    "url": GENERIC_FIELDS_DESCRIPTION["url"][1],
+    "urldate": GENERIC_FIELDS_DESCRIPTION["urldate"][1],
+}
+
+
+def make_book(
+    author,
+    title,
+    citekey,
+    year=None,
+    date=None,
+    export=True,
+    **optionals,
+):
+    """This function generates a `.bib` file for an `@book` entry.
+
+    Parameters
+    ----------
+    author : str
+        The person or persons who wrote the book. The authors' names must be separated by `" and "`;
+    title : str
+        The name of the book;
+    year : int, optional
+        The year of publication; If `year=None`, the `date` parameter must not be `None`;
+    date : str, optional
+        The publication date. If `date=None`, the `year` parameter must not be `None`;
+    citekey : str
+        The name that is used to uniquely identify the entry. If None, the algorithm will generate an automatic `citekey` based on the name of the authors and the year. See Notes for details;
+    export : bool, optional
+        Whether to export the `citekey.bib` file (`True`, default) or not (`False`);
+    **optionals : str
+        Optional fields for an article entry (`volume`, `number`, `pages`, etc).
+
+
+    Returns
+    -------
+    citation : str
+        The citation generated
+    bib : file
+        The `citekey.bib` file (only if `export=True`)
+
+
+    Notes
+    -----
+    A list of all optional fields, as well as their description, can be obtained using:
+
+    >>> from normtest import bibmaker
+    >>> for key, value in bibmaker.OPTIONAL_FIELDS_BOOK.items():
+    >>>     print(key, ": ", value)
+
+    Examples
+    --------
+
+
+
+    """
+
+    if year is None and date is None:
+        try:
+            raise ValueError("FieldNotFoundError")
+        except ValueError:
+            print("Parameters `year` and `date` cannot be `None` at the same time.\n")
+            raise
+
+    field_template = "  {field_tag}{spaces} = {{{tag_value}}},\n"
+
+    fields = {
+        "author": author,
+        "title": title,
+        "year": year,
+        "date": date,
+    }
+    # getting all fields types
+    optional_fields = dict.fromkeys(OPTIONAL_FIELDS_ARTICLE.keys())
+    optional_fields.update(optionals)
+    fields.update(optional_fields)
+
+    filtered = {k: v for k, v in fields.items() if v is not None}
+    fields.clear()
+    fields.update(filtered)
+
+    # building the citation
+    # first line:
+    citation = ["@book{{{citekey},\n".format(citekey=citekey)]
+
+    # ading fields
+    for key, value in fields.items():
+        spaces = " " * empty_spaces(fields.keys(), key)
+        citation.append(
+            field_template.format(field_tag=key, spaces=spaces, tag_value=value)
+        )
+    citation[-1] = citation[-1][:-2] + citation[-1][-1:]
+
+    citation.append("}")
+
+    if export:
+        with open(f"{citekey}.bib", "w") as my_bib:
+            for i in range(len(citation)):
+                my_bib.write(f"{citation[i]}")
+
+    return """""".join(citation)

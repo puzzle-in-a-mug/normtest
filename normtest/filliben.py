@@ -423,7 +423,13 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01]):
     palette = itertools.cycle(constants.seaborn_colors["deep"])
 
     for alpha, color in zip(alphas, palette):
-        axes.scatter(critical["n"], critical[alpha], label=alpha, s=20, color=color)
+        axes.scatter(
+            critical["n"],
+            critical[alpha],
+            label=f"{round(alpha*100)}%",
+            s=20,
+            color=color,
+        )
     axes.set_xlabel("Sample size")
     axes.set_ylabel("Filliben critical values")
     axes.legend(loc=4)

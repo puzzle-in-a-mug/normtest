@@ -69,10 +69,17 @@ class SafeManagement:
 
 
         """
-        self.func_name = "SafeManagement"
+        self.class_name = "SafeManagement"
 
         if safe is not True:
-            types.is_bool(value=safe, param_name="safe", func_name=self.func_name)
+            types.is_bool(
+                value=safe,
+                param_name="safe",
+                kind="class",
+                kind_name=self.class_name,
+                stacklevel=4,
+                error=True,
+            )
         self.safe = safe
 
     @docs.docstring_parameter(
@@ -108,7 +115,14 @@ class SafeManagement:
 
         """
         if safe is not True:
-            types.is_bool(value=safe, param_name="safe", func_name=self.func_name)
+            types.is_bool(
+                value=safe,
+                param_name="safe",
+                kind="class",
+                kind_name=self.class_name,
+                stacklevel=4,
+                error=True,
+            )
         self.safe = safe
 
     def __repr__(self):
@@ -149,14 +163,14 @@ class AlphaManagement:
         This method only allows input of type `float` and between ``0.0`` and ``1.0``.
 
         """
-        self.func_name = "AlphaManagement"
+        self.class_name = "AlphaManagement"
 
         if alpha != 0.05:
             types.is_float(
                 value=alpha,
                 param_name="alpha",
                 kind="class",
-                kind_name=self.func_name,
+                kind_name=self.class_name,
                 stacklevel=4,
                 error=True,
             )
@@ -166,7 +180,7 @@ class AlphaManagement:
                 upper=1,
                 param_name="alpha",
                 kind="class",
-                kind_name=self.func_name,
+                kind_name=self.class_name,
                 inclusive=False,
                 stacklevel=4,
                 error=True,

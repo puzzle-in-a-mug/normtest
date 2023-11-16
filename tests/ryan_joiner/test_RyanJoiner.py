@@ -198,15 +198,15 @@ class Test_dist_plot(unittest.TestCase):
             ax = teste.dist_plot(axes=ax, critical_range=(5, "40"))
             plt.close()
 
-        # with self.assertRaises(
-        #     ValueError,
-        #     msg=f"Does not raised ValueError when critical_range is not not allowed",
-        # ):
-        #     teste = RyanJoiner()
-        #     teste.fit(self.data)
-        #     fig, ax = plt.subplots(figsize=(6, 4))
-        #     ax = teste.dist_plot(axes=ax, critical_range=(3, 40))
-        #     plt.close()
+        with self.assertRaises(
+            ValueError,
+            msg=f"Does not raised ValueError when critical_range is not not allowed",
+        ):
+            teste = RyanJoiner()
+            teste.fit(self.data)
+            fig, ax = plt.subplots(figsize=(6, 4))
+            ax = teste.dist_plot(axes=ax, critical_range=(3, 40))
+            plt.close()
 
     def test_filliben_data(self):
         fig1_base_path = Path("tests/ryan_joiner/figs_dist_plot/filliben_paper.png")

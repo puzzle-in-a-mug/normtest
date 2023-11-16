@@ -1150,7 +1150,7 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         super().__init__(alpha=alpha, safe=safe, **kwargs)
         self.class_name = "RyanJoiner"
         self.conclusion = None  # for checking if the fit was applied
-        if self.safe:
+        if safe:
             parameters.param_options(
                 option=alpha,
                 options=[0.01, 0.05, 0.10],

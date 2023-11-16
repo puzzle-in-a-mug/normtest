@@ -992,26 +992,27 @@ class Filliben(AlphaManagement, SafeManagement):
         super().__init__(alpha=alpha, safe=safe, **kwargs)
         self.class_name = "Filliben"
         self.conclusion = None  # for cheking if the fit was applied
-        if alpha != 0.05:
-            types.is_float(
-                value=alpha,
-                param_name="alpha",
-                kind="class",
-                kind_name=self.class_name,
-                stacklevel=4,
-                error=True,
-            )
-            critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+        if safe:
+            if alpha != 0.05:
+                types.is_float(
+                    value=alpha,
+                    param_name="alpha",
+                    kind="class",
+                    kind_name=self.class_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
 
-            parameters.param_options(
-                alpha,
-                list(critical.keys())[1:],
-                param_name="alpha",
-                kind="class",
-                kind_name=self.class_name,
-                stacklevel=4,
-                error=True,
-            )
+                parameters.param_options(
+                    alpha,
+                    list(critical.keys())[1:],
+                    param_name="alpha",
+                    kind="class",
+                    kind_name=self.class_name,
+                    stacklevel=4,
+                    error=True,
+                )
 
         self.set_safe(safe=safe)
         self.alpha = alpha

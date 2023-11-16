@@ -1231,6 +1231,7 @@ class RyanJoiner(AlphaManagement, SafeManagement):
 
         """
         func_name = "fit"
+
         if self.safe:
             types.is_numpy(
                 value=x_data,
@@ -1304,55 +1305,58 @@ class RyanJoiner(AlphaManagement, SafeManagement):
 
         """
         method_name = "dist_plot"
-        if self.safe:
-            types.is_subplots(
-                value=axes,
-                param_name="axes",
-                kind="method",
-                kind_name=method_name,
-                stacklevel=4,
-                error=True,
-            )
-            types.is_tuple(
-                value=critical_range,
-                param_name="critical_range",
-                kind="method",
-                kind_name=method_name,
-                stacklevel=4,
-                error=True,
-            )
-            types.is_int(
-                value=critical_range[0],
-                param_name="x_min",
-                kind="method",
-                kind_name=method_name,
-                stacklevel=4,
-                error=True,
-            )
-            types.is_int(
-                value=critical_range[1],
-                param_name="x_max",
-                kind="method",
-                kind_name=method_name,
-                stacklevel=4,
-                error=True,
-            )
-            numbers.is_greater_than(
-                number=critical_range[0],
-                lower=4,
-                param_name="x_min",
-                kind="method",
-                kind_name=method_name,
-                inclusive=True,
-                stacklevel=4,
-                error=True,
-            )
+        if self.conclusion is None:
+            return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+        else:
+            if self.safe:
+                types.is_subplots(
+                    value=axes,
+                    param_name="axes",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                types.is_tuple(
+                    value=critical_range,
+                    param_name="critical_range",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                types.is_int(
+                    value=critical_range[0],
+                    param_name="x_min",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                types.is_int(
+                    value=critical_range[1],
+                    param_name="x_max",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                numbers.is_greater_than(
+                    number=critical_range[0],
+                    lower=4,
+                    param_name="x_min",
+                    kind="method",
+                    kind_name=method_name,
+                    inclusive=True,
+                    stacklevel=4,
+                    error=True,
+                )
 
-        return dist_plot(
-            axes=axes,
-            critical_range=critical_range,
-            test=(self.statistic, self.x_data.size),
-        )
+            return dist_plot(
+                axes=axes,
+                critical_range=critical_range,
+                test=(self.statistic, self.x_data.size),
+            )
 
     @docs.docstring_parameter(
         axes=docs.AXES["type"],
@@ -1383,22 +1387,25 @@ class RyanJoiner(AlphaManagement, SafeManagement):
 
         """
         method_name = "correlation_plot"
-        if self.safe:
-            types.is_subplots(
-                value=axes,
-                param_name="axes",
-                kind="method",
-                kind_name=method_name,
-                stacklevel=4,
-                error=True,
-            )
+        if self.conclusion is None:
+            return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+        else:
+            if self.safe:
+                types.is_subplots(
+                    value=axes,
+                    param_name="axes",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
 
-        return correlation_plot(
-            axes=axes,
-            x_data=self.x_data,
-            cte_alpha=self.cte_alpha,
-            weighted=self.weighted,
-        )
+            return correlation_plot(
+                axes=axes,
+                x_data=self.x_data,
+                cte_alpha=self.cte_alpha,
+                weighted=self.weighted,
+            )
 
     def line_up(
         self,

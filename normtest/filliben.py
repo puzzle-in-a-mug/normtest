@@ -993,15 +993,26 @@ class Filliben(AlphaManagement, SafeManagement):
         self.class_name = "Filliben"
         self.conclusion = None  # for cheking if the fit was applied
         if alpha != 0.05:
-            types.is_float(value=alpha, param_name="alpha", func_name=self.class_name)
-            numbers.is_between_a_and_b(
+            types.is_float(
                 value=alpha,
-                a=0.005,
-                b=0.995,
                 param_name="alpha",
-                func_name=self.class_name,
-                inclusive=True,
+                kind="class",
+                kind_name=self.class_name,
+                stacklevel=4,
+                error=True,
             )
+            critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+
+            parameters.param_options(
+                alpha,
+                list(critical.keys())[1:],
+                param_name="alpha",
+                kind="class",
+                kind_name=self.class_name,
+                stacklevel=4,
+                error=True,
+            )
+
         self.set_safe(safe=safe)
         self.alpha = alpha
 
@@ -1050,31 +1061,35 @@ class Filliben(AlphaManagement, SafeManagement):
 
 
         """
-        func_name = "fit"
+        method_name = "fit"
         if self.safe:
-            types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
-            numpy_arrays.n_dimensions(
-                arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
+            types.is_numpy(
+                value=x_data,
+                param_name="x_data",
+                kind="method",
+                kind_name=method_name,
+                stacklevel=4,
+                error=True,
             )
-            numpy_arrays.greater_than_n(
+            numpy_arrays.n_dimensions(
                 array=x_data,
                 param_name="x_data",
-                func_name=func_name,
-                minimum=4,
-                inclusive=True,
+                ndim=1,
+                kind="method",
+                kind_name=method_name,
+                stacklevel=4,
+                error=True,
             )
-            if self.alpha != 0.05:
-                types.is_float(
-                    value=self.alpha, param_name="alpha", func_name=func_name
-                )
-                numbers.is_between_a_and_b(
-                    value=self.alpha,
-                    a=0.005,
-                    b=0.995,
-                    param_name="alpha",
-                    func_name=func_name,
-                    inclusive=True,
-                )
+            numpy_arrays.size_is_greater_than_lower(
+                array=x_data,
+                param_name="x_data",
+                kind="method",
+                kind_name=method_name,
+                lower=4,
+                inclusive=True,
+                stacklevel=4,
+                error=True,
+            )
 
         result = fi_test(x_data=x_data, alpha=self.alpha)
         self.x_data = x_data
@@ -1111,20 +1126,32 @@ class Filliben(AlphaManagement, SafeManagement):
 
 
         """
+        method_name = "dist_plot"
         if self.conclusion is None:
             return "The Filliben Normality test was not performed yet.\nUse the 'fit' method to perform the test."
         else:
             if self.safe:
-                types.is_subplots(value=axes, param_name="axes", func_name="dist_plot")
+                types.is_subplots(
+                    value=axes,
+                    param_name="axes",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
                 # making a copy from original critical values
                 critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
                 for alpha in alphas:
                     parameters.param_options(
                         option=alpha,
-                        param_options=list(critical.keys())[1:],
+                        options=list(critical.keys())[1:],
                         param_name="alphas",
-                        func_name="dist_plot",
+                        kind="method",
+                        kind_name=method_name,
+                        stacklevel=4,
+                        error=True,
                     )
+
             return dist_plot(
                 axes,
                 test=(self.statistic, self.x_data.size),
@@ -1161,7 +1188,12 @@ class Filliben(AlphaManagement, SafeManagement):
         else:
             if self.safe:
                 types.is_subplots(
-                    value=axes, param_name="axes", func_name="correlation_plot"
+                    value=axes,
+                    param_name="axes",
+                    kind="method",
+                    kind_name="correlation_plot",
+                    stacklevel=4,
+                    error=True,
                 )
             return correlation_plot(axes, self.x_data)
 
@@ -1188,15 +1220,35 @@ class Filliben(AlphaManagement, SafeManagement):
 
 
         """
+        method_name = "line_up"
         if self.conclusion is None:
             return "The Filliben Normality test was not performed yet.\nUse the 'fit' method to perform the test."
         else:
             if self.safe:
-                types.is_bool(value=correct, param_name="correct", func_name="line_up")
+                types.is_bool(
+                    value=correct,
+                    param_name="correct",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
                 if seed is not None:
-                    types.is_int(value=seed, param_name="seed", func_name="line_up")
+                    types.is_int(
+                        value=seed,
+                        param_name="seed",
+                        kind="method",
+                        kind_name=method_name,
+                        stacklevel=4,
+                        error=True,
+                    )
                     numbers.is_positive(
-                        value=seed, param_name="seed", func_name="line_up"
+                        number=seed,
+                        param_name="seed",
+                        kind="method",
+                        kind_name=method_name,
+                        stacklevel=4,
+                        error=True,
                     )
 
             return line_up(self.x_data, seed=seed, correct=correct)

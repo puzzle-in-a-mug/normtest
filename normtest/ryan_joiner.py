@@ -1153,18 +1153,30 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         if self.safe:
             parameters.param_options(
                 option=alpha,
-                param_options=[0.01, 0.05, 0.10],
+                options=[0.01, 0.05, 0.10],
                 param_name="alpha",
-                func_name=self.class_name,
+                kind="class",
+                kind_name=self.class_name,
+                stacklevel=4,
+                error=True,
             )
             parameters.param_options(
                 option=cte_alpha,
-                param_options=["0", "3/8", "1/2"],
+                options=["0", "3/8", "1/2"],
                 param_name="cte_alpha",
-                func_name=self.class_name,
+                kind="class",
+                kind_name=self.class_name,
+                stacklevel=4,
+                error=True,
             )
+
             types.is_bool(
-                value=weighted, param_name="weighted", func_name=self.class_name
+                value=weighted,
+                param_name="weighted",
+                kind="class",
+                kind_name=self.class_name,
+                stacklevel=4,
+                error=True,
             )
         self.cte_alpha = cte_alpha
         self.weighted = weighted

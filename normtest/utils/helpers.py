@@ -152,14 +152,24 @@ class AlphaManagement:
         self.func_name = "AlphaManagement"
 
         if alpha != 0.05:
-            types.is_float(value=alpha, param_name="alpha", func_name=self.func_name)
-            numbers.is_between_a_and_b(
+            types.is_float(
                 value=alpha,
-                a=0,
-                b=1,
                 param_name="alpha",
-                func_name=self.func_name,
+                kind="class",
+                kind_name=self.func_name,
+                stacklevel=4,
+                error=True,
+            )
+            numbers.is_between_a_and_b(
+                number=alpha,
+                lower=0,
+                upper=1,
+                param_name="alpha",
+                kind="class",
+                kind_name=self.func_name,
                 inclusive=False,
+                stacklevel=4,
+                error=True,
             )
         self.alpha = alpha
 

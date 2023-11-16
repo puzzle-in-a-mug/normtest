@@ -32,7 +32,7 @@ numpy==1.23.5
 numpydoc==1.6.0
 packaging==23.2
 pandas==1.5.3
-paramcheckup==1.0.0
+paramcheckup==1.0.1
 pathspec==0.11.2
 Pillow==10.1.0
 pkginfo==1.9.6

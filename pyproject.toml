@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "normtest"
-version = "0.0.1"
+version = "0.0.2"
 description = "Check that your data follows, at least approximately, the Normal distribution."
 authors = [
     {name = "Anderson Marcos Dias Canteli", email = "andersonmdcanteli@gmail.com"},

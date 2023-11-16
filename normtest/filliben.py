@@ -46,7 +46,7 @@ Last update: November 13, 2023
 ### Standard ###
 from collections import namedtuple
 from copy import deepcopy
-
+import itertools
 
 ### Third part ###
 import numpy as np
@@ -418,10 +418,12 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01]):
     critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
 
     if test is not None:
-        axes.scatter(test[1], test[0], c="r", label="statistic")
+        axes.scatter(test[1], test[0], c="r", label="statistic", marker="^")
 
-    for alpha in alphas:
-        axes.scatter(critical["n"], critical[alpha], label=alpha)
+    palette = itertools.cycle(constants.seaborn_colors["deep"])
+
+    for alpha, color in zip(alphas, palette):
+        axes.scatter(critical["n"], critical[alpha], label=alpha, s=20, color=color)
     axes.set_xlabel("Sample size")
     axes.set_ylabel("Filliben critical values")
     axes.legend(loc=4)

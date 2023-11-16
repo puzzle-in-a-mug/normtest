@@ -212,14 +212,24 @@ class AlphaManagement:
         This method only allows input of type `float` and between ``0.0`` and ``1.0``.
 
         """
-        types.is_float(value=alpha, param_name="alpha", func_name=self.func_name)
-        numbers.is_between_a_and_b(
+        types.is_float(
             value=alpha,
-            a=0,
-            b=1,
             param_name="alpha",
-            func_name=self.func_name,
+            kind="class",
+            kind_name=self.class_name,
+            stacklevel=4,
+            error=True,
+        )
+        numbers.is_between_a_and_b(
+            number=alpha,
+            lower=0,
+            upper=1,
+            param_name="alpha",
+            kind="class",
+            kind_name=self.class_name,
             inclusive=False,
+            stacklevel=4,
+            error=True,
         )
         self.alpha = alpha
 

@@ -6,16 +6,17 @@
 
 
 ## Functions WITH some TESTS ###
-- _critical_value(sample_size, alpha=0.05, safe=False)
-- _normal_order_medians(mi, safe=False)
-- _statistic(x_data, zi, safe=False)
-- _uniform_order_medians(sample_size, safe=False)
-- _p_value(statistic, sample_size, safe=False)
-- citation()
-- correlation_plot(axes, x_data, safe=False)
-- dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01], safe=False)
-- fi_test(x_data, alpha=0.05, safe=False, **kwargs)
-- line_up(x_data, seed=None, correct=False, safe=False)
+- _critical_value(sample_size, alpha=0.05)
+- _make_line_up_data(x_data)
+- _normal_order_medians(mi)
+- _p_value(statistic, sample_size)
+- _statistic(x_data, zi)
+- _uniform_order_medians(sample_size)
+- citation(export=False)
+- correlation_plot(axes, x_data)
+- dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01])
+- fi_test(x_data, alpha=0.05)
+- line_up(x_data, seed=None, correct=False)
 
 ## Functions WITHOUT tests ###
 

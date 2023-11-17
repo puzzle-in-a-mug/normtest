@@ -12,9 +12,14 @@ Welcome to normtest's documentation!
 
 
 |
+|
 
-**Latast version**: ``0.0.1``
+.. admonition:: **Latest version** |cup_coffee|
 
+   |version|
+
+
+|
 |
 
 

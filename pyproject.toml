@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "normtest"
-version = "0.0.1"
+version = "0.0.2"
 description = "Check that your data follows, at least approximately, the Normal distribution."
 authors = [
     {name = "Anderson Marcos Dias Canteli", email = "andersonmdcanteli@gmail.com"},
@@ -28,7 +28,7 @@ dependencies = [
     "pandas>=1.5.3",
     "matplotlib>=3.7.1",
     "scipy>=1.11.3",
-    "paramcheckup>=1.0.0",
+    "paramcheckup>=1.0.1",
 ]
 
 [project.urls]

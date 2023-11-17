@@ -28,9 +28,9 @@
 
 Author: Anderson Marcos Dias Canteli <andersonmdcanteli@gmail.com>
 
-Last update: November 06, 2023
+Created : November 02, 2023
 
-Last update: November 02, 2023
+Last update: November 13, 2023
 """
 
 ##### IMPORTS #####
@@ -51,9 +51,9 @@ from scipy import interpolate
 
 ### self made ###
 from paramcheckup import parameters, types, numbers, numpy_arrays
-from . import bib
+from . import bibmaker
 from .utils import constants
-
+from .utils.helpers import AlphaManagement, SafeManagement
 
 ##### DOCUMENTATION #####
 from .utils import documentation as docs
@@ -84,17 +84,15 @@ def citation(export=False):
         The Ryan Joiner Test reference
 
     """
-    reference = bib.make_techreport(
+    reference = bibmaker.make_techreport(
         citekey="RyanJoiner1976",
-        author="Thomas A. Ryan, Jr. and Brian L. Joiner",
+        author="Thomas A. Ryan and Brian L. Joiner",
         title="Normal Probability Plots and Tests for Normality",
         institution="The Pennsylvania State University, Statistics Department",
         year="1976",
-        export=False,
+        url="https://api.semanticscholar.org/CorpusID:9233652",
+        export=export,
     )
-    if export:
-        with open("ryan-joiner.bib", "w") as my_bib:
-            my_bib.write(reference)
     return reference
 
 
@@ -103,13 +101,11 @@ def citation(export=False):
     samp_size_desc=docs.SAMPLE_SIZE["description"],
     alpha=docs.ALPHA["type"],
     alpha_desc=docs.ALPHA["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     critical=docs.CRITICAL["type"],
     critical_desc=docs.CRITICAL["description"],
     rj_ref=RyanJoiner1976,
 )
-def _critical_value(sample_size, alpha=0.05, safe=False):
+def _critical_value(sample_size, alpha=0.05):
     """This function calculates the critical value of the Ryan-Joiner test [1]_.
 
     Parameters
@@ -118,8 +114,6 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
         {samp_size_desc}
     {alpha}
         {alpha_desc}
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -161,22 +155,6 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
     0.9178948637370312
 
     """
-    func_name = "_critical_value"
-    if safe:
-        parameters.param_options(
-            option=alpha,
-            param_options=[0.01, 0.05, 0.10],
-            param_name="alpha",
-            func_name=func_name,
-        )
-        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
-        numbers.is_greater_than(
-            value=sample_size,
-            lower=4,
-            param_name="sample_size",
-            func_name=func_name,
-            inclusive=True,
-        )
 
     if alpha == 0.1:
         return (
@@ -208,12 +186,10 @@ def _critical_value(sample_size, alpha=0.05, safe=False):
     weighted_desc=docs.WEIGHTED["description"],
     cte_alpha=docs.CTE_ALPHA["type"],
     cte_alpha_desc=docs.CTE_ALPHA["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
-def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False):
+def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8"):
     """This function transforms the statistical order to the standard Normal distribution scale (:math:`z_{{i}}`).
 
     Parameters
@@ -225,8 +201,6 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
 
     {weighted}
         {weighted_desc}
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -280,26 +254,6 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
     The results will be identical if the data set does not contain repeated values.
 
     """
-    if safe:
-        types.is_numpy(
-            value=x_data, param_name="x_data", func_name="normal_order_statistic"
-        )
-        numpy_arrays.n_dimensions(
-            arr=x_data,
-            param_name="x_data",
-            func_name="normal_order_statistic",
-            n_dimensions=1,
-        )
-        numpy_arrays.greater_than_n(
-            array=x_data,
-            param_name="x_data",
-            func_name="normal_order_statistic",
-            minimum=4,
-            inclusive=True,
-        )
-        types.is_bool(
-            value=weighted, param_name="weighted", func_name="normal_order_statistic"
-        )
 
     # ordering
     x_data = np.sort(x_data)
@@ -308,13 +262,15 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
         # getting mi values
         df["Rank"] = np.arange(1, df.shape[0] + 1)
         df["Ui"] = _order_statistic(
-            sample_size=x_data.size, cte_alpha=cte_alpha, safe=safe
+            sample_size=x_data.size,
+            cte_alpha=cte_alpha,
         )
         df["Mi"] = df.groupby(["x_data"])["Ui"].transform("mean")
         normal_ordered = stats.norm.ppf(df["Mi"])
     else:
         ordered = _order_statistic(
-            sample_size=x_data.size, cte_alpha=cte_alpha, safe=safe
+            sample_size=x_data.size,
+            cte_alpha=cte_alpha,
         )
         normal_ordered = stats.norm.ppf(ordered)
 
@@ -326,12 +282,10 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
     samp_size_desc=docs.SAMPLE_SIZE["description"],
     cte_alpha=docs.CTE_ALPHA["type"],
     cte_alpha_desc=docs.CTE_ALPHA["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     blom_ref=Blom1958,
     rj_ref=RyanJoiner1976,
 )
-def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
+def _order_statistic(sample_size, cte_alpha="3/8"):
     """This function estimates the normal statistical order (:math:`p_{{i}}`) using approximations [1]_.
 
     Parameters
@@ -345,8 +299,6 @@ def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
         * `"3/8"` (default);
         * `"1/2"`;
 
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -394,22 +346,6 @@ def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
     0.64634146 0.74390244 0.84146341 0.93902439]
 
     """
-    func_name = "_order_statistic"
-    if safe:
-        parameters.param_options(
-            option=cte_alpha,
-            param_options=["0", "3/8", "1/2"],
-            param_name="cte_alpha",
-            func_name=func_name,
-        )
-        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
-        numbers.is_greater_than(
-            value=sample_size,
-            lower=4,
-            param_name="sample_size",
-            func_name=func_name,
-            inclusive=True,
-        )
 
     i = np.arange(1, sample_size + 1)
     if cte_alpha == "1/2":
@@ -427,13 +363,11 @@ def _order_statistic(sample_size, cte_alpha="3/8", safe=False):
     statistic_desc=docs.STATISTIC["description"],
     samp_size=docs.SAMPLE_SIZE["type"],
     samp_size_desc=docs.SAMPLE_SIZE["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     p_value=docs.P_VALUE["type"],
     p_value_desc=docs.P_VALUE["description"],
     rj_ref=RyanJoiner1976,
 )
-def _p_value(statistic, sample_size, safe=False):
+def _p_value(statistic, sample_size):
     """This function estimates the probability associated with the Ryan-Joiner Normality test [1]_.
 
 
@@ -443,8 +377,6 @@ def _p_value(statistic, sample_size, safe=False):
         {statistic_desc}
     {samp_size}
         {samp_size_desc}
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -479,31 +411,13 @@ def _p_value(statistic, sample_size, safe=False):
     0.030930589077996555
 
     """
-    func_name = "_p_value"
-    if safe:
-        numbers.is_between_a_and_b(
-            value=statistic,
-            a=0,
-            b=1,
-            param_name="statistic",
-            func_name=func_name,
-            inclusive=False,
-        )
-        types.is_int(value=sample_size, param_name="sample_size", func_name=func_name)
-        numbers.is_greater_than(
-            value=sample_size,
-            lower=4,
-            param_name="sample_size",
-            func_name=func_name,
-            inclusive=True,
-        )
 
     alphas = np.array([0.10, 0.05, 0.01])
     criticals = np.array(
         [
-            _critical_value(sample_size=sample_size, alpha=alphas[0], safe=False),
-            _critical_value(sample_size=sample_size, alpha=alphas[1], safe=False),
-            _critical_value(sample_size=sample_size, alpha=alphas[2], safe=False),
+            _critical_value(sample_size=sample_size, alpha=alphas[0]),
+            _critical_value(sample_size=sample_size, alpha=alphas[1]),
+            _critical_value(sample_size=sample_size, alpha=alphas[2]),
         ]
     )
     f = interpolate.interp1d(criticals, alphas)
@@ -512,7 +426,7 @@ def _p_value(statistic, sample_size, safe=False):
     elif statistic < min(criticals):
         return "p < 0.010"
     else:
-        p_value = f(statistic)
+        p_value = float(f(statistic))
         return p_value
 
 
@@ -521,13 +435,11 @@ def _p_value(statistic, sample_size, safe=False):
     x_data_desc=docs.X_DATA["description"],
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     statistic=docs.STATISTIC["type"],
     statistic_desc=docs.STATISTIC["description"],
     rj_ref=RyanJoiner1976,
 )
-def _statistic(x_data, zi, safe=False):
+def _statistic(x_data, zi):
     """This function estimates the Ryan-Joiner test statistic [1]_.
 
     Parameters
@@ -536,8 +448,6 @@ def _statistic(x_data, zi, safe=False):
         {x_data_desc}
     {zi}
         {zi_desc}
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -576,37 +486,6 @@ def _statistic(x_data, zi, safe=False):
     0.9225156050800545
 
     """
-    func_name = "statistic"
-    if safe:  # missing equal size test
-        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=x_data,
-            param_name="x_data",
-            func_name=func_name,
-            n_dimensions=1,
-        )
-        numpy_arrays.greater_than_n(
-            array=x_data,
-            param_name="x_data",
-            func_name=func_name,
-            minimum=4,
-            inclusive=True,
-        )
-        types.is_numpy(value=zi, param_name="zi", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=zi,
-            param_name="zi",
-            func_name=func_name,
-            n_dimensions=1,
-        )
-        numpy_arrays.greater_than_n(
-            array=zi,
-            param_name="zi",
-            func_name=func_name,
-            minimum=4,
-            inclusive=True,
-        )
-
     return stats.pearsonr(zi, x_data)[0]
 
 
@@ -619,8 +498,6 @@ def _statistic(x_data, zi, safe=False):
     cte_alpha_desc=docs.CTE_ALPHA["description"],
     weighted=docs.WEIGHTED["type"],
     weighted_desc=docs.WEIGHTED["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     statistic=docs.STATISTIC["type"],
     statistic_desc=docs.STATISTIC["description"],
     critical=docs.CRITICAL["type"],
@@ -629,7 +506,7 @@ def _statistic(x_data, zi, safe=False):
     p_value_desc=docs.P_VALUE["description"],
     rj_ref=RyanJoiner1976,
 )
-def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
+def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
     """This function applies the Ryan-Joiner Normality test [1]_.
 
     Parameters
@@ -642,8 +519,6 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
         {cte_alpha_desc}
     {weighted}
         {weighted_desc}
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -686,7 +561,7 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
        :math:`H_1:` The data was sampled from a distribution other than the Normal distribution.
 
 
-    The conclusion of the test is based on the comparison between the *critical* value (at :math:`\\alpha` significance level) and `statistic` of the test:
+    The conclusion of the test is based on the comparison between the `critical` value (at :math:`\\alpha` significance level) and `statistic` of the test:
 
     .. admonition:: \u2615
 
@@ -705,34 +580,29 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
 
     Examples
     --------
-    >>> import normtest as nm
+    >>> from normtest import ryan_joiner
     >>> from scipy import stats
     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
-    >>> result = nm.rj_test(data)
+    >>> result = ryan_joiner.rj_test(data)
     >>> print(result)
     RyanJoiner(statistic=0.990439558451558, critical=0.963891667086667, p_value='p > 0.100', conclusion='Fail to reject H₀')
 
     """
-    func_name = "rj_test"
-    if safe:
-        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
-        )
-
     # ordering
     x_data = np.sort(x_data)
 
     # zi
     zi = _normal_order_statistic(
-        x_data=x_data, weighted=weighted, cte_alpha=cte_alpha, safe=safe
+        x_data=x_data,
+        weighted=weighted,
+        cte_alpha=cte_alpha,
     )
 
     # calculating the stats
-    statistic = _statistic(x_data=x_data, zi=zi, safe=safe)
+    statistic = _statistic(x_data=x_data, zi=zi)
 
     # getting the critical values
-    critical_value = _critical_value(sample_size=x_data.size, alpha=alpha, safe=safe)
+    critical_value = _critical_value(sample_size=x_data.size, alpha=alpha)
 
     # conclusion
     if statistic < critical_value:
@@ -741,7 +611,7 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
         conclusion = constants.ACCEPTATION
 
     # pvalue
-    p_value = _p_value(statistic=statistic, sample_size=x_data.size, safe=safe)
+    p_value = _p_value(statistic=statistic, sample_size=x_data.size)
 
     result = namedtuple(
         "RyanJoiner", ("statistic", "critical", "p_value", "conclusion")
@@ -758,11 +628,9 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False):
     cte_alpha_desc=docs.CTE_ALPHA["description"],
     weighted=docs.WEIGHTED["type"],
     weighted_desc=docs.WEIGHTED["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     rj_ref=RyanJoiner1976,
 )
-def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
+def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False):
     """This function creates an `axis` with the Ryan-Joiner test [1]_ correlation graph.
 
     Parameters
@@ -776,8 +644,7 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
 
     {weighted}
         {weighted_desc}
-    {safe}
-        {safe_desc}
+
 
 
     Returns
@@ -813,15 +680,14 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
         :align: center
 
     """
-    func_name = "rj_correlation_plot"
-    if safe:
-        types.is_subplots(value=axes, param_name="axes", func_name=func_name)
 
     constants.warning_plot()
 
     # ordering the sample
     zi = _normal_order_statistic(
-        x_data=x_data, weighted=weighted, cte_alpha=cte_alpha, safe=safe
+        x_data=x_data,
+        weighted=weighted,
+        cte_alpha=cte_alpha,
     )
     x_data = np.sort(x_data)
 
@@ -852,35 +718,33 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False):
 @docs.docstring_parameter(
     axes=docs.AXES["type"],
     axes_desc=docs.AXES["description"],
-    x_data=docs.X_DATA["type"],
-    x_data_desc=docs.X_DATA["description"],
-    cte_alpha=docs.CTE_ALPHA["type"],
-    cte_alpha_desc=docs.CTE_ALPHA["description"],
-    weighted=docs.WEIGHTED["type"],
-    weighted_desc=docs.WEIGHTED["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    sample_size=docs.SAMPLE_SIZE["type"],
+    sample_size_desc=docs.AXES["description"],
     rj_ref=RyanJoiner1976,
 )
-def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe=False):
+def dist_plot(
+    axes,
+    critical_range=(4, 50),
+    test=None,
+):
     """This function generates axis with critical data from the Ryan-Joiner Normality test [1]_.
 
     Parameters
     ----------
     {axes}
         {axes_desc}
-    {x_data}
-        {x_data_desc}
-    {cte_alpha}
-        {cte_alpha_desc}
-    min : int, optional
-        The lower range of the number of observations for the critical values (default is ``4``).
-    max : int, optional
-        The upper range of the number of observations for the critical values (default is ``50``).
-    {weighted}
-        {weighted_desc}
-    {safe}
-        {safe_desc}
+    critical_range : tuple (optional), with two elements:
+        x_min : int, optional
+            The lower range of the number of observations for the critical values (default is ``4``).
+        x_max : int, optional
+            The upper range of the number of observations for the critical values (default is ``50``).
+    test : tuple (optional), with two elements:
+        {statistic}
+            {statistic_desc}
+        {sample_size}
+            {sample_size_desc}
 
 
     Returns
@@ -906,37 +770,33 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
     >>> import matplotlib.pyplot as plt
     >>> from scipy import stats
     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
+
+
+    Apply the Ryan Joiner test
+
+
+    >>> result = ryan_joiner.rj_test(data)
+
+
+    Create the distribution graph using the test result
+
+
     >>> fig, ax = plt.subplots(figsize=(6, 4))
-    >>> ryan_joiner.dist_plot(axes=ax, x_data=data)
+    >>> ryan_joiner.dist_plot(axes=ax, test=(result.statistic, data.size))
     >>> # plt.savefig("rj_dist_plot.png")
     >>> plt.show()
+
 
     .. image:: img/dist_plot.png
         :alt: Critical chart for Ryan-Joiner test Normality test
         :align: center
 
     """
-    func_name = "dist_plot"
-    if safe:
-        types.is_subplots(value=axes, param_name="axes", func_name=func_name)
-        types.is_int(value=min, param_name="min", func_name=func_name)
-        types.is_int(value=max, param_name="max", func_name=func_name)
-        # _check_a_lower_than_b(value_a, value_b, param_a_name, param_b_name)  # not implemented yet
-
     constants.warning_plot()
 
-    if x_data.size > max:
-        print(
-            f"The graphical visualization is best suited if the sample size is smaller ({x_data.size}) than the max value ({max})."
-        )
-    if x_data.size < min:
-        print(
-            f"The graphical visualization is best suited if the sample size is greater ({x_data.size}) than the min value ({min})."
-        )
-
-    n_samples = np.arange(min, max + 1)
+    n_samples = np.arange(critical_range[0], critical_range[1] + 1)
     alphas = [0.10, 0.05, 0.01]
-    alphas_label = ["$R_{p;10\\%}^{'}$", "$R_{p;5\\%}^{'}$", "$R_{p;1\\%}^{'}$"]
+    alphas_label = ["$10\\%$", "$5\\%$", "$1\\%$"]
     colors = [
         (0.2980392156862745, 0.4470588235294118, 0.6901960784313725),
         (0.8666666666666667, 0.5176470588235295, 0.3215686274509804),
@@ -944,17 +804,26 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
     ]
 
     # main test
-    result = rj_test(x_data=x_data, cte_alpha=cte_alpha, weighted=weighted, safe=safe)
-    axes.scatter(x_data.size, result[0], color="r", label="$R_{p}$")
+    if test is not None:
+        if test[1] > critical_range[1]:
+            constants.user_warning(
+                f"The graphical visualization is best suited if the sample size ({test[1]}) is smaller than the max value ({critical_range[1]})."
+            )
+        if test[1] < critical_range[0]:
+            constants.user_warning(
+                f"The graphical visualization is best suited if the sample size ({test[1]}) is greater than the min value ({critical_range[0]})."
+            )
+
+        axes.scatter(test[1], test[0], color="r", label="$R_{p}$", marker="^")
 
     # adding critical values
     for alp, color, alp_label in zip(alphas, colors, alphas_label):
         criticals = []
         for sample in n_samples:
-            criticals.append(_critical_value(sample_size=sample, alpha=alp, safe=False))
+            criticals.append(_critical_value(sample_size=sample, alpha=alp))
         axes.scatter(n_samples, criticals, label=alp_label, color=color, s=10)
 
-    axes.set_title("Ryan-Joiner Normality test")
+    axes.set_title("Ryan-Joiner")
 
     # adding details
     axes.legend(loc=4)
@@ -972,12 +841,10 @@ def dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe
     cte_alpha_desc=docs.CTE_ALPHA["description"],
     weighted=docs.WEIGHTED["type"],
     weighted_desc=docs.WEIGHTED["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
-def _make_line_up_data(x_data, weighted, cte_alpha, safe):
+def _make_line_up_data(x_data, weighted, cte_alpha):
     """Tthis function prepares the data for the Ryan Joiner test `line_up` function.
 
     Parameters
@@ -988,8 +855,7 @@ def _make_line_up_data(x_data, weighted, cte_alpha, safe):
         {weighted_desc}
     {cte_alpha}
         {cte_alpha_desc}
-    {safe}
-        {safe_desc}
+
 
     Returns
     -------
@@ -1004,7 +870,9 @@ def _make_line_up_data(x_data, weighted, cte_alpha, safe):
     # ordering the sample
     x_data = np.sort(x_data)
     zi = _normal_order_statistic(
-        x_data=x_data, weighted=weighted, cte_alpha=cte_alpha, safe=safe
+        x_data=x_data,
+        weighted=weighted,
+        cte_alpha=cte_alpha,
     )
 
     # performing regression
@@ -1022,13 +890,15 @@ def _make_line_up_data(x_data, weighted, cte_alpha, safe):
     cte_alpha_desc=docs.CTE_ALPHA["description"],
     weighted=docs.WEIGHTED["type"],
     weighted_desc=docs.WEIGHTED["description"],
-    safe=docs.SAFE["type"],
-    safe_desc=docs.SAFE["description"],
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
 def line_up(
-    x_data, cte_alpha="3/8", weighted=False, seed=42, correct=False, safe=False
+    x_data,
+    cte_alpha="3/8",
+    weighted=False,
+    seed=42,
+    correct=False,
 ):
     """This function exports the figure with the correlation graphs for the line up method [1]_.
 
@@ -1045,8 +915,6 @@ def line_up(
         A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``42``;
     correct : bool, optional
         Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
-    {safe}
-        {safe_desc}
 
 
     Returns
@@ -1118,14 +986,12 @@ def line_up(
 
 
     """
-    func_name = "line_up"
-    if safe:
-        types.is_numpy(value=x_data, param_name="x_data", func_name=func_name)
-        numpy_arrays.n_dimensions(
-            arr=x_data, param_name="x_data", func_name=func_name, n_dimensions=1
-        )
-        numbers.is_positive(value=seed, param_name="seed", func_name=func_name)
     constants.warning_plot()
+
+    # getting a properly seed
+    if seed is None:
+        seed = int(np.random.rand() * (2**32 - 1))
+
     # creating a list of 20 integers and shuffling
     position = np.arange(20)
     rng = np.random.default_rng(seed)
@@ -1165,14 +1031,18 @@ def line_up(
         for col in range(cols):
             if i == real_data_position:
                 x, zi, y_pred = _make_line_up_data(
-                    x_data=data[i], weighted=weighted, cte_alpha=cte_alpha, safe=safe
+                    x_data=data[i],
+                    weighted=weighted,
+                    cte_alpha=cte_alpha,
                 )
                 ax[col, row].scatter(zi, x, c=color)
                 ax[col, row].plot(zi, y_pred, ls="--", c=color)
 
             else:
                 x, zi, y_pred = _make_line_up_data(
-                    x_data=data[i], weighted=weighted, cte_alpha=cte_alpha, safe=safe
+                    x_data=data[i],
+                    weighted=weighted,
+                    cte_alpha=cte_alpha,
                 )
                 ax[col, row].scatter(zi, x, c="k")
                 ax[col, row].plot(zi, y_pred, ls="--", c="k")
@@ -1180,8 +1050,453 @@ def line_up(
             i += 1
             ax[col, row].tick_params(axis="both", which="major", labelsize=5)
 
-    fig.text(0.5, 0.0, "Normal statistical order", ha="center")
+    fig.text(0.5, 0.0, f"Normal statistical order (seed={seed})", ha="center")
     fig.text(0.0, 0.5, "Ordered data", va="center", rotation="vertical")
     fig.patch.set_facecolor("white")
 
     return fig
+
+
+##### CLASS #####
+
+
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    critical=docs.CRITICAL["type"],
+    critical_desc=docs.CRITICAL["description"],
+    p_value=docs.P_VALUE["type"],
+    p_value_desc=docs.P_VALUE["description"],
+    conclusion=docs.CONCLUSION["type"],
+    conclusion_desc=docs.CONCLUSION["description"],
+    alpha=docs.ALPHA["type"],
+    alpha_desc=docs.ALPHA["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    rj_ref=RyanJoiner1976,
+)
+class RyanJoiner(AlphaManagement, SafeManagement):
+    """This class instantiates an object to perform the Ryan-Joiner Normality test [1]_.
+
+
+    Attributes
+    ----------
+    {statistic}
+        {statistic_desc}
+    {critical}
+        {critical_desc}
+    {p_value}
+        {p_value_desc}
+    {conclusion}
+        {conclusion_desc}
+    {alpha}
+        {alpha_desc}
+    normality : named tuple
+        A tuple with the main test results summarized
+    normality_hypothesis : str
+        Description of the Normality test
+    {safe}
+        {safe_desc}
+
+    Methods
+    -------
+    fit(x_data)
+        Applies the Ryan-Joiner Normality test;
+    dist_plot(axes, alphas=[0.10, 0.05, 0.01]):
+        Generates `axis` with critical data from the Ryan-Joiner Normality test;
+    correlation_plot(axes)
+        Generates an `axis` with the Ryan-Joiner test correlation graph;
+    line_up(seed=None, correct=False)
+        Generates a `Figure` with the correlation graphs for the line up method;
+    citation(export=False)
+        Returns the Ryan-Joiner's test reference;
+
+    References
+    ----------
+    .. [1] {rj_ref}
+
+
+    Examples
+    --------
+    >>> from normtest import RyanJoiner
+    >>> import numpy as np
+    >>> x = np.array([6, 1, -4, 8, -2, 5, 0])
+    >>> test = RyanJoiner()
+    >>> test.fit(x)
+    >>> print(test.normality)
+    RyanJoiner(statistic=0.9844829186140105, critical=0.8977794003662074, p_value='p > 0.100', conclusion='Fail to reject H₀')
+
+    """
+
+    def __init__(
+        self, alpha=0.05, safe=True, cte_alpha="3/8", weighted=False, **kwargs
+    ):
+        """Initiates Filliben `class` inheriting the `AlphaManagement` and `SafeManagement` classes
+
+        Attributes
+        ----------
+        class_name : "RyanJoiner"
+        conclusion : None
+            This attribute is used to check whether the fit method was applied or not
+        alpha : float
+        safe : bool
+        cte_alpha : str
+        weighted : bool
+
+
+        """
+        super().__init__(alpha=alpha, safe=safe, **kwargs)
+        self.class_name = "RyanJoiner"
+        self.conclusion = None  # for checking if the fit was applied
+        if safe:
+            parameters.param_options(
+                option=alpha,
+                options=[0.01, 0.05, 0.10],
+                param_name="alpha",
+                kind="class",
+                kind_name=self.class_name,
+                stacklevel=4,
+                error=True,
+            )
+            parameters.param_options(
+                option=cte_alpha,
+                options=["0", "3/8", "1/2"],
+                param_name="cte_alpha",
+                kind="class",
+                kind_name=self.class_name,
+                stacklevel=4,
+                error=True,
+            )
+
+            types.is_bool(
+                value=weighted,
+                param_name="weighted",
+                kind="class",
+                kind_name=self.class_name,
+                stacklevel=4,
+                error=True,
+            )
+        self.cte_alpha = cte_alpha
+        self.weighted = weighted
+        self.set_safe(safe=safe)
+        self.alpha = alpha
+        self.normality_hypothesis = constants.HYPOTESES
+
+    @docs.docstring_parameter(
+        x_data=docs.X_DATA["type"],
+        x_data_desc=docs.X_DATA["description"],
+        statistic=docs.STATISTIC["type"],
+        statistic_desc=docs.STATISTIC["description"],
+        critical=docs.CRITICAL["type"],
+        critical_desc=docs.CRITICAL["description"],
+        p_value=docs.P_VALUE["type"],
+        p_value_desc=docs.P_VALUE["description"],
+        conclusion=docs.CONCLUSION["type"],
+        conclusion_desc=docs.CONCLUSION["description"],
+    )
+    def fit(
+        self,
+        x_data,
+    ):
+        """This method applies the Ryan-Joiner test.
+
+        Parameters
+        ----------
+        {x_data}
+            {x_data_desc}
+
+
+        Returns
+        -------
+        {x_data}
+            {x_data_desc}
+        {statistic}
+            {statistic_desc}
+        {critical}
+            {critical_desc}
+        {p_value}
+            {p_value_desc}
+        {conclusion}
+            {conclusion_desc}
+        normality : named tuple
+            A tuple with the main test results summarized
+
+
+        See Also
+        --------
+        rj_test
+
+
+        """
+        func_name = "fit"
+
+        if self.safe:
+            types.is_numpy(
+                value=x_data,
+                param_name="x_data",
+                kind="method",
+                kind_name=func_name,
+                stacklevel=4,
+                error=True,
+            )
+            numpy_arrays.n_dimensions(
+                array=x_data,
+                param_name="x_data",
+                ndim=1,
+                kind="method",
+                kind_name=func_name,
+                stacklevel=4,
+                error=True,
+            )
+            numpy_arrays.size_is_greater_than_lower(
+                array=x_data,
+                param_name="x_data",
+                kind="method",
+                kind_name=func_name,
+                lower=4,
+                inclusive=True,
+                stacklevel=4,
+                error=True,
+            )
+
+        result = rj_test(
+            x_data=x_data,
+            alpha=self.alpha,
+            cte_alpha=self.cte_alpha,
+            weighted=self.weighted,
+        )
+        self.x_data = x_data
+        self.statistic = result.statistic
+        self.critical = result.critical
+        self.p_value = result.p_value
+        self.conclusion = result.conclusion
+        self.normality = result
+
+    @docs.docstring_parameter(
+        axes=docs.AXES["type"],
+        axes_desc=docs.AXES["description"],
+    )
+    def dist_plot(self, axes, critical_range=(4, 50)):
+        """This method generates an `axis` with the critical data from the Ryan-Joiner Normality test.
+
+        Parameters
+        ----------
+        {axes}
+            {axes_desc}
+        critical_range : tuple (optional), with two elements:
+            x_min : int, optional
+                The lower range of the number of observations for the critical values (default is ``4``).
+            x_max : int, optional
+                The upper range of the number of observations for the critical values (default is ``50``).
+
+
+        Returns
+        -------
+        {axes}
+            {axes_desc}
+
+
+        See Also
+        --------
+        dist_plot
+
+
+        """
+        method_name = "dist_plot"
+        if self.conclusion is None:
+            return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+        else:
+            if self.safe:
+                types.is_subplots(
+                    value=axes,
+                    param_name="axes",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                types.is_tuple(
+                    value=critical_range,
+                    param_name="critical_range",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                types.is_int(
+                    value=critical_range[0],
+                    param_name="x_min",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                types.is_int(
+                    value=critical_range[1],
+                    param_name="x_max",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                numbers.is_greater_than(
+                    number=critical_range[0],
+                    lower=4,
+                    param_name="x_min",
+                    kind="method",
+                    kind_name=method_name,
+                    inclusive=True,
+                    stacklevel=4,
+                    error=True,
+                )
+
+            return dist_plot(
+                axes=axes,
+                critical_range=critical_range,
+                test=(self.statistic, self.x_data.size),
+            )
+
+    @docs.docstring_parameter(
+        axes=docs.AXES["type"],
+        axes_desc=docs.AXES["description"],
+    )
+    def correlation_plot(
+        self,
+        axes,
+    ):
+        """This method generates an axis with the correlation plotfor the Ryan-Joiner Normality test.
+
+        Parameters
+        ----------
+        {axes}
+            {axes_desc}
+
+
+        Returns
+        -------
+        {axes}
+            {axes_desc}
+
+
+        See Also
+        --------
+        correlation_plot
+
+
+        """
+        method_name = "correlation_plot"
+        if self.conclusion is None:
+            return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+        else:
+            if self.safe:
+                types.is_subplots(
+                    value=axes,
+                    param_name="axes",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+
+            return correlation_plot(
+                axes=axes,
+                x_data=self.x_data,
+                cte_alpha=self.cte_alpha,
+                weighted=self.weighted,
+            )
+
+    def line_up(
+        self,
+        seed=None,
+        correct=False,
+    ):
+        """This method generates a `Figure` with the correlation graphs for the line up method.
+
+        Parameters
+        ----------
+        seed : int or None, optional
+            A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``None`` what generates a random seed;
+        correct : bool, optional
+            Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
+
+
+        Returns
+        -------
+        fig : matplotlib.figure.Figure
+            A figure with the generated graphics;
+
+
+        See Also
+        --------
+        line_up
+
+
+
+        """
+        method_name = "line_up"
+        if self.conclusion is None:
+            return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+        else:
+            if self.safe:
+                types.is_bool(
+                    value=correct,
+                    param_name="correct",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                if seed is not None:
+                    types.is_int(
+                        value=seed,
+                        param_name="seed",
+                        kind="method",
+                        kind_name=method_name,
+                        stacklevel=4,
+                        error=True,
+                    )
+                    numbers.is_positive(
+                        number=seed,
+                        param_name="seed",
+                        kind="method",
+                        kind_name=method_name,
+                        stacklevel=4,
+                        error=True,
+                    )
+
+            return line_up(
+                x_data=self.x_data,
+                cte_alpha=self.cte_alpha,
+                weighted=self.weighted,
+                seed=seed,
+                correct=correct,
+            )
+
+    def citation(self, export=False):
+        """This method returns the reference from Ryan-Joiner's test, with the option to export the reference in `.bib` format.
+
+        Parameters
+        ----------
+        export : bool
+            Whether to export the reference as `RyanJoiner1976.bib` file (`True`) or not (`False`, default);
+
+
+        Returns
+        -------
+        reference : str
+            The Ryan-Joiner Test reference;
+
+        """
+        return citation(export=export)
+
+    def __str__(self):
+        if self.conclusion is None:
+            text = "The Ryan-Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+            return text
+        else:
+            return self.conclusion
+
+    def __repr__(self):
+        return "Ryan-Joiner Normality test"

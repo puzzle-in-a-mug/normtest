@@ -3,9 +3,6 @@
 --------------------------------------------------------------------------------
 Command to run at the prompt:
     python -m unittest -v tests/ryan_joiner/test_correlation_plot.py
-    or
-    python -m unittest -b tests/ryan_joiner/test_correlation_plot.py
-
 --------------------------------------------------------------------------------
 """
 ### GENERAL IMPORTS ###
@@ -34,11 +31,6 @@ class Test_correlation_plot(unittest.TestCase):
 
     def test_outputs(self):
         result = correlation_plot(self.axes, self.x_data)
-        self.assertIsInstance(result, SubplotBase, msg="not a SubplotBase")
-        plt.close()
-
-    def test_safe(self):
-        result = correlation_plot(self.axes, self.x_data, safe=True)
         self.assertIsInstance(result, SubplotBase, msg="not a SubplotBase")
         plt.close()
 

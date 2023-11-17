@@ -3,9 +3,6 @@
 --------------------------------------------------------------------------------
 Command to run at the prompt:
     python -m unittest -v tests/ryan_joiner/test__statistic.py
-    or
-    python -m unittest -b tests/ryan_joiner/test__statistic.py
-
 --------------------------------------------------------------------------------
 """
 

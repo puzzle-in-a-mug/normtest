@@ -1,7 +1,36 @@
 # Changelog
 
 
-## v0.0.1 (//2023)
+## v0.0.2 (16/11/2023)
+
+### Module utils
+
+#### helpers
+- Added ``AlphaManagement`` class (12/11/2023);
+- Added ``SafeManagement`` class (12/11/2023);
+
+### Module filliben
+- Added ``Filliben`` class (13/11/2023);
+- Added ``fi_test`` function (11/11/2023);
+- Added ``line_up`` function (11/11/2023);
+- Added ``correlation_plot`` function (11/11/2023);
+- Added ``_p_value`` function (11/11/2023);
+- Added ``dist_plot`` function (11/11/2023);
+- Added ``_critical_value`` (11/11/2023);
+- Added ``_statistic`` (09/11/2023);
+- Added ``_normal_order_medians`` (09/11/2023);
+- Added ``_uniform_order_medians`` (09/11/2023);
+- Added ``citation`` (09/11/2023);
+
+
+#### Module ryan_joiner
+- Added ``RyanJoiner`` class (13/11/2023);
+
+
+### Fix
+- Improve the citation for Ryan-Joiner test (12/11/2023)
+
+## v0.0.1 (05/10/2023)
 
 
 ### First Release

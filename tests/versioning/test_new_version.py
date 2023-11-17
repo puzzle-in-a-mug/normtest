@@ -26,8 +26,8 @@ os.system("cls")
 class Test_version(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.current_version = "0.0.1"
-        cls.next_version = "0.0.2"  # need to be change
+        cls.current_version = "0.0.2"
+        cls.next_version = "0.0.3"  # need to be change
 
     def test_current_version(self):
         pyproject_version = toml.load("pyproject.toml")["project"]["version"]

@@ -3,9 +3,6 @@
 --------------------------------------------------------------------------------
 Command to run at the prompt:
     python -m unittest -v tests/ryan_joiner/test__normal_order_statistic.py
-    or
-    python -m unittest -b tests/ryan_joiner/test__normal_order_statistic.py
-
 --------------------------------------------------------------------------------
 """
 
@@ -26,13 +23,10 @@ class Test__normal_order_statistic(unittest.TestCase):
     def setUpClass(cls):
         cls.x_data = np.array([1, 1.1, 1.2, 1.3, 1.14, 1.5])
         cls.cte_alpha = "3/8"
-        cls.safe = True
         cls.weighted = False
 
     def test_input(self):
-        result = _normal_order_statistic(
-            self.x_data, self.weighted, self.cte_alpha, self.safe
-        )
+        result = _normal_order_statistic(self.x_data, self.weighted, self.cte_alpha)
         self.assertIsInstance(
             result,
             np.ndarray,
@@ -44,7 +38,6 @@ class Test__normal_order_statistic(unittest.TestCase):
             x_data=self.x_data,
             weighted=self.weighted,
             cte_alpha=self.cte_alpha,
-            safe=self.safe,
         )
         self.assertIsInstance(
             result,
@@ -58,7 +51,7 @@ class Test__normal_order_statistic(unittest.TestCase):
         x_data = np.array(
             [148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210]
         )
-        result = _normal_order_statistic(x_data, False, self.cte_alpha, False)
+        result = _normal_order_statistic(x_data, False, self.cte_alpha)
         expected = np.array(
             [
                 -1.67294,
@@ -85,7 +78,11 @@ class Test__normal_order_statistic(unittest.TestCase):
         x_data = np.array(
             [43.5, 125.1, 166.3, 38.1, 116.7, 25.4, 40, 38.1, 253.7, 81.1, 96.7]
         )
-        result = _normal_order_statistic(x_data, False, self.cte_alpha, False)
+        result = _normal_order_statistic(
+            x_data,
+            False,
+            self.cte_alpha,
+        )
         expected = np.array(
             [
                 -1.59322,
@@ -111,7 +108,11 @@ class Test__normal_order_statistic(unittest.TestCase):
         x_data = np.array(
             [148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210]
         )
-        result = _normal_order_statistic(x_data, True, self.cte_alpha, False)
+        result = _normal_order_statistic(
+            x_data,
+            True,
+            self.cte_alpha,
+        )
         expected = np.array(
             [
                 -1.37281,
@@ -138,7 +139,11 @@ class Test__normal_order_statistic(unittest.TestCase):
         x_data = np.array(
             [43.5, 125.1, 166.3, 38.1, 116.7, 25.4, 40, 38.1, 253.7, 81.1, 96.7]
         )
-        result = _normal_order_statistic(x_data, True, self.cte_alpha, False)
+        result = _normal_order_statistic(
+            x_data,
+            True,
+            self.cte_alpha,
+        )
         expected = np.array(
             [
                 -1.59322,
@@ -162,7 +167,11 @@ class Test__normal_order_statistic(unittest.TestCase):
     def test_datasets_weighted_False(self):
         # dataset 1
         x_data = np.array([44.1, -33.1, 243.1, -25.2, 11])
-        result = _normal_order_statistic(x_data, False, self.cte_alpha, False)
+        result = _normal_order_statistic(
+            x_data,
+            False,
+            self.cte_alpha,
+        )
         expected = np.array(
             [
                 -1.17976,
@@ -181,7 +190,11 @@ class Test__normal_order_statistic(unittest.TestCase):
         x_data = np.array(
             [0.876, 0.001, 0.704, 0.852, 0.498, 0.12, 0.094, 0.865, 0.069, 0.019]
         )
-        result = _normal_order_statistic(x_data, False, self.cte_alpha, False)
+        result = _normal_order_statistic(
+            x_data,
+            False,
+            self.cte_alpha,
+        )
         expected = np.array(
             [
                 -1.54664,
@@ -204,7 +217,11 @@ class Test__normal_order_statistic(unittest.TestCase):
     def test_datasets_weighted_True(self):
         # dataset 1
         x_data = np.array([44.1, -33.1, 243.1, -25.2, 11])
-        result = _normal_order_statistic(x_data, True, self.cte_alpha, False)
+        result = _normal_order_statistic(
+            x_data,
+            True,
+            self.cte_alpha,
+        )
         expected = np.array(
             [
                 -1.17976,
@@ -223,7 +240,11 @@ class Test__normal_order_statistic(unittest.TestCase):
         x_data = np.array(
             [0.876, 0.001, 0.704, 0.852, 0.498, 0.12, 0.094, 0.865, 0.069, 0.019]
         )
-        result = _normal_order_statistic(x_data, True, self.cte_alpha, False)
+        result = _normal_order_statistic(
+            x_data,
+            True,
+            self.cte_alpha,
+        )
         expected = np.array(
             [
                 -1.54664,

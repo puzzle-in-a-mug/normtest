@@ -14,12 +14,17 @@ def docstring_parameter(*args, **kwargs):
 
 ALPHA = {
     "type": "alpha : float, optional",
-    "description": "The level of significance (:math:`\\alpha`). Must be ``0.01``, ``0.05`` (default) or ``0.10``;",
+    "description": "The level of significance (:math:`\\alpha`). Default is ``0.05``;",
 }
 
 AXES = {
     "type": "axes : matplotlib.axes.SubplotBase",
     "description": "The axis of the graph;",
+}
+
+CONCLUSION = {
+    "type": "conclusion : str",
+    "description": "The test conclusion (e.g, Normal/Not Normal).",
 }
 
 
@@ -38,6 +43,13 @@ CTE_ALPHA = {
         * `"1/2"`;""",
 }
 
+
+MI = {
+    "type": "mi : :doc:`numpy array <numpy:reference/generated/numpy.array>`",
+    "description": "The estimated the uniform order statistic median (:math:`m_{{i}}`)",
+}
+
+
 P_VALUE = {
     "type": "p_value : float or str",
     "description": "The probability of the test;",
@@ -46,7 +58,7 @@ P_VALUE = {
 
 SAFE = {
     "type": "safe : bool, optional",
-    "description": "Whether to check the inputs before performing the calculations (`True`) or not (`False`, default). Useful for beginners to identify problems in data entry (may reduce algorithm execution time);",
+    "description": "Whether to check the inputs before performing the calculations (`True`, default) or not (`False`). Useful for beginners to identify problems in data entry (may reduce algorithm execution time);",
 }
 
 

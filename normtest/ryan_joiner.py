@@ -86,7 +86,7 @@ def citation(export=False):
     """
     reference = bibmaker.make_techreport(
         citekey="RyanJoiner1976",
-        author="Thomas A. Ryan, Jr. and Brian L. Joiner",
+        author="Thomas A. Ryan and Brian L. Joiner",
         title="Normal Probability Plots and Tests for Normality",
         institution="The Pennsylvania State University, Statistics Department",
         year="1976",

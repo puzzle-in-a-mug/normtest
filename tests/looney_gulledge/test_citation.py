@@ -3,9 +3,6 @@
 --------------------------------------------------------------------------------
 Command to run at the prompt:
     python -m unittest -v tests/looney_gulledge/test_citation.py
-    or
-    python -m unittest -b tests/looney_gulledge/test_citation.py
-
 --------------------------------------------------------------------------------
 """
 

@@ -5,14 +5,14 @@
 
 ## Tests with critical values (alphabetical order) ###
 - Filliben
-
+- Looney Gulledge
 
 ------------------------------------------------------------------
 Author: Anderson Marcos Dias Canteli <andersonmdcanteli@gmail.com>
 
 Created : November 11, 2023
 
-Last update: November 11, 2023
+Last update: November 23, 2023
 """
 
 

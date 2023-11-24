@@ -390,63 +390,67 @@ def _p_value(statistic, sample_size):
         return p_value
 
 
-# @docs.docstring_parameter(
-#     x_data=docs.X_DATA["type"],
-#     x_data_desc=docs.X_DATA["description"],
-#     zi=docs.ZI["type"],
-#     zi_desc=docs.ZI["description"],
-#     statistic=docs.STATISTIC["type"],
-#     statistic_desc=docs.STATISTIC["description"],
-#     rj_ref=RyanJoiner1976,
-# )
-# def _statistic(x_data, zi):
-#     """This function estimates the Ryan-Joiner test statistic [1]_.
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    zi=docs.ZI["type"],
+    zi_desc=docs.ZI["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    lg_ref=LooneyGulledge1985,
+)
+def _statistic(x_data, zi):
+    """This function estimates the Looney-Gulledge test statistic [1]_.
 
-#     Parameters
-#     ----------
-#     {x_data}
-#         {x_data_desc}
-#     {zi}
-#         {zi_desc}
-
-
-#     Returns
-#     -------
-#     {statistic}
-#         {statistic_desc}
+    Parameters
+    ----------
+    {x_data}
+        {x_data_desc}
+    {zi}
+        {zi_desc}
 
 
-#     Notes
-#     -----
-#     The test statistic (:math:`R_{{p}}`) is estimated through the correlation between the ordered data and the Normal statistical order:
-
-#     .. math::
-
-#             R_{{p}}=\\dfrac{{\\sum_{{i=1}}^{{n}}x_{{(i)}}z_{{(i)}}}}{{\\sqrt{{s^{{2}}(n-1)\\sum_{{i=1}}^{{n}}z_{{(i)}}^2}}}}
-
-#     where :math:`z_{{(i)}}` values are the z-score values of the corresponding experimental data (:math:`x_{{({{i)}}}}`) value, :math:`n` is the sample size and :math:`s^{{2}}` is the sample variance.
-
-#     The correlation is estimated using :doc:`scipy.stats.pearsonr() <scipy:reference/generated/scipy.stats.pearsonr>`.
+    Returns
+    -------
+    {statistic}
+        {statistic_desc}
 
 
-#     References
-#     ----------
-#     .. [1] {rj_ref}
+    Notes
+    -----
+    The test statistic (:math:`R_{{p}}`) is estimated through the correlation between the ordered data and the Normal statistical order:
+
+    .. math::
+
+            R_{{p}}=\\dfrac{{\\sum_{{i=1}}^{{n}}x_{{(i)}}z_{{(i)}}}}{{\\sqrt{{s^{{2}}(n-1)\\sum_{{i=1}}^{{n}}z_{{(i)}}^2}}}}
+
+    where :math:`z_{{(i)}}` values are the z-score values of the corresponding experimental data (:math:`x_{{({{i)}}}}`) value, :math:`n` is the sample size and :math:`s^{{2}}` is the sample variance.
+
+    The correlation is estimated using :doc:`scipy.stats.pearsonr() <scipy:reference/generated/scipy.stats.pearsonr>`.
 
 
-#     Examples
-#     --------
-#     >>> from normtest import ryan_joiner
-#     >>> import numpy as np
-#     >>> x_data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
-#     >>> x_data = np.sort(x_data)
-#     >>> normal_order = ryan_joiner._normal_order_statistic(x_data)
-#     >>> result = ryan_joiner._statistic(x_data, normal_order)
-#     >>> print(result)
-#     0.9225156050800545
+    See also
+    --------
+    normtest.ryan_joiner._statistic
 
-#     """
-#     return stats.pearsonr(zi, x_data)[0]
+    References
+    ----------
+    .. [1] {lg_ref}
+
+
+    Examples
+    --------
+    >>> from normtest import ryan_joiner
+    >>> import numpy as np
+    >>> x_data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
+    >>> x_data = np.sort(x_data)
+    >>> normal_order = ryan_joiner._normal_order_statistic(x_data)
+    >>> result = ryan_joiner._statistic(x_data, normal_order)
+    >>> print(result)
+    0.9225156050800545
+
+    """
+    return stats.pearsonr(zi, x_data)[0]
 
 
 # @docs.docstring_parameter(

@@ -33,7 +33,7 @@ class Test_init(unittest.TestCase):
         self.assertFalse(teste.weighted, msg="wrong weighted")
 
     def test_changed(self):
-        teste = LooneyGulledge(alpha=0.10, safe=False, cte_alpha="0", weighted=True)
+        teste = LooneyGulledge(alpha=0.10, safe=False, weighted=True)
         self.assertFalse(teste.safe, msg="wrong safe")
         self.assertEqual(teste.alpha, 0.10, msg="wrong alpha")
         self.assertTrue(teste.weighted, msg="wrong weighted")

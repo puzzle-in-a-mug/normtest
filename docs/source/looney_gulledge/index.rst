@@ -25,6 +25,7 @@ Main functions
    
 
    citation
+   correlation_plot
    test
 
 |

@@ -4,6 +4,7 @@
 
 ### Module looney_gulledge
 - Added ``_normal_order_statistic`` (23/11/2023);
+- Added ``_statistic`` (23/11/2023);
 - Added ``_p_value`` (23/11/2023);
 - Added ``_order_statistic`` (23/11/2023);
 - Added ``_critical_value`` (23/11/2023);

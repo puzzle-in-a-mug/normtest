@@ -155,102 +155,95 @@ def _critical_value(sample_size, alpha=0.05):
     return float(f(sample_size))
 
 
-# @docs.docstring_parameter(
-#     x_data=docs.X_DATA["type"],
-#     x_data_desc=docs.X_DATA["description"],
-#     weighted=docs.WEIGHTED["type"],
-#     weighted_desc=docs.WEIGHTED["description"],
-#     cte_alpha=docs.CTE_ALPHA["type"],
-#     cte_alpha_desc=docs.CTE_ALPHA["description"],
-#     zi=docs.ZI["type"],
-#     zi_desc=docs.ZI["description"],
-# )
-# def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8"):
-#     """This function transforms the statistical order to the standard Normal distribution scale (:math:`z_{{i}}`).
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    weighted=docs.WEIGHTED["type"],
+    weighted_desc=docs.WEIGHTED["description"],
+    zi=docs.ZI["type"],
+    zi_desc=docs.ZI["description"],
+)
+def _normal_order_statistic(x_data, weighted=False):
+    """This function transforms the statistical order to the standard Normal distribution scale (:math:`z_{{i}}`).
 
-#     Parameters
-#     ----------
-#     {x_data}
-#         {x_data_desc}
-#     {cte_alpha}
-#         {cte_alpha_desc}
-
-#     {weighted}
-#         {weighted_desc}
+    Parameters
+    ----------
+    {x_data}
+        {x_data_desc}
+    {weighted}
+        {weighted_desc}
 
 
-#     Returns
-#     -------
-#     {zi}
-#         {zi_desc}
+    Returns
+    -------
+    {zi}
+        {zi_desc}
 
 
-#     Notes
-#     -----
-#     The transformation to the standard Normal scale is done using the equation:
+    Notes
+    -----
+    The transformation to the standard Normal scale is done using the equation:
 
-#     .. math::
+    .. math::
 
-#             z_{{i}} = \\phi^{{-1}} \\left(p_{{i}} \\right)
+            z_{{i}} = \\phi^{{-1}} \\left(p_{{i}} \\right)
 
-#     where :math:`p_{{i}}` is the normal statistical order and :math:`\\phi^{{-1}}` is the inverse of the standard Normal distribution. The transformation is performed using :doc:`stats.norm.ppf() <scipy:reference/generated/scipy.stats.norm>`.
+    where :math:`p_{{i}}` is the normal statistical order and :math:`\\phi^{{-1}}` is the inverse of the standard Normal distribution. The transformation is performed using :doc:`stats.norm.ppf() <scipy:reference/generated/scipy.stats.norm>`.
 
-#     The statistical order (:math:`p_{{i}}`) is estimated using :func:`_order_statistic` function. See this function for details on parameter `cte_alpha`.
-
-
-#     See Also
-#     --------
-#     rj_test
+    The statistical order (:math:`p_{{i}}`) is estimated using :func:`_order_statistic` function.
 
 
-#     Examples
-#     --------
-#     The first example uses `weighted=False`:
-
-#     >>> import numpy as np
-#     >>> from normtest import ryan_joiner
-#     >>> data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
-#     >>> result = ryan_joiner._normal_order_statistic(data, weighted=False)
-#     >>> print(result)
-#     [-1.67293739 -1.16188294 -0.84837993 -0.6020065  -0.38786869 -0.19032227
-#     0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
-#     1.67293739]
-
-#     The second example uses `weighted=True`, with the same data set:
-
-#     >>> result = ryan_joiner._normal_order_statistic(data, weighted=True)
-#     >>> print(result)
-#     [-1.37281032 -1.37281032 -0.84837993 -0.4921101  -0.4921101  -0.19032227
-#     0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
-#     1.67293739]
+    See Also
+    --------
+    normtest.ryan_joiner._normal_order_statistic
 
 
-#     Note that the results are only different for positions where we have repeated values. Using `weighted=True`, the normal statistical order is obtained with the average of the order statistic values.
+    Examples
+    --------
+    The first example uses `weighted=False`:
 
-#     The results will be identical if the data set does not contain repeated values.
+    >>> import numpy as np
+    >>> from normtest import ryan_joiner
+    >>> data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
+    >>> result = ryan_joiner._normal_order_statistic(data, weighted=False)
+    >>> print(result)
+    [-1.67293739 -1.16188294 -0.84837993 -0.6020065  -0.38786869 -0.19032227
+    0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
+    1.67293739]
 
-#     """
+    The second example uses `weighted=True`, with the same data set:
 
-#     # ordering
-#     x_data = np.sort(x_data)
-#     if weighted:
-#         df = pd.DataFrame({"x_data": x_data})
-#         # getting mi values
-#         df["Rank"] = np.arange(1, df.shape[0] + 1)
-#         df["Ui"] = _order_statistic(
-#             sample_size=x_data.size,
-#             cte_alpha=cte_alpha,
-#         )
-#         df["Mi"] = df.groupby(["x_data"])["Ui"].transform("mean")
-#         normal_ordered = stats.norm.ppf(df["Mi"])
-#     else:
-#         ordered = _order_statistic(
-#             sample_size=x_data.size,
-#             cte_alpha=cte_alpha,
-#         )
-#         normal_ordered = stats.norm.ppf(ordered)
+    >>> result = ryan_joiner._normal_order_statistic(data, weighted=True)
+    >>> print(result)
+    [-1.37281032 -1.37281032 -0.84837993 -0.4921101  -0.4921101  -0.19032227
+    0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
+    1.67293739]
 
-#     return normal_ordered
+
+    Note that the results are only different for positions where we have repeated values. Using `weighted=True`, the normal statistical order is obtained with the average of the order statistic values.
+
+    The results will be identical if the data set does not contain repeated values.
+
+    """
+
+    # ordering
+    x_data = np.sort(x_data)
+    if weighted:
+        df = pd.DataFrame({"x_data": x_data})
+        # getting mi values
+        df["Rank"] = np.arange(1, df.shape[0] + 1)
+        df["Ui"] = _order_statistic(
+            sample_size=x_data.size,
+        )
+        df["Mi"] = df.groupby(["x_data"])["Ui"].transform("mean")
+        normal_ordered = stats.norm.ppf(df["Mi"])
+    else:
+        ordered = _order_statistic(
+            sample_size=x_data.size,
+        )
+        normal_ordered = stats.norm.ppf(ordered)
+
+    return normal_ordered
 
 
 @docs.docstring_parameter(

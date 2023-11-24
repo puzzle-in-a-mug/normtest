@@ -4,7 +4,8 @@
 ## v0.0.3 (XX/11/2023)
 
 ### Module looney_gulledge
-- Added ``citation`` (23/11/2023)
+- Added ``_critical_value`` (23/11/2023);
+- Added ``citation`` (23/11/2023);
 
 
 ## v0.0.2 (16/11/2023)

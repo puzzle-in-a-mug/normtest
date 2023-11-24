@@ -1,4 +1,4 @@
-.. _critical_value:
+.. _lg_critical_value:
 
 _critical_value
 ===============

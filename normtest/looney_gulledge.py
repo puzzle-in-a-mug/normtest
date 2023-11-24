@@ -1180,27 +1180,27 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
         axes=docs.AXES["type"],
         axes_desc=docs.AXES["description"],
     )
-    def dist_plot(self, axes, critical_range=(4, 50)):
-        """This method generates an `axis` with the critical data from the Looney-Gulledge Normality test.
+    def dist_plot(self, axes, alphas=[0.10, 0.05, 0.01]):
+        """This method generates an `axis` with critical data from the Looney-Gulledge Normality test.
 
         Parameters
         ----------
         {axes}
             {axes_desc}
-        critical_range : tuple (optional), with two elements:
-            x_min : int, optional
-                The lower range of the number of observations for the critical values (default is ``4``).
-            x_max : int, optional
-                The upper range of the number of observations for the critical values (default is ``50``).
+        alphas : list of floats, optional
+            The significance level (:math:`\\alpha`) to draw the critical lines. Default is `[0.10, 0.05, 0.01]`;
+
 
         Returns
         -------
         {axes}
             {axes_desc}
 
+
         See Also
         --------
         dist_plot
+
 
         """
         method_name = "dist_plot"
@@ -1216,45 +1216,23 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
                     stacklevel=4,
                     error=True,
                 )
-                types.is_tuple(
-                    value=critical_range,
-                    param_name="critical_range",
-                    kind="method",
-                    kind_name=method_name,
-                    stacklevel=4,
-                    error=True,
-                )
-                types.is_int(
-                    value=critical_range[0],
-                    param_name="x_min",
-                    kind="method",
-                    kind_name=method_name,
-                    stacklevel=4,
-                    error=True,
-                )
-                types.is_int(
-                    value=critical_range[1],
-                    param_name="x_max",
-                    kind="method",
-                    kind_name=method_name,
-                    stacklevel=4,
-                    error=True,
-                )
-                numbers.is_greater_than(
-                    number=critical_range[0],
-                    lower=4,
-                    param_name="x_min",
-                    kind="method",
-                    kind_name=method_name,
-                    inclusive=True,
-                    stacklevel=4,
-                    error=True,
-                )
+                # making a copy from original critical values
+                critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+                for alpha in alphas:
+                    parameters.param_options(
+                        option=alpha,
+                        options=list(critical.keys())[1:],
+                        param_name="alphas",
+                        kind="method",
+                        kind_name=method_name,
+                        stacklevel=4,
+                        error=True,
+                    )
 
             return dist_plot(
-                axes=axes,
-                critical_range=critical_range,
+                axes,
                 test=(self.statistic, self.x_data.size),
+                alphas=alphas,
             )
 
     # @docs.docstring_parameter(

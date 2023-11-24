@@ -163,58 +163,50 @@ class Test_fit(unittest.TestCase):
                 teste.fit(data)
 
 
-# class Test_dist_plot(unittest.TestCase):
-#     @classmethod
-#     def setUpClass(cls):
-#         cls.data = np.array([6, 1, -4, 8, -2, 5, 0])
+class Test_dist_plot(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.data = np.array([6, 1, -4, 8, -2, 5, 0])
 
-#     def test_safe(self):
-#         with self.assertRaises(
-#             TypeError,
-#             msg=f"Does not raised TypeError when axes is not axes",
-#         ):
-#             teste = RyanJoiner()
-#             teste.fit(self.data)
-#             fig, ax = plt.subplots(figsize=(6, 4))
-#             ax = teste.dist_plot(axes=fig)
-#             plt.close()
+    def test_safe(self):
+        with self.assertRaises(
+            TypeError,
+            msg=f"Does not raised TypeError when axes is not axes",
+        ):
+            teste = LooneyGulledge()
+            teste.fit(self.data)
+            fig, ax = plt.subplots(figsize=(6, 4))
+            ax = teste.dist_plot(axes=fig)
+            plt.close()
 
-#         with self.assertRaises(
-#             TypeError,
-#             msg=f"Does not raised TypeError when critical_range is not not allowed",
-#         ):
-#             teste = RyanJoiner()
-#             teste.fit(self.data)
-#             fig, ax = plt.subplots(figsize=(6, 4))
-#             ax = teste.dist_plot(axes=ax, critical_range=(5, "40"))
-#             plt.close()
+        with self.assertRaises(
+            ValueError,
+            msg=f"Does not raised ValueError when alphas is not not allowed",
+        ):
+            teste = LooneyGulledge()
+            teste.fit(self.data)
+            fig, ax = plt.subplots(figsize=(6, 4))
+            ax = teste.dist_plot(axes=ax, alphas=[0.01, 0.05, 0.0001])
+            plt.close()
 
-#         with self.assertRaises(
-#             ValueError,
-#             msg=f"Does not raised ValueError when critical_range is not not allowed",
-#         ):
-#             teste = RyanJoiner()
-#             teste.fit(self.data)
-#             fig, ax = plt.subplots(figsize=(6, 4))
-#             ax = teste.dist_plot(axes=ax, critical_range=(3, 40))
-#             plt.close()
+    def test_filliben_data(self):
+        fig1_base_path = Path(
+            "tests/looney_gulledge/figs_dist_plot/filliben_from_class.png"
+        )
 
-#     def test_filliben_data(self):
-#         fig1_base_path = Path("tests/ryan_joiner/figs_dist_plot/filliben_paper.png")
+        teste = LooneyGulledge()
+        teste.fit(self.data)
+        fig, ax = plt.subplots(figsize=(6, 4))
+        ax = teste.dist_plot(axes=ax)
+        fig1_file = Path("tests/looney_gulledge/figs_dist_plot/fig1_test.png")
+        plt.savefig(fig1_file)
+        plt.close()
 
-#         teste = RyanJoiner()
-#         teste.fit(self.data)
-#         fig, ax = plt.subplots(figsize=(6, 4))
-#         ax = teste.dist_plot(axes=ax)
-#         fig1_file = Path("tests/filliben/figs_dist_plot/fig1_test.png")
-#         plt.savefig(fig1_file)
-#         plt.close()
-
-#         self.assertTrue(
-#             functions.validate_file_contents(fig1_base_path, fig1_file),
-#             msg="figures does not match",
-#         )
-#         fig1_file.unlink()
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
 
 
 # class Test_correlation_plot(unittest.TestCase):

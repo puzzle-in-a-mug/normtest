@@ -1176,86 +1176,86 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
         self.conclusion = result.conclusion
         self.normality = result
 
-    # @docs.docstring_parameter(
-    #     axes=docs.AXES["type"],
-    #     axes_desc=docs.AXES["description"],
-    # )
-    # def dist_plot(self, axes, critical_range=(4, 50)):
-    #     """This method generates an `axis` with the critical data from the Ryan-Joiner Normality test.
+    @docs.docstring_parameter(
+        axes=docs.AXES["type"],
+        axes_desc=docs.AXES["description"],
+    )
+    def dist_plot(self, axes, critical_range=(4, 50)):
+        """This method generates an `axis` with the critical data from the Looney-Gulledge Normality test.
 
-    #     Parameters
-    #     ----------
-    #     {axes}
-    #         {axes_desc}
-    #     critical_range : tuple (optional), with two elements:
-    #         x_min : int, optional
-    #             The lower range of the number of observations for the critical values (default is ``4``).
-    #         x_max : int, optional
-    #             The upper range of the number of observations for the critical values (default is ``50``).
+        Parameters
+        ----------
+        {axes}
+            {axes_desc}
+        critical_range : tuple (optional), with two elements:
+            x_min : int, optional
+                The lower range of the number of observations for the critical values (default is ``4``).
+            x_max : int, optional
+                The upper range of the number of observations for the critical values (default is ``50``).
 
-    #     Returns
-    #     -------
-    #     {axes}
-    #         {axes_desc}
+        Returns
+        -------
+        {axes}
+            {axes_desc}
 
-    #     See Also
-    #     --------
-    #     dist_plot
+        See Also
+        --------
+        dist_plot
 
-    #     """
-    #     method_name = "dist_plot"
-    #     if self.conclusion is None:
-    #         return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
-    #     else:
-    #         if self.safe:
-    #             types.is_subplots(
-    #                 value=axes,
-    #                 param_name="axes",
-    #                 kind="method",
-    #                 kind_name=method_name,
-    #                 stacklevel=4,
-    #                 error=True,
-    #             )
-    #             types.is_tuple(
-    #                 value=critical_range,
-    #                 param_name="critical_range",
-    #                 kind="method",
-    #                 kind_name=method_name,
-    #                 stacklevel=4,
-    #                 error=True,
-    #             )
-    #             types.is_int(
-    #                 value=critical_range[0],
-    #                 param_name="x_min",
-    #                 kind="method",
-    #                 kind_name=method_name,
-    #                 stacklevel=4,
-    #                 error=True,
-    #             )
-    #             types.is_int(
-    #                 value=critical_range[1],
-    #                 param_name="x_max",
-    #                 kind="method",
-    #                 kind_name=method_name,
-    #                 stacklevel=4,
-    #                 error=True,
-    #             )
-    #             numbers.is_greater_than(
-    #                 number=critical_range[0],
-    #                 lower=4,
-    #                 param_name="x_min",
-    #                 kind="method",
-    #                 kind_name=method_name,
-    #                 inclusive=True,
-    #                 stacklevel=4,
-    #                 error=True,
-    #             )
+        """
+        method_name = "dist_plot"
+        if self.conclusion is None:
+            return "The Looney-Gulledge Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+        else:
+            if self.safe:
+                types.is_subplots(
+                    value=axes,
+                    param_name="axes",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                types.is_tuple(
+                    value=critical_range,
+                    param_name="critical_range",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                types.is_int(
+                    value=critical_range[0],
+                    param_name="x_min",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                types.is_int(
+                    value=critical_range[1],
+                    param_name="x_max",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                numbers.is_greater_than(
+                    number=critical_range[0],
+                    lower=4,
+                    param_name="x_min",
+                    kind="method",
+                    kind_name=method_name,
+                    inclusive=True,
+                    stacklevel=4,
+                    error=True,
+                )
 
-    #         return dist_plot(
-    #             axes=axes,
-    #             critical_range=critical_range,
-    #             test=(self.statistic, self.x_data.size),
-    #         )
+            return dist_plot(
+                axes=axes,
+                critical_range=critical_range,
+                test=(self.statistic, self.x_data.size),
+            )
 
     # @docs.docstring_parameter(
     #     axes=docs.AXES["type"],

@@ -36,6 +36,7 @@ Others functions
    :maxdepth: 1
    
    _critical_value
+   _normal_order_statistic
    _order_statistic
    _p_value
 

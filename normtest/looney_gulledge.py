@@ -743,7 +743,7 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01]):
 
     """
     # making a copy from original critical values
-    critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+    critical = deepcopy(critical_values.LOONEY_GULLEDGE_CRITICAL)
 
     if test is not None:
         axes.scatter(test[1], test[0], c="r", label="statistic", marker="^")

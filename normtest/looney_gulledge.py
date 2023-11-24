@@ -979,442 +979,416 @@ def line_up(
 # ##### CLASS #####
 
 
-# @docs.docstring_parameter(
-#     x_data=docs.X_DATA["type"],
-#     x_data_desc=docs.X_DATA["description"],
-#     statistic=docs.STATISTIC["type"],
-#     statistic_desc=docs.STATISTIC["description"],
-#     critical=docs.CRITICAL["type"],
-#     critical_desc=docs.CRITICAL["description"],
-#     p_value=docs.P_VALUE["type"],
-#     p_value_desc=docs.P_VALUE["description"],
-#     conclusion=docs.CONCLUSION["type"],
-#     conclusion_desc=docs.CONCLUSION["description"],
-#     alpha=docs.ALPHA["type"],
-#     alpha_desc=docs.ALPHA["description"],
-#     safe=docs.SAFE["type"],
-#     safe_desc=docs.SAFE["description"],
-#     rj_ref=RyanJoiner1976,
-# )
-# class RyanJoiner(AlphaManagement, SafeManagement):
-#     """This class instantiates an object to perform the Ryan-Joiner Normality test [1]_.
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    critical=docs.CRITICAL["type"],
+    critical_desc=docs.CRITICAL["description"],
+    p_value=docs.P_VALUE["type"],
+    p_value_desc=docs.P_VALUE["description"],
+    conclusion=docs.CONCLUSION["type"],
+    conclusion_desc=docs.CONCLUSION["description"],
+    alpha=docs.ALPHA["type"],
+    alpha_desc=docs.ALPHA["description"],
+    safe=docs.SAFE["type"],
+    safe_desc=docs.SAFE["description"],
+    lg_ref=LooneyGulledge1985,
+)
+class LooneyGulledge(AlphaManagement, SafeManagement):
+    """This class instantiates an object to perform the Looney-Gulledge Normality test [1]_.
 
 
-#     Attributes
-#     ----------
-#     {statistic}
-#         {statistic_desc}
-#     {critical}
-#         {critical_desc}
-#     {p_value}
-#         {p_value_desc}
-#     {conclusion}
-#         {conclusion_desc}
-#     {alpha}
-#         {alpha_desc}
-#     normality : named tuple
-#         A tuple with the main test results summarized
-#     normality_hypothesis : str
-#         Description of the Normality test
-#     {safe}
-#         {safe_desc}
+    Attributes
+    ----------
+    {statistic}
+        {statistic_desc}
+    {critical}
+        {critical_desc}
+    {p_value}
+        {p_value_desc}
+    {conclusion}
+        {conclusion_desc}
+    {alpha}
+        {alpha_desc}
+    normality : named tuple
+        A tuple with the main test results summarized
+    normality_hypothesis : str
+        Description of the Normality test
+    {safe}
+        {safe_desc}
 
-#     Methods
-#     -------
-#     fit(x_data)
-#         Applies the Ryan-Joiner Normality test;
-#     dist_plot(axes, alphas=[0.10, 0.05, 0.01]):
-#         Generates `axis` with critical data from the Ryan-Joiner Normality test;
-#     correlation_plot(axes)
-#         Generates an `axis` with the Ryan-Joiner test correlation graph;
-#     line_up(seed=None, correct=False)
-#         Generates a `Figure` with the correlation graphs for the line up method;
-#     citation(export=False)
-#         Returns the Ryan-Joiner's test reference;
+    Methods
+    -------
+    fit(x_data)
+        Applies the Looney-Gulledge Normality test;
+    dist_plot(axes, alphas=[0.10, 0.05, 0.01]):
+        Generates `axis` with critical data from the Looney-Gulledge Normality test;
+    correlation_plot(axes)
+        Generates an `axis` with the Looney-Gulledge test correlation graph;
+    line_up(seed=None, correct=False)
+        Generates a `Figure` with the correlation graphs for the line up method;
+    citation(export=False)
+        Returns the Looney-Gulledge's test reference;
 
-#     References
-#     ----------
-#     .. [1] {rj_ref}
-
-
-#     Examples
-#     --------
-#     >>> from normtest import RyanJoiner
-#     >>> import numpy as np
-#     >>> x = np.array([6, 1, -4, 8, -2, 5, 0])
-#     >>> test = RyanJoiner()
-#     >>> test.fit(x)
-#     >>> print(test.normality)
-#     RyanJoiner(statistic=0.9844829186140105, critical=0.8977794003662074, p_value='p > 0.100', conclusion='Fail to reject H₀')
-
-#     """
-
-#     def __init__(
-#         self, alpha=0.05, safe=True, cte_alpha="3/8", weighted=False, **kwargs
-#     ):
-#         """Initiates Filliben `class` inheriting the `AlphaManagement` and `SafeManagement` classes
-
-#         Attributes
-#         ----------
-#         class_name : "RyanJoiner"
-#         conclusion : None
-#             This attribute is used to check whether the fit method was applied or not
-#         alpha : float
-#         safe : bool
-#         cte_alpha : str
-#         weighted : bool
+    References
+    ----------
+    .. [1] {lg_ref}
 
 
-#         """
-#         super().__init__(alpha=alpha, safe=safe, **kwargs)
-#         self.class_name = "RyanJoiner"
-#         self.conclusion = None  # for checking if the fit was applied
-#         if safe:
-#             parameters.param_options(
-#                 option=alpha,
-#                 options=[0.01, 0.05, 0.10],
-#                 param_name="alpha",
-#                 kind="class",
-#                 kind_name=self.class_name,
-#                 stacklevel=4,
-#                 error=True,
-#             )
-#             parameters.param_options(
-#                 option=cte_alpha,
-#                 options=["0", "3/8", "1/2"],
-#                 param_name="cte_alpha",
-#                 kind="class",
-#                 kind_name=self.class_name,
-#                 stacklevel=4,
-#                 error=True,
-#             )
+    Examples
+    --------
+    >>> from normtest import RyanJoiner
+    >>> import numpy as np
+    >>> x = np.array([6, 1, -4, 8, -2, 5, 0])
+    >>> test = RyanJoiner()
+    >>> test.fit(x)
+    >>> print(test.normality)
+    RyanJoiner(statistic=0.9844829186140105, critical=0.8977794003662074, p_value='p > 0.100', conclusion='Fail to reject H₀')
 
-#             types.is_bool(
-#                 value=weighted,
-#                 param_name="weighted",
-#                 kind="class",
-#                 kind_name=self.class_name,
-#                 stacklevel=4,
-#                 error=True,
-#             )
-#         self.cte_alpha = cte_alpha
-#         self.weighted = weighted
-#         self.set_safe(safe=safe)
-#         self.alpha = alpha
-#         self.normality_hypothesis = constants.HYPOTESES
+    """
 
-#     @docs.docstring_parameter(
-#         x_data=docs.X_DATA["type"],
-#         x_data_desc=docs.X_DATA["description"],
-#         statistic=docs.STATISTIC["type"],
-#         statistic_desc=docs.STATISTIC["description"],
-#         critical=docs.CRITICAL["type"],
-#         critical_desc=docs.CRITICAL["description"],
-#         p_value=docs.P_VALUE["type"],
-#         p_value_desc=docs.P_VALUE["description"],
-#         conclusion=docs.CONCLUSION["type"],
-#         conclusion_desc=docs.CONCLUSION["description"],
-#     )
-#     def fit(
-#         self,
-#         x_data,
-#     ):
-#         """This method applies the Ryan-Joiner test.
+    def __init__(self, alpha=0.05, safe=True, weighted=False, **kwargs):
+        """Initiates Looney-Gulledge `class` inheriting the `AlphaManagement` and `SafeManagement` classes
 
-#         Parameters
-#         ----------
-#         {x_data}
-#             {x_data_desc}
+        Attributes
+        ----------
+        class_name : "LooneyGulledge"
+        conclusion : None
+            This attribute is used to check whether the fit method was applied or not
+        alpha : float
+        safe : bool
+        weighted : bool
 
 
-#         Returns
-#         -------
-#         {x_data}
-#             {x_data_desc}
-#         {statistic}
-#             {statistic_desc}
-#         {critical}
-#             {critical_desc}
-#         {p_value}
-#             {p_value_desc}
-#         {conclusion}
-#             {conclusion_desc}
-#         normality : named tuple
-#             A tuple with the main test results summarized
+        """
+        super().__init__(alpha=alpha, safe=safe, **kwargs)
+        self.class_name = "LooneyGulledge"
+        self.conclusion = None  # for checking if the fit was applied
+        if safe:
+            parameters.param_options(
+                option=alpha,
+                options=[0.01, 0.05, 0.10],
+                param_name="alpha",
+                kind="class",
+                kind_name=self.class_name,
+                stacklevel=4,
+                error=True,
+            )
+            types.is_bool(
+                value=weighted,
+                param_name="weighted",
+                kind="class",
+                kind_name=self.class_name,
+                stacklevel=4,
+                error=True,
+            )
 
+        self.weighted = weighted
+        self.set_safe(safe=safe)
+        self.alpha = alpha
+        self.normality_hypothesis = constants.HYPOTESES
 
-#         See Also
-#         --------
-#         rj_test
+    # @docs.docstring_parameter(
+    #     x_data=docs.X_DATA["type"],
+    #     x_data_desc=docs.X_DATA["description"],
+    #     statistic=docs.STATISTIC["type"],
+    #     statistic_desc=docs.STATISTIC["description"],
+    #     critical=docs.CRITICAL["type"],
+    #     critical_desc=docs.CRITICAL["description"],
+    #     p_value=docs.P_VALUE["type"],
+    #     p_value_desc=docs.P_VALUE["description"],
+    #     conclusion=docs.CONCLUSION["type"],
+    #     conclusion_desc=docs.CONCLUSION["description"],
+    # )
+    # def fit(
+    #     self,
+    #     x_data,
+    # ):
+    #     """This method applies the Ryan-Joiner test.
 
+    #     Parameters
+    #     ----------
+    #     {x_data}
+    #         {x_data_desc}
 
-#         """
-#         func_name = "fit"
+    #     Returns
+    #     -------
+    #     {x_data}
+    #         {x_data_desc}
+    #     {statistic}
+    #         {statistic_desc}
+    #     {critical}
+    #         {critical_desc}
+    #     {p_value}
+    #         {p_value_desc}
+    #     {conclusion}
+    #         {conclusion_desc}
+    #     normality : named tuple
+    #         A tuple with the main test results summarized
 
-#         if self.safe:
-#             types.is_numpy(
-#                 value=x_data,
-#                 param_name="x_data",
-#                 kind="method",
-#                 kind_name=func_name,
-#                 stacklevel=4,
-#                 error=True,
-#             )
-#             numpy_arrays.n_dimensions(
-#                 array=x_data,
-#                 param_name="x_data",
-#                 ndim=1,
-#                 kind="method",
-#                 kind_name=func_name,
-#                 stacklevel=4,
-#                 error=True,
-#             )
-#             numpy_arrays.size_is_greater_than_lower(
-#                 array=x_data,
-#                 param_name="x_data",
-#                 kind="method",
-#                 kind_name=func_name,
-#                 lower=4,
-#                 inclusive=True,
-#                 stacklevel=4,
-#                 error=True,
-#             )
+    #     See Also
+    #     --------
+    #     rj_test
 
-#         result = rj_test(
-#             x_data=x_data,
-#             alpha=self.alpha,
-#             cte_alpha=self.cte_alpha,
-#             weighted=self.weighted,
-#         )
-#         self.x_data = x_data
-#         self.statistic = result.statistic
-#         self.critical = result.critical
-#         self.p_value = result.p_value
-#         self.conclusion = result.conclusion
-#         self.normality = result
+    #     """
+    #     func_name = "fit"
 
-#     @docs.docstring_parameter(
-#         axes=docs.AXES["type"],
-#         axes_desc=docs.AXES["description"],
-#     )
-#     def dist_plot(self, axes, critical_range=(4, 50)):
-#         """This method generates an `axis` with the critical data from the Ryan-Joiner Normality test.
+    #     if self.safe:
+    #         types.is_numpy(
+    #             value=x_data,
+    #             param_name="x_data",
+    #             kind="method",
+    #             kind_name=func_name,
+    #             stacklevel=4,
+    #             error=True,
+    #         )
+    #         numpy_arrays.n_dimensions(
+    #             array=x_data,
+    #             param_name="x_data",
+    #             ndim=1,
+    #             kind="method",
+    #             kind_name=func_name,
+    #             stacklevel=4,
+    #             error=True,
+    #         )
+    #         numpy_arrays.size_is_greater_than_lower(
+    #             array=x_data,
+    #             param_name="x_data",
+    #             kind="method",
+    #             kind_name=func_name,
+    #             lower=4,
+    #             inclusive=True,
+    #             stacklevel=4,
+    #             error=True,
+    #         )
 
-#         Parameters
-#         ----------
-#         {axes}
-#             {axes_desc}
-#         critical_range : tuple (optional), with two elements:
-#             x_min : int, optional
-#                 The lower range of the number of observations for the critical values (default is ``4``).
-#             x_max : int, optional
-#                 The upper range of the number of observations for the critical values (default is ``50``).
+    #     result = rj_test(
+    #         x_data=x_data,
+    #         alpha=self.alpha,
+    #         cte_alpha=self.cte_alpha,
+    #         weighted=self.weighted,
+    #     )
+    #     self.x_data = x_data
+    #     self.statistic = result.statistic
+    #     self.critical = result.critical
+    #     self.p_value = result.p_value
+    #     self.conclusion = result.conclusion
+    #     self.normality = result
 
+    # @docs.docstring_parameter(
+    #     axes=docs.AXES["type"],
+    #     axes_desc=docs.AXES["description"],
+    # )
+    # def dist_plot(self, axes, critical_range=(4, 50)):
+    #     """This method generates an `axis` with the critical data from the Ryan-Joiner Normality test.
 
-#         Returns
-#         -------
-#         {axes}
-#             {axes_desc}
+    #     Parameters
+    #     ----------
+    #     {axes}
+    #         {axes_desc}
+    #     critical_range : tuple (optional), with two elements:
+    #         x_min : int, optional
+    #             The lower range of the number of observations for the critical values (default is ``4``).
+    #         x_max : int, optional
+    #             The upper range of the number of observations for the critical values (default is ``50``).
 
+    #     Returns
+    #     -------
+    #     {axes}
+    #         {axes_desc}
 
-#         See Also
-#         --------
-#         dist_plot
+    #     See Also
+    #     --------
+    #     dist_plot
 
+    #     """
+    #     method_name = "dist_plot"
+    #     if self.conclusion is None:
+    #         return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+    #     else:
+    #         if self.safe:
+    #             types.is_subplots(
+    #                 value=axes,
+    #                 param_name="axes",
+    #                 kind="method",
+    #                 kind_name=method_name,
+    #                 stacklevel=4,
+    #                 error=True,
+    #             )
+    #             types.is_tuple(
+    #                 value=critical_range,
+    #                 param_name="critical_range",
+    #                 kind="method",
+    #                 kind_name=method_name,
+    #                 stacklevel=4,
+    #                 error=True,
+    #             )
+    #             types.is_int(
+    #                 value=critical_range[0],
+    #                 param_name="x_min",
+    #                 kind="method",
+    #                 kind_name=method_name,
+    #                 stacklevel=4,
+    #                 error=True,
+    #             )
+    #             types.is_int(
+    #                 value=critical_range[1],
+    #                 param_name="x_max",
+    #                 kind="method",
+    #                 kind_name=method_name,
+    #                 stacklevel=4,
+    #                 error=True,
+    #             )
+    #             numbers.is_greater_than(
+    #                 number=critical_range[0],
+    #                 lower=4,
+    #                 param_name="x_min",
+    #                 kind="method",
+    #                 kind_name=method_name,
+    #                 inclusive=True,
+    #                 stacklevel=4,
+    #                 error=True,
+    #             )
 
-#         """
-#         method_name = "dist_plot"
-#         if self.conclusion is None:
-#             return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
-#         else:
-#             if self.safe:
-#                 types.is_subplots(
-#                     value=axes,
-#                     param_name="axes",
-#                     kind="method",
-#                     kind_name=method_name,
-#                     stacklevel=4,
-#                     error=True,
-#                 )
-#                 types.is_tuple(
-#                     value=critical_range,
-#                     param_name="critical_range",
-#                     kind="method",
-#                     kind_name=method_name,
-#                     stacklevel=4,
-#                     error=True,
-#                 )
-#                 types.is_int(
-#                     value=critical_range[0],
-#                     param_name="x_min",
-#                     kind="method",
-#                     kind_name=method_name,
-#                     stacklevel=4,
-#                     error=True,
-#                 )
-#                 types.is_int(
-#                     value=critical_range[1],
-#                     param_name="x_max",
-#                     kind="method",
-#                     kind_name=method_name,
-#                     stacklevel=4,
-#                     error=True,
-#                 )
-#                 numbers.is_greater_than(
-#                     number=critical_range[0],
-#                     lower=4,
-#                     param_name="x_min",
-#                     kind="method",
-#                     kind_name=method_name,
-#                     inclusive=True,
-#                     stacklevel=4,
-#                     error=True,
-#                 )
+    #         return dist_plot(
+    #             axes=axes,
+    #             critical_range=critical_range,
+    #             test=(self.statistic, self.x_data.size),
+    #         )
 
-#             return dist_plot(
-#                 axes=axes,
-#                 critical_range=critical_range,
-#                 test=(self.statistic, self.x_data.size),
-#             )
+    # @docs.docstring_parameter(
+    #     axes=docs.AXES["type"],
+    #     axes_desc=docs.AXES["description"],
+    # )
+    # def correlation_plot(
+    #     self,
+    #     axes,
+    # ):
+    #     """This method generates an axis with the correlation plotfor the Ryan-Joiner Normality test.
 
-#     @docs.docstring_parameter(
-#         axes=docs.AXES["type"],
-#         axes_desc=docs.AXES["description"],
-#     )
-#     def correlation_plot(
-#         self,
-#         axes,
-#     ):
-#         """This method generates an axis with the correlation plotfor the Ryan-Joiner Normality test.
+    #     Parameters
+    #     ----------
+    #     {axes}
+    #         {axes_desc}
 
-#         Parameters
-#         ----------
-#         {axes}
-#             {axes_desc}
+    #     Returns
+    #     -------
+    #     {axes}
+    #         {axes_desc}
 
+    #     See Also
+    #     --------
+    #     correlation_plot
 
-#         Returns
-#         -------
-#         {axes}
-#             {axes_desc}
+    #     """
+    #     method_name = "correlation_plot"
+    #     if self.conclusion is None:
+    #         return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+    #     else:
+    #         if self.safe:
+    #             types.is_subplots(
+    #                 value=axes,
+    #                 param_name="axes",
+    #                 kind="method",
+    #                 kind_name=method_name,
+    #                 stacklevel=4,
+    #                 error=True,
+    #             )
 
+    #         return correlation_plot(
+    #             axes=axes,
+    #             x_data=self.x_data,
+    #             cte_alpha=self.cte_alpha,
+    #             weighted=self.weighted,
+    #         )
 
-#         See Also
-#         --------
-#         correlation_plot
+    # def line_up(
+    #     self,
+    #     seed=None,
+    #     correct=False,
+    # ):
+    #     """This method generates a `Figure` with the correlation graphs for the line up method.
 
+    #     Parameters
+    #     ----------
+    #     seed : int or None, optional
+    #         A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``None`` what generates a random seed;
+    #     correct : bool, optional
+    #         Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
 
-#         """
-#         method_name = "correlation_plot"
-#         if self.conclusion is None:
-#             return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
-#         else:
-#             if self.safe:
-#                 types.is_subplots(
-#                     value=axes,
-#                     param_name="axes",
-#                     kind="method",
-#                     kind_name=method_name,
-#                     stacklevel=4,
-#                     error=True,
-#                 )
+    #     Returns
+    #     -------
+    #     fig : matplotlib.figure.Figure
+    #         A figure with the generated graphics;
 
-#             return correlation_plot(
-#                 axes=axes,
-#                 x_data=self.x_data,
-#                 cte_alpha=self.cte_alpha,
-#                 weighted=self.weighted,
-#             )
+    #     See Also
+    #     --------
+    #     line_up
 
-#     def line_up(
-#         self,
-#         seed=None,
-#         correct=False,
-#     ):
-#         """This method generates a `Figure` with the correlation graphs for the line up method.
+    #     """
+    #     method_name = "line_up"
+    #     if self.conclusion is None:
+    #         return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+    #     else:
+    #         if self.safe:
+    #             types.is_bool(
+    #                 value=correct,
+    #                 param_name="correct",
+    #                 kind="method",
+    #                 kind_name=method_name,
+    #                 stacklevel=4,
+    #                 error=True,
+    #             )
+    #             if seed is not None:
+    #                 types.is_int(
+    #                     value=seed,
+    #                     param_name="seed",
+    #                     kind="method",
+    #                     kind_name=method_name,
+    #                     stacklevel=4,
+    #                     error=True,
+    #                 )
+    #                 numbers.is_positive(
+    #                     number=seed,
+    #                     param_name="seed",
+    #                     kind="method",
+    #                     kind_name=method_name,
+    #                     stacklevel=4,
+    #                     error=True,
+    #                 )
 
-#         Parameters
-#         ----------
-#         seed : int or None, optional
-#             A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``None`` what generates a random seed;
-#         correct : bool, optional
-#             Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
+    #         return line_up(
+    #             x_data=self.x_data,
+    #             cte_alpha=self.cte_alpha,
+    #             weighted=self.weighted,
+    #             seed=seed,
+    #             correct=correct,
+    #         )
 
+    # def citation(self, export=False):
+    #     """This method returns the reference from Ryan-Joiner's test, with the option to export the reference in `.bib` format.
 
-#         Returns
-#         -------
-#         fig : matplotlib.figure.Figure
-#             A figure with the generated graphics;
+    #     Parameters
+    #     ----------
+    #     export : bool
+    #         Whether to export the reference as `RyanJoiner1976.bib` file (`True`) or not (`False`, default);
 
+    #     Returns
+    #     -------
+    #     reference : str
+    #         The Ryan-Joiner Test reference;
 
-#         See Also
-#         --------
-#         line_up
+    #     """
+    #     return citation(export=export)
 
+    # def __str__(self):
+    #     if self.conclusion is None:
+    #         text = "The Ryan-Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+    #         return text
+    #     else:
+    #         return self.conclusion
 
-#         """
-#         method_name = "line_up"
-#         if self.conclusion is None:
-#             return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
-#         else:
-#             if self.safe:
-#                 types.is_bool(
-#                     value=correct,
-#                     param_name="correct",
-#                     kind="method",
-#                     kind_name=method_name,
-#                     stacklevel=4,
-#                     error=True,
-#                 )
-#                 if seed is not None:
-#                     types.is_int(
-#                         value=seed,
-#                         param_name="seed",
-#                         kind="method",
-#                         kind_name=method_name,
-#                         stacklevel=4,
-#                         error=True,
-#                     )
-#                     numbers.is_positive(
-#                         number=seed,
-#                         param_name="seed",
-#                         kind="method",
-#                         kind_name=method_name,
-#                         stacklevel=4,
-#                         error=True,
-#                     )
-
-#             return line_up(
-#                 x_data=self.x_data,
-#                 cte_alpha=self.cte_alpha,
-#                 weighted=self.weighted,
-#                 seed=seed,
-#                 correct=correct,
-#             )
-
-#     def citation(self, export=False):
-#         """This method returns the reference from Ryan-Joiner's test, with the option to export the reference in `.bib` format.
-
-#         Parameters
-#         ----------
-#         export : bool
-#             Whether to export the reference as `RyanJoiner1976.bib` file (`True`) or not (`False`, default);
-
-
-#         Returns
-#         -------
-#         reference : str
-#             The Ryan-Joiner Test reference;
-
-#         """
-#         return citation(export=export)
-
-#     def __str__(self):
-#         if self.conclusion is None:
-#             text = "The Ryan-Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
-#             return text
-#         else:
-#             return self.conclusion
-
-#     def __repr__(self):
-#         return "Ryan-Joiner Normality test"
+    # def __repr__(self):
+    #     return "Ryan-Joiner Normality test"

@@ -28,7 +28,9 @@ Main functions
    correlation_plot
    dist_plot
    test
+   line_up
 
+   
 |
 
 

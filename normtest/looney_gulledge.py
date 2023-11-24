@@ -253,84 +253,65 @@ def _critical_value(sample_size, alpha=0.05):
 #     return normal_ordered
 
 
-# @docs.docstring_parameter(
-#     samp_size=docs.SAMPLE_SIZE["type"],
-#     samp_size_desc=docs.SAMPLE_SIZE["description"],
-#     cte_alpha=docs.CTE_ALPHA["type"],
-#     cte_alpha_desc=docs.CTE_ALPHA["description"],
-#     blom_ref=Blom1958,
-#     rj_ref=RyanJoiner1976,
-# )
-# def _order_statistic(sample_size, cte_alpha="3/8"):
-#     """This function estimates the normal statistical order (:math:`p_{{i}}`) using approximations [1]_.
-
-#     Parameters
-#     ----------
-#     {samp_size}
-#         {samp_size_desc}
-#     {cte_alpha}
-#         A `str` with the `cte_alpha` value that should be adopted (see details in the Notes section). The options are:
-
-#         * `"0"`;
-#         * `"3/8"` (default);
-#         * `"1/2"`;
+@docs.docstring_parameter(
+    samp_size=docs.SAMPLE_SIZE["type"],
+    samp_size_desc=docs.SAMPLE_SIZE["description"],
+    blom_ref=Blom1958,
+    lf_ref=LooneyGulledge1985,
+)
+def _order_statistic(sample_size):
+    """This function estimates the normal statistical order (:math:`p_{{i}}`) using an approximation [1]_.
 
 
-#     Returns
-#     -------
-#     pi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
-#         The estimated statistical order (:math:`p_{{i}}`)
+    Parameters
+    ----------
+    {samp_size}
+        {samp_size_desc}
 
 
-#     See Also
-#     --------
-#     ryan_joiner
+    Returns
+    -------
+    pi : :doc:`numpy array <numpy:reference/generated/numpy.array>`
+        The estimated statistical order (:math:`p_{{i}}`)
 
 
-#     Notes
-#     -----
-
-#     The `cte_alpha` (:math:`\\alpha_{{cte}}`) parameter corresponds to the values studied by [1]_, which adopts the following equation to estimate the statistical order:
-
-#     .. math::
-
-#             p_{{i}} = \\frac{{i - \\alpha_{{cte}}}}{{n - 2 \\times \\alpha_{{cte}} + 1}}
-
-#     where :math:`n` is the sample size and :math:`i` is the ith observation.
+    See Also
+    --------
+    normtest.ryan_joiner._order_statistic
 
 
-#     .. admonition:: Info
+    Notes
+    -----
 
-#         `cte_alpha="3/8"` is adopted in the implementations of the Ryan-Joiner test in Minitab and Statext software. This option is also cited as an alternative by [2]_.
+    The statistical order (:math:`p_{{i}}`) is estimated using the following aproximation:
+
+    .. math::
+
+            p_{{i}} = \\frac{{i - \\alpha_{{cte}}}}{{n - 2 \\times \\alpha_{{cte}} + 1}}
+
+    where :math:`n` is the sample size, :math:`i` is the ith observation and :math:`\\alpha_{{cte}}` is a constant equal to `3/8`, which is the value proposed by [2].
 
 
-#     References
-#     ----------
-#     .. [1] {blom_ref}
+    References
+    ----------
+    .. [1] {blom_ref}
 
-#     .. [2] {rj_ref}
+    .. [2] {lg_ref}
 
 
-#     Examples
-#     --------
-#     >>> from normtest import ryan_joiner
-#     >>> size = 10
-#     >>> pi = ryan_joiner._order_statistic(size)
-#     >>> print(pi)
-#     [0.06097561 0.15853659 0.25609756 0.35365854 0.45121951 0.54878049
-#     0.64634146 0.74390244 0.84146341 0.93902439]
+    Examples
+    --------
+    >>> from normtest import ryan_joiner
+    >>> size = 10
+    >>> pi = ryan_joiner._order_statistic(size)
+    >>> print(pi)
+    [0.06097561 0.15853659 0.25609756 0.35365854 0.45121951 0.54878049
+    0.64634146 0.74390244 0.84146341 0.93902439]
 
-#     """
-
-#     i = np.arange(1, sample_size + 1)
-#     if cte_alpha == "1/2":
-#         cte_alpha = 0.5
-#     elif cte_alpha == "0":
-#         cte_alpha = 0
-#     else:
-#         cte_alpha = 3 / 8
-
-#     return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
+    """
+    i = np.arange(1, sample_size + 1)
+    cte_alpha = 3 / 8
+    return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
 
 
 # @docs.docstring_parameter(

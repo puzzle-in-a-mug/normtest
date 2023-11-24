@@ -1281,68 +1281,67 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
                 weighted=self.weighted,
             )
 
-    # def line_up(
-    #     self,
-    #     seed=None,
-    #     correct=False,
-    # ):
-    #     """This method generates a `Figure` with the correlation graphs for the line up method.
+    def line_up(
+        self,
+        seed=None,
+        correct=False,
+    ):
+        """This method generates a `Figure` with the correlation graphs for the line up method.
 
-    #     Parameters
-    #     ----------
-    #     seed : int or None, optional
-    #         A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``None`` what generates a random seed;
-    #     correct : bool, optional
-    #         Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
+        Parameters
+        ----------
+        seed : int or None, optional
+            A numerical value that generates a new set or repeats pseudo-random numbers. Use a positive integer value to be able to repeat results. Default is ``None`` what generates a random seed;
+        correct : bool, optional
+            Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
 
-    #     Returns
-    #     -------
-    #     fig : matplotlib.figure.Figure
-    #         A figure with the generated graphics;
+        Returns
+        -------
+        fig : matplotlib.figure.Figure
+            A figure with the generated graphics;
 
-    #     See Also
-    #     --------
-    #     line_up
+        See Also
+        --------
+        line_up
 
-    #     """
-    #     method_name = "line_up"
-    #     if self.conclusion is None:
-    #         return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
-    #     else:
-    #         if self.safe:
-    #             types.is_bool(
-    #                 value=correct,
-    #                 param_name="correct",
-    #                 kind="method",
-    #                 kind_name=method_name,
-    #                 stacklevel=4,
-    #                 error=True,
-    #             )
-    #             if seed is not None:
-    #                 types.is_int(
-    #                     value=seed,
-    #                     param_name="seed",
-    #                     kind="method",
-    #                     kind_name=method_name,
-    #                     stacklevel=4,
-    #                     error=True,
-    #                 )
-    #                 numbers.is_positive(
-    #                     number=seed,
-    #                     param_name="seed",
-    #                     kind="method",
-    #                     kind_name=method_name,
-    #                     stacklevel=4,
-    #                     error=True,
-    #                 )
+        """
+        method_name = "line_up"
+        if self.conclusion is None:
+            return "The Looney-Gulledge Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+        else:
+            if self.safe:
+                types.is_bool(
+                    value=correct,
+                    param_name="correct",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
+                if seed is not None:
+                    types.is_int(
+                        value=seed,
+                        param_name="seed",
+                        kind="method",
+                        kind_name=method_name,
+                        stacklevel=4,
+                        error=True,
+                    )
+                    numbers.is_positive(
+                        number=seed,
+                        param_name="seed",
+                        kind="method",
+                        kind_name=method_name,
+                        stacklevel=4,
+                        error=True,
+                    )
 
-    #         return line_up(
-    #             x_data=self.x_data,
-    #             cte_alpha=self.cte_alpha,
-    #             weighted=self.weighted,
-    #             seed=seed,
-    #             correct=correct,
-    #         )
+            return line_up(
+                x_data=self.x_data,
+                weighted=self.weighted,
+                seed=seed,
+                correct=correct,
+            )
 
     # def citation(self, export=False):
     #     """This method returns the reference from Ryan-Joiner's test, with the option to export the reference in `.bib` format.

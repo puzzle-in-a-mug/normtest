@@ -203,9 +203,9 @@ def _normal_order_statistic(x_data, weighted=False):
     The first example uses `weighted=False`:
 
     >>> import numpy as np
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
-    >>> result = ryan_joiner._normal_order_statistic(data, weighted=False)
+    >>> result = looney_gulledge._normal_order_statistic(data, weighted=False)
     >>> print(result)
     [-1.67293739 -1.16188294 -0.84837993 -0.6020065  -0.38786869 -0.19032227
     0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
@@ -213,7 +213,7 @@ def _normal_order_statistic(x_data, weighted=False):
 
     The second example uses `weighted=True`, with the same data set:
 
-    >>> result = ryan_joiner._normal_order_statistic(data, weighted=True)
+    >>> result = looney_gulledge._normal_order_statistic(data, weighted=True)
     >>> print(result)
     [-1.37281032 -1.37281032 -0.84837993 -0.4921101  -0.4921101  -0.19032227
     0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294

@@ -1353,17 +1353,17 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
         Returns
         -------
         reference : str
-            The Looney-GulledgeTest reference;
+            The Looney-Gulledge test reference;
 
         """
         return citation(export=export)
 
-    # def __str__(self):
-    #     if self.conclusion is None:
-    #         text = "The Ryan-Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
-    #         return text
-    #     else:
-    #         return self.conclusion
+    def __str__(self):
+        if self.conclusion is None:
+            text = "The Looney-Gulledge Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+            return text
+        else:
+            return self.conclusion
 
-    # def __repr__(self):
-    #     return "Ryan-Joiner Normality test"
+    def __repr__(self):
+        return "Looney-Gulledge Normality test"

@@ -27,7 +27,7 @@ Last update: November 23, 2023
 
 ### Standard ###
 from collections import namedtuple
-
+from copy import deepcopy
 
 ### Third part ###
 import numpy as np
@@ -42,7 +42,7 @@ from scipy import interpolate
 ### self made ###
 from paramcheckup import parameters, types, numbers, numpy_arrays
 from . import bibmaker
-from .utils import constants
+from .utils import critical_values, constants
 from .utils.helpers import AlphaManagement, SafeManagement
 
 ##### DOCUMENTATION #####
@@ -93,87 +93,66 @@ def citation(export=False):
     return reference
 
 
-# @docs.docstring_parameter(
-#     sample_size=docs.SAMPLE_SIZE["type"],
-#     samp_size_desc=docs.SAMPLE_SIZE["description"],
-#     alpha=docs.ALPHA["type"],
-#     alpha_desc=docs.ALPHA["description"],
-#     critical=docs.CRITICAL["type"],
-#     critical_desc=docs.CRITICAL["description"],
-#     rj_ref=RyanJoiner1976,
-# )
-# def _critical_value(sample_size, alpha=0.05):
-#     """This function calculates the critical value of the Ryan-Joiner test [1]_.
-
-#     Parameters
-#     ----------
-#     {sample_size}
-#         {samp_size_desc}
-#     {alpha}
-#         {alpha_desc}
+@docs.docstring_parameter(
+    sample_size=docs.SAMPLE_SIZE["type"],
+    sample_size_desc=docs.SAMPLE_SIZE["description"],
+    alpha=docs.ALPHA["type"],
+    alpha_desc=docs.ALPHA["description"],
+    critical=docs.CRITICAL["type"],
+    critical_desc=docs.CRITICAL["description"],
+    lg_ref=LooneyGulledge1985,
+)
+def _critical_value(sample_size, alpha=0.05):
+    """This function calculates the critical value for the Looney Gulledge normality test [1]_.
 
 
-#     Returns
-#     -------
-#     {critical}
-#         {critical_desc}
+    Parameters
+    ----------
+    {sample_size}
+        {sample_size_desc}
+    {alpha}
+        {alpha_desc}
 
 
-#     See Also
-#     --------
-#     rj_test
+    Returns
+    -------
+    {critical}
+        {critical_desc}
 
 
-#     Notes
-#     -----
-#     The critical values are calculated using [1]_ the following equations:
-
-#     .. math::
-
-#             R_{{p;\\alpha=0.10}}^{{'}} = 1.0071 - \\frac{{0.1371}}{{\\sqrt{{n}}}} - \\frac{{0.3682}}{{n}} + \\frac{{0.7780}}{{n^{{2}}}}
-
-#             R_{{p;\\alpha=0.05}}^{{'}} = 1.0063 - \\frac{{0.1288}}{{\\sqrt{{n}}}} - \\frac{{0.6118}}{{n}} + \\frac{{1.3505}}{{n^{{2}}}}
-
-#             R_{{p;\\alpha=0.01}}^{{'}} = 0.9963 - \\frac{{0.0211}}{{\\sqrt{{n}}}} - \\frac{{1.4106}}{{n}} + \\frac{{3.1791}}{{n^{{2}}}}
-
-#     where :math:`n` is the sample size.
+    References
+    ----------
+    .. [1] {lg_ref}
 
 
-#     References
-#     ----------
-#     .. [1] {rj_ref}
+    Examples
+    --------
+    >>> from normtest import filliben
+    >>> sample_size = 7
+    >>> critical = filliben._critical_value(sample_size, alpha=0.05)
+    >>> print(critical)
+    0.899
 
 
-#     Examples
-#     --------
-#     >>> from normtest import ryan_joiner
-#     >>> critical = ryan_joiner._critical_value(10, alpha=0.05)
-#     >>> print(critical)
-#     0.9178948637370312
+    """
+    # making a copy from original critical values
+    critical = deepcopy(critical_values.LOONEY_GULLEDGE_CRITICAL)
 
-#     """
+    if sample_size not in critical["n"]:
+        if sample_size < 100:
+            constants.user_warning(
+                "The Looney Gulledge critical value may not be accurate as it was obtained with linear interpolation."
+            )
+        else:
+            constants.user_warning(
+                "The Looney Gulledge critical value may not be accurate as it was obtained with linear *extrapolation*."
+            )
 
-#     if alpha == 0.1:
-#         return (
-#             1.0071
-#             - (0.1371 / np.sqrt(sample_size))
-#             - (0.3682 / sample_size)
-#             + (0.7780 / sample_size**2)
-#         )
-#     elif alpha == 0.05:
-#         return (
-#             1.0063
-#             - (0.1288 / np.sqrt(sample_size))
-#             - (0.6118 / sample_size)
-#             + (1.3505 / sample_size**2)
-#         )
-#     else:  # alpha == 0.01:
-#         return (
-#             0.9963
-#             - (0.0211 / np.sqrt(sample_size))
-#             - (1.4106 / sample_size)
-#             + (3.1791 / sample_size**2)
-#         )
+    f = interpolate.interp1d(
+        critical["n"][3:], critical[alpha][3:], fill_value="extrapolate"
+    )
+
+    return float(f(sample_size))
 
 
 # @docs.docstring_parameter(

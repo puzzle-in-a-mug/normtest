@@ -453,134 +453,130 @@ def _statistic(x_data, zi):
     return stats.pearsonr(zi, x_data)[0]
 
 
-# @docs.docstring_parameter(
-#     x_data=docs.X_DATA["type"],
-#     x_data_desc=docs.X_DATA["description"],
-#     alpha=docs.ALPHA["type"],
-#     alpha_desc=docs.ALPHA["description"],
-#     cte_alpha=docs.CTE_ALPHA["type"],
-#     cte_alpha_desc=docs.CTE_ALPHA["description"],
-#     weighted=docs.WEIGHTED["type"],
-#     weighted_desc=docs.WEIGHTED["description"],
-#     statistic=docs.STATISTIC["type"],
-#     statistic_desc=docs.STATISTIC["description"],
-#     critical=docs.CRITICAL["type"],
-#     critical_desc=docs.CRITICAL["description"],
-#     p_value=docs.P_VALUE["type"],
-#     p_value_desc=docs.P_VALUE["description"],
-#     rj_ref=RyanJoiner1976,
-# )
-# def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
-#     """This function applies the Ryan-Joiner Normality test [1]_.
-
-#     Parameters
-#     ----------
-#     {x_data}
-#         {x_data_desc}
-#     {alpha}
-#         {alpha_desc}
-#     {cte_alpha}
-#         {cte_alpha_desc}
-#     {weighted}
-#         {weighted_desc}
+@docs.docstring_parameter(
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    alpha=docs.ALPHA["type"],
+    alpha_desc=docs.ALPHA["description"],
+    weighted=docs.WEIGHTED["type"],
+    weighted_desc=docs.WEIGHTED["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    critical=docs.CRITICAL["type"],
+    critical_desc=docs.CRITICAL["description"],
+    p_value=docs.P_VALUE["type"],
+    p_value_desc=docs.P_VALUE["description"],
+    lg_ref=LooneyGulledge1985,
+)
+def test(x_data, alpha=0.05, weighted=False):
+    """This function applies the Looney-Gulledge Normality test [1]_.
 
 
-#     Returns
-#     -------
-#     result : tuple with
-#         {statistic}
-#             {statistic_desc}
-#         critical
-#             {critical_desc}
-#         {p_value}
-#             {p_value_desc}
-#         conclusion : str
-#             The test conclusion (e.g, Normal/Not Normal).
+    Parameters
+    ----------
+    {x_data}
+        {x_data_desc}
+    {alpha}
+        {alpha_desc}
+    {weighted}
+        {weighted_desc}
 
 
-#     See Also
-#     --------
-#     correlation_plot
-#     dist_plot
+    Returns
+    -------
+    result : tuple with
+        {statistic}
+            {statistic_desc}
+        critical
+            {critical_desc}
+        {p_value}
+            {p_value_desc}
+        conclusion : str
+            The test conclusion (e.g, Normal/Not Normal).
 
 
-#     Notes
-#     -----
-#     The test statistic (:math:`R_{{p}}`) is estimated through the correlation between the ordered data and the Normal statistical order:
-
-#     .. math::
-
-#             R_{{p}}=\\dfrac{{\\sum_{{i=1}}^{{n}}x_{{(i)}}z_{{(i)}}}}{{\\sqrt{{s^{{2}}(n-1)\\sum_{{i=1}}^{{n}}z_{{(i)}}^2}}}}
-
-#     where :math:`z_{{(i)}}` values are the z-score values of the corresponding experimental data (:math:`x_{{({{i)}}}}`) value and :math:`s^{{2}}` is the sample variance.
-
-#     The correlation is estimated using :func:`_statistic`.
-
-#     The Normality test has the following assumptions:
-
-#     .. admonition:: \u2615
-
-#        :math:`H_0:` Data was sampled from a Normal distribution.
-
-#        :math:`H_1:` The data was sampled from a distribution other than the Normal distribution.
+    See Also
+    --------
+    correlation_plot
+    dist_plot
 
 
-#     The conclusion of the test is based on the comparison between the `critical` value (at :math:`\\alpha` significance level) and `statistic` of the test:
+    Notes
+    -----
+    The test statistic (:math:`R_{{p}}`) is estimated through the correlation between the ordered data and the Normal statistical order:
 
-#     .. admonition:: \u2615
+    .. math::
 
-#        if critical :math:`\\leq` statistic:
-#            Fail to reject :math:`H_0:` (e.g., data is Normal)
-#        else:
-#            Reject :math:`H_0:` (e.g., data is not Normal)
+            R_{{p}}=\\dfrac{{\\sum_{{i=1}}^{{n}}x_{{(i)}}z_{{(i)}}}}{{\\sqrt{{s^{{2}}(n-1)\\sum_{{i=1}}^{{n}}z_{{(i)}}^2}}}}
 
-#     The critical values are obtained using :func:`_critical_value`.
+    where :math:`z_{{(i)}}` values are the z-score values of the corresponding experimental data (:math:`x_{{({{i)}}}}`) value and :math:`s^{{2}}` is the sample variance.
+
+    The correlation is estimated using :func:`_statistic`.
+
+    The Normality test has the following assumptions:
+
+    .. admonition:: \u2615
+
+       :math:`H_0:` Data was sampled from a Normal distribution.
+
+       :math:`H_1:` The data was sampled from a distribution other than the Normal distribution.
 
 
-#     References
-#     ----------
-#     .. [1] {rj_ref}
+    The conclusion of the test is based on the comparison between the `critical` value (at :math:`\\alpha` significance level) and `statistic` of the test:
+
+    .. admonition:: \u2615
+
+       if critical :math:`\\leq` statistic:
+           Fail to reject :math:`H_0:` (e.g., data is Normal)
+       else:
+           Reject :math:`H_0:` (e.g., data is not Normal)
+
+    The critical values are obtained using :func:`_critical_value`.
 
 
-#     Examples
-#     --------
-#     >>> from normtest import ryan_joiner
-#     >>> from scipy import stats
-#     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
-#     >>> result = ryan_joiner.rj_test(data)
-#     >>> print(result)
-#     RyanJoiner(statistic=0.990439558451558, critical=0.963891667086667, p_value='p > 0.100', conclusion='Fail to reject H₀')
+    References
+    ----------
+    .. [1] {lg_ref}
 
-#     """
-#     # ordering
-#     x_data = np.sort(x_data)
 
-#     # zi
-#     zi = _normal_order_statistic(
-#         x_data=x_data,
-#         weighted=weighted,
-#         cte_alpha=cte_alpha,
-#     )
+    Examples
+    --------
+    >>> from normtest import ryan_joiner
+    >>> from scipy import stats
+    >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
+    >>> result = ryan_joiner.rj_test(data)
+    >>> print(result)
+    RyanJoiner(statistic=0.990439558451558, critical=0.963891667086667, p_value='p > 0.100', conclusion='Fail to reject H₀')
 
-#     # calculating the stats
-#     statistic = _statistic(x_data=x_data, zi=zi)
+    """
+    # ordering
+    x_data = np.sort(x_data)
 
-#     # getting the critical values
-#     critical_value = _critical_value(sample_size=x_data.size, alpha=alpha)
+    # zi
+    zi = _normal_order_statistic(
+        x_data=x_data,
+        weighted=weighted,
+    )
 
-#     # conclusion
-#     if statistic < critical_value:
-#         conclusion = constants.REJECTION
-#     else:
-#         conclusion = constants.ACCEPTATION
+    # calculating the stats
+    statistic = _statistic(x_data=x_data, zi=zi)
 
-#     # pvalue
-#     p_value = _p_value(statistic=statistic, sample_size=x_data.size)
+    # getting the critical values
+    critical_value = _critical_value(sample_size=x_data.size, alpha=alpha)
 
-#     result = namedtuple(
-#         "RyanJoiner", ("statistic", "critical", "p_value", "conclusion")
-#     )
-#     return result(statistic, critical_value, p_value, conclusion)
+    # conclusion
+    if statistic < critical_value:
+        conclusion = constants.REJECTION
+    else:
+        conclusion = constants.ACCEPTATION
+
+    # pvalue
+    p_value = _p_value(statistic=statistic, sample_size=x_data.size)
+
+    result = namedtuple(
+        "LooneyGulledge", ("statistic", "critical", "p_value", "conclusion")
+    )
+    return result(statistic, critical_value, p_value, conclusion)
 
 
 # @docs.docstring_parameter(

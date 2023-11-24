@@ -127,11 +127,11 @@ def _critical_value(sample_size, alpha=0.05):
 
     Examples
     --------
-    >>> from normtest import filliben
+    >>> from normtest import looney_gulledge
     >>> sample_size = 7
-    >>> critical = filliben._critical_value(sample_size, alpha=0.05)
+    >>> critical = looney_gulledge._critical_value(sample_size, alpha=0.05)
     >>> print(critical)
-    0.899
+    0.898
 
 
     """

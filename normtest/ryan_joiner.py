@@ -1133,7 +1133,7 @@ class RyanJoiner(AlphaManagement, SafeManagement):
     def __init__(
         self, alpha=0.05, safe=True, cte_alpha="3/8", weighted=False, **kwargs
     ):
-        """Initiates Filliben `class` inheriting the `AlphaManagement` and `SafeManagement` classes
+        """Initiates RyanJoiner `class` inheriting the `AlphaManagement` and `SafeManagement` classes
 
         Attributes
         ----------

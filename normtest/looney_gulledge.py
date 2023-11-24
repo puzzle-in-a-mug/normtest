@@ -870,11 +870,11 @@ def line_up(
     The line-up method must be conducted in two steps. The first step involves generating a figure with 20 graphs from the data, without indicating which graph is the true one.
 
 
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
     >>> x_exp = np.array([5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, 4.9, 5.4])
-    >>> fig = ryan_joiner.line_up(x_exp, seed=42, correct=False)
+    >>> fig = looney_gulledge.line_up(x_exp, seed=42, correct=False)
     >>> fig.tight_layout()
     >>> # plt.savefig("line_up.png", bbox_inches="tight")
     >>> plt.show()
@@ -889,7 +889,7 @@ def line_up(
     The second step involves determining which graph corresponds to the true data set. This can be accomplished by simply changing parameter `correct` from `False` to `True`:
 
 
-    >>> fig = ryan_joiner.line_up(x_exp, seed=42, correct=True)
+    >>> fig = looney_gulledge.line_up(x_exp, seed=42, correct=True)
     >>> fig.tight_layout()
     >>> # plt.savefig("line_up_true.png", bbox_inches="tight")
     >>> plt.show()
@@ -899,7 +899,7 @@ def line_up(
         :animate: fade-in
 
         .. image:: img/line_up_true.png
-            :alt: Line-up method chart for Ryan-Joiner test Normality test
+            :alt: Line-up method chart for Looney-Gulledge test Normality test
             :align: center
 
 

@@ -1342,21 +1342,21 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
                 correct=correct,
             )
 
-    # def citation(self, export=False):
-    #     """This method returns the reference from Ryan-Joiner's test, with the option to export the reference in `.bib` format.
+    def citation(self, export=False):
+        """This method returns the reference from Looney-Gulledge's test, with the option to export the reference in `.bib` format.
 
-    #     Parameters
-    #     ----------
-    #     export : bool
-    #         Whether to export the reference as `RyanJoiner1976.bib` file (`True`) or not (`False`, default);
+        Parameters
+        ----------
+        export : bool
+            Whether to export the reference as `LooneyGulledge1985.bib` file (`True`) or not (`False`, default);
 
-    #     Returns
-    #     -------
-    #     reference : str
-    #         The Ryan-Joiner Test reference;
+        Returns
+        -------
+        reference : str
+            The Looney-GulledgeTest reference;
 
-    #     """
-    #     return citation(export=export)
+        """
+        return citation(export=export)
 
     # def __str__(self):
     #     if self.conclusion is None:

@@ -626,17 +626,17 @@ def correlation_plot(axes, x_data, weighted=False):
 
     Examples
     --------
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> import matplotlib.pyplot as plt
     >>> from scipy import stats
     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
     >>> fig, ax = plt.subplots(figsize=(6, 4))
-    >>> ryan_joiner.correlation_plot(axes=ax, x_data=data)
-    >>> #plt.savefig("correlation_plot.png")
+    >>> looney_gulledge.correlation_plot(axes=ax, x_data=data)
+    >>> # plt.savefig("correlation_plot.png")
     >>> plt.show()
 
     .. image:: img/correlation_plot.png
-        :alt: Correlation chart for Ryan-Joiner test Normality test
+        :alt: Correlation chart for Looney-Gulledge test Normality test
         :align: center
 
     """

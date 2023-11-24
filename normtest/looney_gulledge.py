@@ -314,76 +314,87 @@ def _order_statistic(sample_size):
     return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
 
 
-# @docs.docstring_parameter(
-#     statistic=docs.STATISTIC["type"],
-#     statistic_desc=docs.STATISTIC["description"],
-#     samp_size=docs.SAMPLE_SIZE["type"],
-#     samp_size_desc=docs.SAMPLE_SIZE["description"],
-#     p_value=docs.P_VALUE["type"],
-#     p_value_desc=docs.P_VALUE["description"],
-#     rj_ref=RyanJoiner1976,
-# )
-# def _p_value(statistic, sample_size):
-#     """This function estimates the probability associated with the Ryan-Joiner Normality test [1]_.
+@docs.docstring_parameter(
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    samp_size=docs.SAMPLE_SIZE["type"],
+    samp_size_desc=docs.SAMPLE_SIZE["description"],
+    p_value=docs.P_VALUE["type"],
+    p_value_desc=docs.P_VALUE["description"],
+    lg_ref=LooneyGulledge1985,
+)
+def _p_value(statistic, sample_size):
+    """This function estimates the probability associated with the Looney Gulledge Normality test [1]_.
 
 
-#     Parameters
-#     ----------
-#     {statistic}
-#         {statistic_desc}
-#     {samp_size}
-#         {samp_size_desc}
+    Parameters
+    ----------
+    {statistic}
+        {statistic_desc}
+    {samp_size}
+        {samp_size_desc}
 
 
-#     Returns
-#     -------
-#     {p_value}
-#         {p_value_desc}
+    Returns
+    -------
+    {p_value}
+        {p_value_desc}
 
 
-#     See Also
-#     --------
-#     rj_test
+    See Also
+    --------
 
 
-#     Notes
-#     -----
-#     The test probability is estimated through linear interpolation of the test statistic with critical values from the Ryan-Joiner test [1]_. The Interpolation is performed using the :doc:`scipy.interpolate.interp1d() <scipy:reference/generated/scipy.interpolate.interp1d>` function.
 
-#     * If the test statistic is greater than the critical value for :math:`\\alpha=0.10`, the result is always *"p > 0.100"*.
-#     * If the test statistic is lower than the critical value for :math:`\\alpha=0.01`, the result is always *"p < 0.010"*.
+    Notes
+    -----
+    The test probability is estimated through linear interpolation of the test statistic with critical values from the Looney Gulledge test [1]_. The Interpolation is performed using the :doc:`scipy.interpolate.interp1d() <scipy:reference/generated/scipy.interpolate.interp1d>` function.
 
-
-#     References
-#     ----------
-#     .. [1] {rj_ref}
+    * If the test statistic is greater than the critical value for :math:`\\alpha=0.995`, the result is always *"p > 0.995"*.
+    * If the test statistic is lower than the critical value for :math:`\\alpha=0.005`, the result is always *"p < 0.005"*.
 
 
-#     Examples
-#     --------
-#     >>> from normtest import ryan_joiner
-#     >>> p_value = ryan_joiner._p_value(0.90, 10)
-#     >>> print(p_value)
-#     0.030930589077996555
+    References
+    ----------
+    .. [1] {lg_ref}
 
-#     """
 
-#     alphas = np.array([0.10, 0.05, 0.01])
-#     criticals = np.array(
-#         [
-#             _critical_value(sample_size=sample_size, alpha=alphas[0]),
-#             _critical_value(sample_size=sample_size, alpha=alphas[1]),
-#             _critical_value(sample_size=sample_size, alpha=alphas[2]),
-#         ]
-#     )
-#     f = interpolate.interp1d(criticals, alphas)
-#     if statistic > max(criticals):
-#         return "p > 0.100"
-#     elif statistic < min(criticals):
-#         return "p < 0.010"
-#     else:
-#         p_value = float(f(statistic))
-#         return p_value
+    Examples
+    --------
+    >>> from normtest import filliben
+    >>> p_value = filliben._p_value(0.98538, 7)
+    >>> print(p_value)
+    0.8883750000000009
+
+    """
+    alphas = [
+        0.005,
+        0.01,
+        0.025,
+        0.05,
+        0.1,
+        0.25,
+        0.5,
+        0.75,
+        0.9,
+        0.95,
+        0.975,
+        0.99,
+        0.995,
+    ]
+    criticals = []
+    for alpha in alphas:
+        criticals.append(
+            _critical_value(sample_size=sample_size, alpha=alpha),
+        )
+    f = interpolate.interp1d(criticals, alphas)
+    if statistic > max(criticals):
+        return "p > 0.995"
+    elif statistic < min(criticals):
+        return "p < 0.005"
+    else:
+        p_value = float(f(statistic))
+        return p_value
 
 
 # @docs.docstring_parameter(

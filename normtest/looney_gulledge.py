@@ -1217,7 +1217,7 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
                     error=True,
                 )
                 # making a copy from original critical values
-                critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+                critical = deepcopy(critical_values.LOONEY_GULLEDGE_CRITICAL)
                 for alpha in alphas:
                     parameters.param_options(
                         option=alpha,
@@ -1235,51 +1235,51 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
                 alphas=alphas,
             )
 
-    # @docs.docstring_parameter(
-    #     axes=docs.AXES["type"],
-    #     axes_desc=docs.AXES["description"],
-    # )
-    # def correlation_plot(
-    #     self,
-    #     axes,
-    # ):
-    #     """This method generates an axis with the correlation plotfor the Ryan-Joiner Normality test.
+    @docs.docstring_parameter(
+        axes=docs.AXES["type"],
+        axes_desc=docs.AXES["description"],
+    )
+    def correlation_plot(
+        self,
+        axes,
+    ):
+        """This method generates an axis with the correlation plotfor the Ryan-Joiner Normality test.
 
-    #     Parameters
-    #     ----------
-    #     {axes}
-    #         {axes_desc}
+        Parameters
+        ----------
+        {axes}
+            {axes_desc}
 
-    #     Returns
-    #     -------
-    #     {axes}
-    #         {axes_desc}
+        Returns
+        -------
+        {axes}
+            {axes_desc}
 
-    #     See Also
-    #     --------
-    #     correlation_plot
+        See Also
+        --------
+        correlation_plot
 
-    #     """
-    #     method_name = "correlation_plot"
-    #     if self.conclusion is None:
-    #         return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
-    #     else:
-    #         if self.safe:
-    #             types.is_subplots(
-    #                 value=axes,
-    #                 param_name="axes",
-    #                 kind="method",
-    #                 kind_name=method_name,
-    #                 stacklevel=4,
-    #                 error=True,
-    #             )
+        """
+        method_name = "correlation_plot"
+        if self.conclusion is None:
+            return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+        else:
+            if self.safe:
+                types.is_subplots(
+                    value=axes,
+                    param_name="axes",
+                    kind="method",
+                    kind_name=method_name,
+                    stacklevel=4,
+                    error=True,
+                )
 
-    #         return correlation_plot(
-    #             axes=axes,
-    #             x_data=self.x_data,
-    #             cte_alpha=self.cte_alpha,
-    #             weighted=self.weighted,
-    #         )
+            return correlation_plot(
+                axes=axes,
+                x_data=self.x_data,
+                cte_alpha=self.cte_alpha,
+                weighted=self.weighted,
+            )
 
     # def line_up(
     #     self,

@@ -728,10 +728,10 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01]):
 
     Examples
     --------
-    >>> from normtest import filliben
+    >>> from normtest import looney_gulledge
     >>> import matplotlib.pyplot as plt
     >>> fig, ax = plt.subplots(figsize=(6, 4))
-    >>> filliben.dist_plot(axes=ax, test=(0.98538, 7))
+    >>> looney_gulledge.dist_plot(axes=ax, test=(0.98538, 7))
     >>> # plt.savefig("dist_plot.png")
     >>> plt.show()
 

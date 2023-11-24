@@ -1243,7 +1243,7 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
         self,
         axes,
     ):
-        """This method generates an axis with the correlation plotfor the Ryan-Joiner Normality test.
+        """This method generates an axis with the correlation plotfor the Looney-Gulledge Normality test.
 
         Parameters
         ----------
@@ -1262,7 +1262,7 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
         """
         method_name = "correlation_plot"
         if self.conclusion is None:
-            return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+            return "The Looney-Gulledge Normality test was not performed yet.\nUse the 'fit' method to perform the test."
         else:
             if self.safe:
                 types.is_subplots(
@@ -1277,7 +1277,6 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
             return correlation_plot(
                 axes=axes,
                 x_data=self.x_data,
-                cte_alpha=self.cte_alpha,
                 weighted=self.weighted,
             )
 

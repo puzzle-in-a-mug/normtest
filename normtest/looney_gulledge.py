@@ -583,99 +583,95 @@ def test(x_data, alpha=0.05, weighted=False):
     return result(statistic, critical_value, p_value, conclusion)
 
 
-# @docs.docstring_parameter(
-#     axes=docs.AXES["type"],
-#     axes_desc=docs.AXES["description"],
-#     x_data=docs.X_DATA["type"],
-#     x_data_desc=docs.X_DATA["description"],
-#     cte_alpha=docs.CTE_ALPHA["type"],
-#     cte_alpha_desc=docs.CTE_ALPHA["description"],
-#     weighted=docs.WEIGHTED["type"],
-#     weighted_desc=docs.WEIGHTED["description"],
-#     rj_ref=RyanJoiner1976,
-# )
-# def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False):
-#     """This function creates an `axis` with the Ryan-Joiner test [1]_ correlation graph.
+@docs.docstring_parameter(
+    axes=docs.AXES["type"],
+    axes_desc=docs.AXES["description"],
+    x_data=docs.X_DATA["type"],
+    x_data_desc=docs.X_DATA["description"],
+    cte_alpha=docs.CTE_ALPHA["type"],
+    cte_alpha_desc=docs.CTE_ALPHA["description"],
+    weighted=docs.WEIGHTED["type"],
+    weighted_desc=docs.WEIGHTED["description"],
+    lg_ref=LooneyGulledge1985,
+)
+def correlation_plot(axes, x_data, weighted=False):
+    """This function creates an `axis` with the Looney-Gulledge test [1]_ correlation graph.
 
-#     Parameters
-#     ----------
-#     {axes}
-#         {axes_desc}
-#     {x_data}
-#         {x_data_desc}
-#     {cte_alpha}
-#         {cte_alpha_desc}
-
-#     {weighted}
-#         {weighted_desc}
+    Parameters
+    ----------
+    {axes}
+        {axes_desc}
+    {x_data}
+        {x_data_desc}
+    {weighted}
+        {weighted_desc}
 
 
-#     Returns
-#     -------
-#     {axes}
-#         {axes_desc}
+    Returns
+    -------
+    {axes}
+        {axes_desc}
 
 
-#     See Also
-#     --------
-#     rj_test
-#     dist_plot
+    See Also
+    --------
+    test
+    dist_plot
 
 
-#     References
-#     ----------
-#     .. [1] {rj_ref}
+    References
+    ----------
+    .. [1] {lg_ref}
 
 
-#     Examples
-#     --------
-#     >>> from normtest import ryan_joiner
-#     >>> import matplotlib.pyplot as plt
-#     >>> from scipy import stats
-#     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
-#     >>> fig, ax = plt.subplots(figsize=(6, 4))
-#     >>> ryan_joiner.correlation_plot(axes=ax, x_data=data)
-#     >>> #plt.savefig("correlation_plot.png")
-#     >>> plt.show()
+    Examples
+    --------
+    >>> from normtest import ryan_joiner
+    >>> import matplotlib.pyplot as plt
+    >>> from scipy import stats
+    >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
+    >>> fig, ax = plt.subplots(figsize=(6, 4))
+    >>> ryan_joiner.correlation_plot(axes=ax, x_data=data)
+    >>> #plt.savefig("correlation_plot.png")
+    >>> plt.show()
 
-#     .. image:: img/correlation_plot.png
-#         :alt: Correlation chart for Ryan-Joiner test Normality test
-#         :align: center
+    .. image:: img/correlation_plot.png
+        :alt: Correlation chart for Ryan-Joiner test Normality test
+        :align: center
 
-#     """
+    """
 
-#     constants.warning_plot()
+    constants.warning_plot()
 
-#     # ordering the sample
-#     zi = _normal_order_statistic(
-#         x_data=x_data,
-#         weighted=weighted,
-#         cte_alpha=cte_alpha,
-#     )
-#     x_data = np.sort(x_data)
+    # ordering the sample
+    zi = _normal_order_statistic(
+        x_data=x_data,
+        weighted=weighted,
+    )
+    x_data = np.sort(x_data)
 
-#     # performing regression
-#     reg = stats.linregress(zi, x_data)
-#     # pred data
-#     y_pred = zi * reg.slope + reg.intercept
+    # performing regression
+    reg = stats.linregress(zi, x_data)
+    # pred data
+    y_pred = zi * reg.slope + reg.intercept
 
-#     ## making the plot
+    ## making the plot
 
-#     # adding the data
-#     axes.scatter(zi, x_data, fc="none", ec="k")
+    # adding the data
+    axes.scatter(zi, x_data, fc="none", ec="k")
 
-#     # adding the trend line
-#     axes.plot(zi, y_pred, c="r")
+    # adding the trend line
+    axes.plot(zi, y_pred, c="r")
 
-#     # adding the statistic
-#     text = "$R_{p}=" + str(round(reg.rvalue, 4)) + "$"
-#     axes.text(0.1, 0.9, text, ha="left", va="center", transform=axes.transAxes)
+    # adding the statistic
+    text = "$R_{p}=" + str(round(reg.rvalue, 4)) + "$"
+    axes.text(0.1, 0.9, text, ha="left", va="center", transform=axes.transAxes)
 
-#     # perfuming
-#     axes.set_xlabel("Normal statistical order")
-#     axes.set_ylabel("Ordered data")
+    # perfuming
+    axes.set_xlabel("Normal statistical order")
+    axes.set_ylabel("Ordered data")
 
-#     return axes
+    return axes
 
 
 # @docs.docstring_parameter(
@@ -796,7 +792,7 @@ def test(x_data, alpha=0.05, weighted=False):
 #     return axes
 
 
-# # this function does not have documentation on purpose (private)
+# this function does not have documentation on purpose (private)
 # @docs.docstring_parameter(
 #     x_data=docs.X_DATA["type"],
 #     x_data_desc=docs.X_DATA["description"],

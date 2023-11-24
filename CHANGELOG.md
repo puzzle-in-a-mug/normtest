@@ -4,6 +4,7 @@
 ## v0.0.3 (XX/11/2023)
 
 ### Module looney_gulledge
+- Added ``_p_value`` (23/11/2023);
 - Added ``_order_statistic`` (23/11/2023);
 - Added ``_critical_value`` (23/11/2023);
 - Added ``citation`` (23/11/2023);

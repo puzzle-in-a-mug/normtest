@@ -2,7 +2,7 @@
 
 --------------------------------------------------------------------------------
 Command to run at the prompt:
-    python -m unittest -v tests/filliben/test_dist_plot.py
+    python -m unittest -v tests/looney_gulledge/test_dist_plot.py
 --------------------------------------------------------------------------------
 """
 ### GENERAL IMPORTS ###
@@ -14,7 +14,7 @@ from pathlib import Path
 
 ### FUNCTION IMPORT ###
 from tests.functions_to_test import functions
-from normtest.filliben import dist_plot
+from normtest.looney_gulledge import dist_plot
 
 os.system("cls")
 
@@ -42,13 +42,13 @@ class Test_dist_plot(unittest.TestCase):
         plt.close()
 
     def test_default(self):
-        fig1_base_path = Path("tests/filliben/figs_dist_plot/default.png")
+        fig1_base_path = Path("tests/looney_gulledge/figs_dist_plot/default.png")
 
         fig, ax = plt.subplots(figsize=(6, 4))
         result = dist_plot(
             ax,
         )
-        fig1_file = Path("tests/filliben/figs_dist_plot/fig1_test.png")
+        fig1_file = Path("tests/looney_gulledge/figs_dist_plot/fig1_test.png")
         plt.savefig(fig1_file)
         plt.close()
 
@@ -59,11 +59,11 @@ class Test_dist_plot(unittest.TestCase):
         fig1_file.unlink()
 
     def test_filliben_data(self):
-        fig1_base_path = Path("tests/filliben/figs_dist_plot/filliben_paper.png")
+        fig1_base_path = Path("tests/looney_gulledge/figs_dist_plot/filliben_paper.png")
 
         fig, ax = plt.subplots(figsize=(6, 4))
         result = dist_plot(axes=ax, test=(0.98538, 7))
-        fig1_file = Path("tests/filliben/figs_dist_plot/fig1_test.png")
+        fig1_file = Path("tests/looney_gulledge/figs_dist_plot/fig1_test.png")
         plt.savefig(fig1_file)
         plt.close()
 

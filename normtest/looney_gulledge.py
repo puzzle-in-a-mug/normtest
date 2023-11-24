@@ -541,12 +541,12 @@ def test(x_data, alpha=0.05, weighted=False):
 
     Examples
     --------
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> from scipy import stats
     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
-    >>> result = ryan_joiner.rj_test(data)
+    >>> result = looney_gulledge.test(data)
     >>> print(result)
-    RyanJoiner(statistic=0.990439558451558, critical=0.963891667086667, p_value='p > 0.100', conclusion='Fail to reject H₀')
+    LooneyGulledge(statistic=0.990439558451558, critical=0.964, p_value=0.7719779225778982, conclusion='Fail to reject H₀')
 
     """
     # ordering

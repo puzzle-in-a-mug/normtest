@@ -190,7 +190,9 @@ class Test_dist_plot(unittest.TestCase):
             plt.close()
 
     def test_filliben_data(self):
-        fig1_base_path = Path("tests/looney_gulledge/figs_dist_plot/filliben_paper.png")
+        fig1_base_path = Path(
+            "tests/looney_gulledge/figs_dist_plot/filliben_from_class.png"
+        )
 
         teste = LooneyGulledge()
         teste.fit(self.data)

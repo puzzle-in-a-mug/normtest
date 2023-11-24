@@ -301,9 +301,9 @@ def _order_statistic(sample_size):
 
     Examples
     --------
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> size = 10
-    >>> pi = ryan_joiner._order_statistic(size)
+    >>> pi = looney_gulledge._order_statistic(size)
     >>> print(pi)
     [0.06097561 0.15853659 0.25609756 0.35365854 0.45121951 0.54878049
     0.64634146 0.74390244 0.84146341 0.93902439]

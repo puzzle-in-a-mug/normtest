@@ -24,8 +24,6 @@ Main functions
    :maxdepth: 1
    
 
-   _critical_value
-   _order_statistic
    citation
 
 |
@@ -37,7 +35,9 @@ Others functions
 .. toctree:: 
    :maxdepth: 1
    
-
+   _critical_value
+   _order_statistic
+   _p_value
 
 
 

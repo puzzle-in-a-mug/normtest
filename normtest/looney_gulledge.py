@@ -361,8 +361,8 @@ def _p_value(statistic, sample_size):
 
     Examples
     --------
-    >>> from normtest import filliben
-    >>> p_value = filliben._p_value(0.98538, 7)
+    >>> from normtest import looney_gulledge
+    >>> p_value = looney_gulledge._p_value(0.98538, 7)
     >>> print(p_value)
     0.8883750000000009
 

@@ -4,6 +4,7 @@
 ## v0.0.3 (XX/11/2023)
 
 ### Module looney_gulledge
+- Added ``line_up`` (24/11/2023);
 - Added ``_make_line_up_data`` (24/11/2023);
 - Added ``dist_plot`` (24/11/2023);
 - Added ``correlation_plot`` (24/11/2023);

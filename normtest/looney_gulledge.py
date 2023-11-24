@@ -881,7 +881,7 @@ def line_up(
 
 
     .. image:: img/line_up.png
-        :alt: Line-up method chart for Ryan-Joiner test Normality test
+        :alt: Line-up method chart for Looney-Gulledge test Normality test
         :align: center
 
     The researcher must identify which of the 20 graphs deviates most significantly from what is expected for a Normal distribution. For instance, the graph located in the first row and second column.
@@ -1039,13 +1039,13 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
 
     Examples
     --------
-    >>> from normtest import RyanJoiner
+    >>> from normtest import LooneyGulledge
     >>> import numpy as np
     >>> x = np.array([6, 1, -4, 8, -2, 5, 0])
-    >>> test = RyanJoiner()
+    >>> test = LooneyGulledge()
     >>> test.fit(x)
     >>> print(test.normality)
-    RyanJoiner(statistic=0.9844829186140105, critical=0.8977794003662074, p_value='p > 0.100', conclusion='Fail to reject H₀')
+    LooneyGulledge(statistic=0.9844829186140105, critical=0.898, p_value=0.8715547240126971, conclusion='Fail to reject H₀')
 
     """
 

@@ -27,17 +27,15 @@ os.system("cls")
 
 class Test_init(unittest.TestCase):
     def test_default(self):
-        teste = RyanJoiner()
+        teste = LooneyGulledge()
         self.assertTrue(teste.safe, msg="wrong safe")
         self.assertEqual(teste.alpha, 0.05, msg="wrong alpha")
-        self.assertEqual(teste.cte_alpha, "3/8", msg="wrong cte_alpha")
         self.assertFalse(teste.weighted, msg="wrong weighted")
 
     def test_changed(self):
-        teste = RyanJoiner(alpha=0.10, safe=False, cte_alpha="0", weighted=True)
+        teste = LooneyGulledge(alpha=0.10, safe=False, cte_alpha="0", weighted=True)
         self.assertFalse(teste.safe, msg="wrong safe")
         self.assertEqual(teste.alpha, 0.10, msg="wrong alpha")
-        self.assertEqual(teste.cte_alpha, "0", msg="wrong cte_alpha")
         self.assertTrue(teste.weighted, msg="wrong weighted")
 
     def test_alpha_not_allowed(self):
@@ -45,21 +43,14 @@ class Test_init(unittest.TestCase):
             ValueError,
             msg=f"Does not raised ValueError when alpha is not allowed",
         ):
-            teste = RyanJoiner(alpha=0.101)
-
-    def test_cte_alpha_not_allowed(self):
-        with self.assertRaises(
-            ValueError,
-            msg=f"Does not raised ValueError when cte_alpha is not allowed",
-        ):
-            teste = RyanJoiner(cte_alpha="0.5")
+            teste = LooneyGulledge(alpha=0.101)
 
     def test_weighted_not_allowed(self):
         with self.assertRaises(
             TypeError,
             msg=f"Does not raised TypeError when weighted is not bool",
         ):
-            teste = RyanJoiner(weighted="ponderado")
+            teste = LooneyGulledge(weighted="ponderado")
 
 
 # class Test_fit_applied(unittest.TestCase):

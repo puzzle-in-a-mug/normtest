@@ -534,6 +534,10 @@ def test(x_data, alpha=0.05, weighted=False):
     The critical values are obtained using :func:`_critical_value`.
 
 
+    .. warning:: The estimated :math:`p_{{value}}` may not be accurate as it is calculated using linear interpolation
+
+
+
     References
     ----------
     .. [1] {lg_ref}

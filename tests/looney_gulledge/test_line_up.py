@@ -2,7 +2,7 @@
 
 --------------------------------------------------------------------------------
 Command to run at the prompt:
-    python -m unittest -v tests/ryan_joiner/test_line_up.py
+    python -m unittest -v tests/looney_gulledge/test_line_up.py
 --------------------------------------------------------------------------------
 """
 ### GENERAL IMPORTS ###
@@ -15,7 +15,7 @@ from pathlib import Path
 
 ### FUNCTION IMPORT ###
 from tests.functions_to_test import functions
-from normtest.ryan_joiner import line_up
+from normtest.looney_gulledge import line_up
 
 os.system("cls")
 
@@ -30,7 +30,6 @@ class Test_line_up(unittest.TestCase):
     def test_outputs(self):
         result = line_up(
             x_data=self.x_data,
-            cte_alpha="3/8",
             weighted=False,
             seed=42,
             correct=False,
@@ -42,7 +41,6 @@ class Test_line_up(unittest.TestCase):
 
         result = line_up(
             self.x_data,
-            "3/8",
             False,
             42,
             False,
@@ -53,10 +51,10 @@ class Test_line_up(unittest.TestCase):
         )
 
     def test_basic_plot(self):
-        fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up.png")
+        fig1_base_path = Path("tests/looney_gulledge/figs_line_up/line_up.png")
 
         result = line_up(self.x_data)
-        fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
+        fig1_file = Path("tests/looney_gulledge/figs_line_up/fig1_test.png")
         result.tight_layout()
         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
         plt.close()
@@ -67,10 +65,10 @@ class Test_line_up(unittest.TestCase):
         )
         fig1_file.unlink()
 
-        fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up_true.png")
+        fig1_base_path = Path("tests/looney_gulledge/figs_line_up/line_up_true.png")
 
         result = line_up(self.x_data, correct=True)
-        fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
+        fig1_file = Path("tests/looney_gulledge/figs_line_up/fig1_test.png")
         result.tight_layout()
         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
         plt.close()
@@ -82,10 +80,10 @@ class Test_line_up(unittest.TestCase):
         fig1_file.unlink()
 
     def test_weighted(self):
-        fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up_weighted.png")
+        fig1_base_path = Path("tests/looney_gulledge/figs_line_up/line_up_weighted.png")
 
         result = line_up(self.x_data, correct=False, weighted=True)
-        fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
+        fig1_file = Path("tests/looney_gulledge/figs_line_up/fig1_test.png")
         result.tight_layout()
         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
         plt.close()
@@ -97,11 +95,11 @@ class Test_line_up(unittest.TestCase):
         fig1_file.unlink()
 
         fig1_base_path = Path(
-            "tests/ryan_joiner/figs_line_up/line_up_true_weighted.png"
+            "tests/looney_gulledge/figs_line_up/line_up_true_weighted.png"
         )
 
         result = line_up(self.x_data, correct=True, weighted=True)
-        fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
+        fig1_file = Path("tests/looney_gulledge/figs_line_up/fig1_test.png")
         result.tight_layout()
         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
         plt.close()
@@ -113,10 +111,10 @@ class Test_line_up(unittest.TestCase):
         fig1_file.unlink()
 
     def test_seed(self):
-        fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up_pi.png")
+        fig1_base_path = Path("tests/looney_gulledge/figs_line_up/line_up_pi.png")
 
         result = line_up(self.x_data, correct=False, seed=31416)
-        fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
+        fig1_file = Path("tests/looney_gulledge/figs_line_up/fig1_test.png")
         result.tight_layout()
         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
         plt.close()
@@ -127,10 +125,10 @@ class Test_line_up(unittest.TestCase):
         )
         fig1_file.unlink()
 
-        fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up_true_pi.png")
+        fig1_base_path = Path("tests/looney_gulledge/figs_line_up/line_up_true_pi.png")
 
         result = line_up(self.x_data, correct=True, seed=31416)
-        fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
+        fig1_file = Path("tests/looney_gulledge/figs_line_up/fig1_test.png")
         result.tight_layout()
         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
         plt.close()

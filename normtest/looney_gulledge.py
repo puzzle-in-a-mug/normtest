@@ -257,7 +257,7 @@ def _critical_value(sample_size, alpha=0.05):
     samp_size=docs.SAMPLE_SIZE["type"],
     samp_size_desc=docs.SAMPLE_SIZE["description"],
     blom_ref=Blom1958,
-    lf_ref=LooneyGulledge1985,
+    lg_ref=LooneyGulledge1985,
 )
 def _order_statistic(sample_size):
     """This function estimates the normal statistical order (:math:`p_{{i}}`) using an approximation [1]_.

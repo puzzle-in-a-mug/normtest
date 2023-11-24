@@ -28,6 +28,7 @@ Last update: November 23, 2023
 ### Standard ###
 from collections import namedtuple
 from copy import deepcopy
+import itertools
 
 ### Third part ###
 import numpy as np
@@ -674,122 +675,94 @@ def correlation_plot(axes, x_data, weighted=False):
     return axes
 
 
-# @docs.docstring_parameter(
-#     axes=docs.AXES["type"],
-#     axes_desc=docs.AXES["description"],
-#     statistic=docs.STATISTIC["type"],
-#     statistic_desc=docs.STATISTIC["description"],
-#     sample_size=docs.SAMPLE_SIZE["type"],
-#     sample_size_desc=docs.AXES["description"],
-#     rj_ref=RyanJoiner1976,
-# )
-# def dist_plot(
-#     axes,
-#     critical_range=(4, 50),
-#     test=None,
-# ):
-#     """This function generates axis with critical data from the Ryan-Joiner Normality test [1]_.
+@docs.docstring_parameter(
+    axes=docs.AXES["type"],
+    axes_desc=docs.AXES["description"],
+    statistic=docs.STATISTIC["type"],
+    statistic_desc=docs.STATISTIC["description"],
+    sample_size=docs.SAMPLE_SIZE["type"],
+    sample_size_desc=docs.SAMPLE_SIZE["description"],
+    lg_ref=LooneyGulledge1985,
+)
+def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01]):
+    """This function generates axis with critical data from the Looney-Gulledge Normality test [1]_.
 
-#     Parameters
-#     ----------
-#     {axes}
-#         {axes_desc}
-#     critical_range : tuple (optional), with two elements:
-#         x_min : int, optional
-#             The lower range of the number of observations for the critical values (default is ``4``).
-#         x_max : int, optional
-#             The upper range of the number of observations for the critical values (default is ``50``).
-#     test : tuple (optional), with two elements:
-#         {statistic}
-#             {statistic_desc}
-#         {sample_size}
-#             {sample_size_desc}
+    Parameters
+    ----------
+    {axes}
+        {axes_desc}
+    test : tuple (optional), with two elements:
+        {statistic}
+            {statistic_desc}
+        {sample_size}
+            {sample_size_desc}
+    alphas : list of floats, optional
+        The significance level (:math:`\\alpha`) to draw the critical lines. Default is `[0.10, 0.05, 0.01]`. It can be a combination of:
 
-
-#     Returns
-#     -------
-#     {axes}
-#         {axes_desc}
-
-
-#     See Also
-#     --------
-#     rj_test
-#     correlation_plot
+        * ``0.005``;
+        * ``0.01``;
+        * ``0.025``;
+        * ``0.05``;
+        * ``0.10``;
+        * ``0.25``;
+        * ``0.50``;
+        * ``0.75``;
+        * ``0.90``;
+        * ``0.95``;
+        * ``0.975``;
+        * ``0.99``;
+        * ``0.995``;
 
 
-#     References
-#     ----------
-#     .. [1] {rj_ref}
+
+    Returns
+    -------
+    {axes}
+        {axes_desc}
 
 
-#     Examples
-#     --------
-#     >>> from normtest import ryan_joiner
-#     >>> import matplotlib.pyplot as plt
-#     >>> from scipy import stats
-#     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
+    References
+    ----------
+    .. [1] {lg_ref}
 
 
-#     Apply the Ryan Joiner test
+    Examples
+    --------
+    >>> from normtest import filliben
+    >>> import matplotlib.pyplot as plt
+    >>> fig, ax = plt.subplots(figsize=(6, 4))
+    >>> filliben.dist_plot(axes=ax, test=(0.98538, 7))
+    >>> # plt.savefig("dist_plot.png")
+    >>> plt.show()
 
 
-#     >>> result = ryan_joiner.rj_test(data)
+    .. image:: img/dist_plot.png
+        :alt: Default critical chart for Looney-Gulledge Normality test
+        :align: center
 
 
-#     Create the distribution graph using the test result
+    """
+    # making a copy from original critical values
+    critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
 
+    if test is not None:
+        axes.scatter(test[1], test[0], c="r", label="statistic", marker="^")
 
-#     >>> fig, ax = plt.subplots(figsize=(6, 4))
-#     >>> ryan_joiner.dist_plot(axes=ax, test=(result.statistic, data.size))
-#     >>> # plt.savefig("rj_dist_plot.png")
-#     >>> plt.show()
+    palette = itertools.cycle(constants.seaborn_colors["deep"])
 
+    for alpha, color in zip(alphas, palette):
+        axes.scatter(
+            critical["n"],
+            critical[alpha],
+            label=f"{round(alpha*100)}%",
+            s=20,
+            color=color,
+        )
+    axes.set_xlabel("Sample size")
+    axes.set_ylabel("Looney Gulledge critical values")
+    axes.legend(loc=4)
 
-#     .. image:: img/dist_plot.png
-#         :alt: Critical chart for Ryan-Joiner test Normality test
-#         :align: center
-
-#     """
-#     constants.warning_plot()
-
-#     n_samples = np.arange(critical_range[0], critical_range[1] + 1)
-#     alphas = [0.10, 0.05, 0.01]
-#     alphas_label = ["$10\\%$", "$5\\%$", "$1\\%$"]
-#     colors = [
-#         (0.2980392156862745, 0.4470588235294118, 0.6901960784313725),
-#         (0.8666666666666667, 0.5176470588235295, 0.3215686274509804),
-#         (0.3333333333333333, 0.6588235294117647, 0.40784313725490196),
-#     ]
-
-#     # main test
-#     if test is not None:
-#         if test[1] > critical_range[1]:
-#             constants.user_warning(
-#                 f"The graphical visualization is best suited if the sample size ({test[1]}) is smaller than the max value ({critical_range[1]})."
-#             )
-#         if test[1] < critical_range[0]:
-#             constants.user_warning(
-#                 f"The graphical visualization is best suited if the sample size ({test[1]}) is greater than the min value ({critical_range[0]})."
-#             )
-
-#         axes.scatter(test[1], test[0], color="r", label="$R_{p}$", marker="^")
-
-#     # adding critical values
-#     for alp, color, alp_label in zip(alphas, colors, alphas_label):
-#         criticals = []
-#         for sample in n_samples:
-#             criticals.append(_critical_value(sample_size=sample, alpha=alp))
-#         axes.scatter(n_samples, criticals, label=alp_label, color=color, s=10)
-
-#     axes.set_title("Ryan-Joiner")
-
-#     # adding details
-#     axes.legend(loc=4)
-#     axes.set_xlabel("Sample size")
-#     axes.set_ylabel("Critical value")
-
-#     return axes
+    return axes
 
 
 # this function does not have documentation on purpose (private)

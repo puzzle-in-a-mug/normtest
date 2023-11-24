@@ -25,6 +25,7 @@ Main functions
    
 
    _critical_value
+   _order_statistic
    citation
 
 |

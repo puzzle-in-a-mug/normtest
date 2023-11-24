@@ -265,141 +265,141 @@ class Test_dist_plot(unittest.TestCase):
 #         fig2_file.unlink()
 
 
-# class Test_line_up(unittest.TestCase):
-#     @classmethod
-#     def setUpClass(cls):
-#         cls.x_data = np.array(
-#             [148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210]
-#         )
+class Test_line_up(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.x_data = np.array(
+            [148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210]
+        )
 
-#     def test_safe(self):
-#         corrects = [2, "2", "True"]
-#         for correct in corrects:
-#             with self.assertRaises(
-#                 TypeError,
-#                 msg=f"Does not raised TypeError when correct is wrong",
-#             ):
-#                 teste = RyanJoiner()
-#                 teste.fit(self.x_data)
-#                 ax = teste.line_up(correct=correct)
-#                 plt.close()
+    def test_safe(self):
+        corrects = [2, "2", "True"]
+        for correct in corrects:
+            with self.assertRaises(
+                TypeError,
+                msg=f"Does not raised TypeError when correct is wrong",
+            ):
+                teste = LooneyGulledge()
+                teste.fit(self.x_data)
+                ax = teste.line_up(correct=correct)
+                plt.close()
 
-#         seeds = [2.0, "2", "True"]
-#         for seed in seeds:
-#             with self.assertRaises(
-#                 TypeError,
-#                 msg=f"Does not raised TypeError when seed is not wrong",
-#             ):
-#                 teste = RyanJoiner()
-#                 teste.fit(self.x_data)
-#                 ax = teste.line_up(seed=seed)
-#                 plt.close()
+        seeds = [2.0, "2", "True"]
+        for seed in seeds:
+            with self.assertRaises(
+                TypeError,
+                msg=f"Does not raised TypeError when seed is not wrong",
+            ):
+                teste = LooneyGulledge()
+                teste.fit(self.x_data)
+                ax = teste.line_up(seed=seed)
+                plt.close()
 
-#         seeds = [-2, 0, -1000]
-#         for seed in seeds:
-#             with self.assertRaises(
-#                 ValueError,
-#                 msg=f"Does not raised ValueError when seed is not wrong",
-#             ):
-#                 teste = RyanJoiner()
-#                 teste.fit(self.x_data)
-#                 ax = teste.line_up(seed=seed)
-#                 plt.close()
+        seeds = [-2, 0, -1000]
+        for seed in seeds:
+            with self.assertRaises(
+                ValueError,
+                msg=f"Does not raised ValueError when seed is not wrong",
+            ):
+                teste = LooneyGulledge()
+                teste.fit(self.x_data)
+                ax = teste.line_up(seed=seed)
+                plt.close()
 
-#     def test_basic_plot(self):
-#         fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up.png")
-#         teste = RyanJoiner()
-#         teste.fit(self.x_data)
-#         result = teste.line_up(seed=42)
-#         fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
-#         result.tight_layout()
-#         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
-#         plt.close()
+    def test_basic_plot(self):
+        fig1_base_path = Path("tests/looney_gulledge/figs_line_up/line_up.png")
+        teste = LooneyGulledge()
+        teste.fit(self.x_data)
+        result = teste.line_up(seed=42)
+        fig1_file = Path("tests/looney_gulledge/figs_line_up/fig1_test.png")
+        result.tight_layout()
+        plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
+        plt.close()
 
-#         self.assertTrue(
-#             functions.validate_file_contents(fig1_base_path, fig1_file),
-#             msg="figures does not match",
-#         )
-#         fig1_file.unlink()
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
 
-#         fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up_true.png")
-#         teste = RyanJoiner()
-#         teste.fit(self.x_data)
-#         result = teste.line_up(correct=True, seed=42)
-#         fig1_file = Path("tests/filliben/figs_line_up/fig1_test.png")
-#         result.tight_layout()
-#         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
-#         plt.close()
+        fig1_base_path = Path("tests/looney_gulledge/figs_line_up/line_up_true.png")
+        teste = LooneyGulledge()
+        teste.fit(self.x_data)
+        result = teste.line_up(correct=True, seed=42)
+        fig1_file = Path("tests/looney_gulledge/figs_line_up/fig1_test.png")
+        result.tight_layout()
+        plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
+        plt.close()
 
-#         self.assertTrue(
-#             functions.validate_file_contents(fig1_base_path, fig1_file),
-#             msg="figures does not match",
-#         )
-#         fig1_file.unlink()
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
 
-#     def test_seed(self):
-#         fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up_pi.png")
-#         teste = RyanJoiner()
-#         teste.fit(self.x_data)
-#         result = teste.line_up(correct=False, seed=31416)
-#         fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
-#         result.tight_layout()
-#         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
-#         plt.close()
+    def test_seed(self):
+        fig1_base_path = Path("tests/looney_gulledge/figs_line_up/line_up_pi.png")
+        teste = LooneyGulledge()
+        teste.fit(self.x_data)
+        result = teste.line_up(correct=False, seed=31416)
+        fig1_file = Path("tests/looney_gulledge/figs_line_up/fig1_test.png")
+        result.tight_layout()
+        plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
+        plt.close()
 
-#         self.assertTrue(
-#             functions.validate_file_contents(fig1_base_path, fig1_file),
-#             msg="figures does not match",
-#         )
-#         fig1_file.unlink()
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
 
-#         fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up_true_pi.png")
-#         teste = RyanJoiner()
-#         teste.fit(self.x_data)
-#         result = teste.line_up(correct=True, seed=31416)
-#         fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
-#         result.tight_layout()
-#         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
-#         plt.close()
+        fig1_base_path = Path("tests/looney_gulledge/figs_line_up/line_up_true_pi.png")
+        teste = LooneyGulledge()
+        teste.fit(self.x_data)
+        result = teste.line_up(correct=True, seed=31416)
+        fig1_file = Path("tests/looney_gulledge/figs_line_up/fig1_test.png")
+        result.tight_layout()
+        plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
+        plt.close()
 
-#         self.assertTrue(
-#             functions.validate_file_contents(fig1_base_path, fig1_file),
-#             msg="figures does not match",
-#         )
-#         fig1_file.unlink()
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
 
-#     def test_weighted(self):
-#         fig1_base_path = Path("tests/ryan_joiner/figs_line_up/line_up_weighted.png")
-#         teste = RyanJoiner(weighted=True)
-#         teste.fit(self.x_data)
-#         result = teste.line_up(correct=False, seed=42)
-#         fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
-#         result.tight_layout()
-#         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
-#         plt.close()
+    def test_weighted(self):
+        fig1_base_path = Path("tests/looney_gulledge/figs_line_up/line_up_weighted.png")
+        teste = LooneyGulledge(weighted=True)
+        teste.fit(self.x_data)
+        result = teste.line_up(correct=False, seed=42)
+        fig1_file = Path("tests/looney_gulledge/figs_line_up/fig1_test.png")
+        result.tight_layout()
+        plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
+        plt.close()
 
-#         self.assertTrue(
-#             functions.validate_file_contents(fig1_base_path, fig1_file),
-#             msg="figures does not match",
-#         )
-#         fig1_file.unlink()
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
 
-#         fig1_base_path = Path(
-#             "tests/ryan_joiner/figs_line_up/line_up_true_weighted.png"
-#         )
-#         teste = RyanJoiner(weighted=True)
-#         teste.fit(self.x_data)
-#         result = teste.line_up(correct=True, seed=42)
-#         fig1_file = Path("tests/ryan_joiner/figs_line_up/fig1_test.png")
-#         result.tight_layout()
-#         plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
-#         plt.close()
+        fig1_base_path = Path(
+            "tests/looney_gulledge/figs_line_up/line_up_true_weighted.png"
+        )
+        teste = LooneyGulledge(weighted=True)
+        teste.fit(self.x_data)
+        result = teste.line_up(correct=True, seed=42)
+        fig1_file = Path("tests/looney_gulledge/figs_line_up/fig1_test.png")
+        result.tight_layout()
+        plt.savefig(fig1_file, dpi=300, bbox_inches="tight")
+        plt.close()
 
-#         self.assertTrue(
-#             functions.validate_file_contents(fig1_base_path, fig1_file),
-#             msg="figures does not match",
-#         )
-#         fig1_file.unlink()
+        self.assertTrue(
+            functions.validate_file_contents(fig1_base_path, fig1_file),
+            msg="figures does not match",
+        )
+        fig1_file.unlink()
 
 
 # class Test_citation(unittest.TestCase):

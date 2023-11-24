@@ -1090,92 +1090,91 @@ class LooneyGulledge(AlphaManagement, SafeManagement):
         self.alpha = alpha
         self.normality_hypothesis = constants.HYPOTESES
 
-    # @docs.docstring_parameter(
-    #     x_data=docs.X_DATA["type"],
-    #     x_data_desc=docs.X_DATA["description"],
-    #     statistic=docs.STATISTIC["type"],
-    #     statistic_desc=docs.STATISTIC["description"],
-    #     critical=docs.CRITICAL["type"],
-    #     critical_desc=docs.CRITICAL["description"],
-    #     p_value=docs.P_VALUE["type"],
-    #     p_value_desc=docs.P_VALUE["description"],
-    #     conclusion=docs.CONCLUSION["type"],
-    #     conclusion_desc=docs.CONCLUSION["description"],
-    # )
-    # def fit(
-    #     self,
-    #     x_data,
-    # ):
-    #     """This method applies the Ryan-Joiner test.
+    @docs.docstring_parameter(
+        x_data=docs.X_DATA["type"],
+        x_data_desc=docs.X_DATA["description"],
+        statistic=docs.STATISTIC["type"],
+        statistic_desc=docs.STATISTIC["description"],
+        critical=docs.CRITICAL["type"],
+        critical_desc=docs.CRITICAL["description"],
+        p_value=docs.P_VALUE["type"],
+        p_value_desc=docs.P_VALUE["description"],
+        conclusion=docs.CONCLUSION["type"],
+        conclusion_desc=docs.CONCLUSION["description"],
+    )
+    def fit(
+        self,
+        x_data,
+    ):
+        """This method applies the Looney-Gulledge test.
 
-    #     Parameters
-    #     ----------
-    #     {x_data}
-    #         {x_data_desc}
+        Parameters
+        ----------
+        {x_data}
+            {x_data_desc}
 
-    #     Returns
-    #     -------
-    #     {x_data}
-    #         {x_data_desc}
-    #     {statistic}
-    #         {statistic_desc}
-    #     {critical}
-    #         {critical_desc}
-    #     {p_value}
-    #         {p_value_desc}
-    #     {conclusion}
-    #         {conclusion_desc}
-    #     normality : named tuple
-    #         A tuple with the main test results summarized
+        Returns
+        -------
+        {x_data}
+            {x_data_desc}
+        {statistic}
+            {statistic_desc}
+        {critical}
+            {critical_desc}
+        {p_value}
+            {p_value_desc}
+        {conclusion}
+            {conclusion_desc}
+        normality : named tuple
+            A tuple with the main test results summarized
 
-    #     See Also
-    #     --------
-    #     rj_test
+        See Also
+        --------
+        test
 
-    #     """
-    #     func_name = "fit"
+        """
+        func_name = "fit"
 
-    #     if self.safe:
-    #         types.is_numpy(
-    #             value=x_data,
-    #             param_name="x_data",
-    #             kind="method",
-    #             kind_name=func_name,
-    #             stacklevel=4,
-    #             error=True,
-    #         )
-    #         numpy_arrays.n_dimensions(
-    #             array=x_data,
-    #             param_name="x_data",
-    #             ndim=1,
-    #             kind="method",
-    #             kind_name=func_name,
-    #             stacklevel=4,
-    #             error=True,
-    #         )
-    #         numpy_arrays.size_is_greater_than_lower(
-    #             array=x_data,
-    #             param_name="x_data",
-    #             kind="method",
-    #             kind_name=func_name,
-    #             lower=4,
-    #             inclusive=True,
-    #             stacklevel=4,
-    #             error=True,
-    #         )
+        if self.safe:
+            types.is_numpy(
+                value=x_data,
+                param_name="x_data",
+                kind="method",
+                kind_name=func_name,
+                stacklevel=4,
+                error=True,
+            )
+            numpy_arrays.n_dimensions(
+                array=x_data,
+                param_name="x_data",
+                ndim=1,
+                kind="method",
+                kind_name=func_name,
+                stacklevel=4,
+                error=True,
+            )
+            numpy_arrays.size_is_greater_than_lower(
+                array=x_data,
+                param_name="x_data",
+                kind="method",
+                kind_name=func_name,
+                lower=4,
+                inclusive=True,
+                stacklevel=4,
+                error=True,
+            )
 
-    #     result = rj_test(
-    #         x_data=x_data,
-    #         alpha=self.alpha,
-    #         cte_alpha=self.cte_alpha,
-    #         weighted=self.weighted,
-    #     )
-    #     self.x_data = x_data
-    #     self.statistic = result.statistic
-    #     self.critical = result.critical
-    #     self.p_value = result.p_value
-    #     self.conclusion = result.conclusion
-    #     self.normality = result
+        result = test(
+            x_data=x_data,
+            alpha=self.alpha,
+            weighted=self.weighted,
+        )
+        self.x_data = x_data
+        self.statistic = result.statistic
+        self.critical = result.critical
+        self.p_value = result.p_value
+        self.conclusion = result.conclusion
+        self.normality = result
 
     # @docs.docstring_parameter(
     #     axes=docs.AXES["type"],

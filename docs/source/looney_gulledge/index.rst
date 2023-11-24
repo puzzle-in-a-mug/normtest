@@ -39,6 +39,7 @@ Others functions
    _normal_order_statistic
    _order_statistic
    _p_value
+   _statistic
 
 
 

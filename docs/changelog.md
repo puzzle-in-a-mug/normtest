@@ -3,6 +3,7 @@
 ## v0.0.3 (XX/11/2023)
 
 ### Module looney_gulledge
+- Added ``LooneyGulledge`` (24/11/2023);
 - Added ``line_up`` (24/11/2023);
 - Added ``dist_plot`` (24/11/2023);
 - Added ``correlation_plot`` (24/11/2023);

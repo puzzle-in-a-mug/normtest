@@ -440,12 +440,12 @@ def _statistic(x_data, zi):
 
     Examples
     --------
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> import numpy as np
     >>> x_data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
     >>> x_data = np.sort(x_data)
-    >>> normal_order = ryan_joiner._normal_order_statistic(x_data)
-    >>> result = ryan_joiner._statistic(x_data, normal_order)
+    >>> normal_order = looney_gulledge._normal_order_statistic(x_data)
+    >>> result = looney_gulledge._statistic(x_data, normal_order)
     >>> print(result)
     0.9225156050800545
 

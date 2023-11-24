@@ -24,8 +24,8 @@ Main functions
    :maxdepth: 1
    
 
+   _critical_value
    citation
-
 
 |
 

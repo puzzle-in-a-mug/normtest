@@ -478,6 +478,8 @@ def _p_value(statistic, sample_size):
     * If the test statistic is lower than the critical value for :math:`\\alpha=0.005`, the result is always *"p < 0.005"*.
 
 
+    .. warning:: The estimated :math:`p_{{value}}` may not be accurate as it is calculated using linear interpolation.
+
     References
     ----------
     .. [1] {fi_ref}
@@ -877,6 +879,8 @@ def fi_test(x_data, alpha=0.05):
 
     The critical values are obtained using :func:`_critical_value`.
 
+
+    .. warning:: The estimated :math:`p_{{value}}` may not be accurate as it is calculated using linear interpolation.
 
     References
     ----------

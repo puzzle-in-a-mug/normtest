@@ -398,6 +398,9 @@ def _p_value(statistic, sample_size):
     * If the test statistic is lower than the critical value for :math:`\\alpha=0.01`, the result is always *"p < 0.010"*.
 
 
+    .. warning:: The estimated :math:`p_{{value}}` may not be accurate as it is calculated using linear interpolation
+
+
     References
     ----------
     .. [1] {rj_ref}
@@ -572,6 +575,8 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
 
     The critical values are obtained using :func:`_critical_value`.
 
+
+    .. warning:: The estimated :math:`p_{{value}}` may not be accurate as it is calculated using linear interpolation.
 
     References
     ----------

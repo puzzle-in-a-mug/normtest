@@ -104,7 +104,7 @@ def citation(export=False):
     lg_ref=LooneyGulledge1985,
 )
 def _critical_value(sample_size, alpha=0.05):
-    """This function calculates the critical value for the Looney Gulledge normality test [1]_.
+    """This function calculates the critical value for the Looney-Gulledge normality test [1]_.
 
 
     Parameters
@@ -142,11 +142,11 @@ def _critical_value(sample_size, alpha=0.05):
     if sample_size not in critical["n"]:
         if sample_size < 100:
             constants.user_warning(
-                "The Looney Gulledge critical value may not be accurate as it was obtained with linear interpolation."
+                "The Looney-Gulledge critical value may not be accurate as it was obtained with linear interpolation."
             )
         else:
             constants.user_warning(
-                "The Looney Gulledge critical value may not be accurate as it was obtained with linear *extrapolation*."
+                "The Looney-Gulledge critical value may not be accurate as it was obtained with linear *extrapolation*."
             )
 
     f = interpolate.interp1d(
@@ -318,7 +318,7 @@ def _order_statistic(sample_size):
     lg_ref=LooneyGulledge1985,
 )
 def _p_value(statistic, sample_size):
-    """This function estimates the probability associated with the Looney Gulledge Normality test [1]_.
+    """This function estimates the probability associated with the Looney-Gulledge Normality test [1]_.
 
 
     Parameters
@@ -342,7 +342,7 @@ def _p_value(statistic, sample_size):
 
     Notes
     -----
-    The test probability is estimated through linear interpolation of the test statistic with critical values from the Looney Gulledge test [1]_. The Interpolation is performed using the :doc:`scipy.interpolate.interp1d() <scipy:reference/generated/scipy.interpolate.interp1d>` function.
+    The test probability is estimated through linear interpolation of the test statistic with critical values from the Looney-Gulledge test [1]_. The Interpolation is performed using the :doc:`scipy.interpolate.interp1d() <scipy:reference/generated/scipy.interpolate.interp1d>` function.
 
     * If the test statistic is greater than the critical value for :math:`\\alpha=0.995`, the result is always *"p > 0.995"*.
     * If the test statistic is lower than the critical value for :math:`\\alpha=0.005`, the result is always *"p < 0.005"*.

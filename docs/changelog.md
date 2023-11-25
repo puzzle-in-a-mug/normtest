@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.0.3 (XX/11/2023)
+
+### Module looney_gulledge
+- Added ``LooneyGulledge`` (24/11/2023);
+- Added ``line_up`` (24/11/2023);
+- Added ``dist_plot`` (24/11/2023);
+- Added ``correlation_plot`` (24/11/2023);
+- Added ``test`` (24/11/2023);
+- Added ``_normal_order_statistic`` (23/11/2023);
+- Added ``_statistic`` (23/11/2023);
+- Added ``_p_value`` (23/11/2023);
+- Added ``_order_statistic`` (23/11/2023);
+- Added ``_critical_value`` (23/11/2023);
+- Added ``citation`` (23/11/2023);
 
 ## v0.0.2 (16/11/2023)
 

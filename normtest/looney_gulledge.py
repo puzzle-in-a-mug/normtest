@@ -1,21 +1,11 @@
-"""This module contains functions related to the Ryan-Joiner test
+"""This module contains functions related to the Looney & Gulledge test (also know as Probability Plot Correlation Coefficient (PPCC) Goodness-of-Fit Test)
 
 ##### List of functions (cte_alphabetical order) #####
 
 ## Functions WITH good TESTS ###
-- _critical_value(sample_size, alpha=0.05, safe=False)
-- _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8", safe=False)
-- _order_statistic(sample_size, cte_alpha="3/8", safe=False)
-- _p_value(statistic, sample_size, safe=False)
-- citation(export=False)
-- rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False, safe=False)
+
 
 ## Functions WITH some TESTS ###
-- _statistic(x_data, zi, safe=False)
-- correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False, safe=False)
-- dist_plot(axes, x_data, cte_alpha="3/8", min=4, max=50, weighted=False, safe=False)
-- _make_line_up_data(x_data, weighted, cte_alpha, safe)
-- line_up(x_data, cte_alpha="3/8", weighted=False, seed=42, correct=False, safe=False)
 
 
 ## Functions WITHOUT tests ###
@@ -28,16 +18,17 @@
 
 Author: Anderson Marcos Dias Canteli <andersonmdcanteli@gmail.com>
 
-Created : November 02, 2023
+Created : November 23, 2023
 
-Last update: November 13, 2023
+Last update: November 23, 2023
 """
 
 ##### IMPORTS #####
 
 ### Standard ###
 from collections import namedtuple
-
+from copy import deepcopy
+import itertools
 
 ### Third part ###
 import numpy as np
@@ -52,14 +43,14 @@ from scipy import interpolate
 ### self made ###
 from paramcheckup import parameters, types, numbers, numpy_arrays
 from . import bibmaker
-from .utils import constants
+from .utils import critical_values, constants
 from .utils.helpers import AlphaManagement, SafeManagement
 
 ##### DOCUMENTATION #####
 from .utils import documentation as docs
 
 #### CONSTANTS ####
-RyanJoiner1976 = "RYAN, T. A., JOINER, B. L. Normal Probability Plots and Tests for Normality, Technical Report, Statistics Department, The Pennsylvania State University, 1976. Available at `www.additive-net.de <https://www.additive-net.de/de/component/jdownloads/send/70-support/236-normal-probability-plots-and-tests-for-normality-thomas-a-ryan-jr-bryan-l-joiner>`_. Access on: 22 Jul. 2023."
+LooneyGulledge1985 = "LOONEY, S. W.; GULLEDGE, T. R. Use of the Correlation Coefficient with Normal Probability Plots. The American Statistician, v. 39, n. 1, p. 75-79, fev. 1985."
 Blom1958 = "BLOM, G. Statistical Estimates and Transformed Beta-Variables. New York: John Wiley and Sons, Inc, p. 71-72, 1958."
 
 
@@ -70,27 +61,34 @@ Blom1958 = "BLOM, G. Statistical Estimates and Transformed Beta-Variables. New Y
 
 
 def citation(export=False):
-    """This function returns the reference from Ryan Joiner's test, with the option to export the reference in `.bib` format.
+    """This function returns the reference from Looney & Gulledge's test, with the option to export the reference in `.bib` format.
 
     Parameters
     ----------
     export : bool
-        Whether to export the reference as `ryan-joiner.bib` file (`True`) or not (`False`, default);
+        Whether to export the reference as `LooneyGulledge1985.bib` file (`True`) or not (`False`, default);
 
 
     Returns
     -------
     reference : str
-        The Ryan Joiner Test reference
+        Looney & Gulledge Test reference
 
     """
-    reference = bibmaker.make_techreport(
-        citekey="RyanJoiner1976",
-        author="Thomas A. Ryan and Brian L. Joiner",
-        title="Normal Probability Plots and Tests for Normality",
-        institution="The Pennsylvania State University, Statistics Department",
-        year="1976",
-        url="https://api.semanticscholar.org/CorpusID:9233652",
+    reference = bibmaker.make_article(
+        citekey="LooneyGulledge1985",
+        author="Stephen W. Looney and Thomas R. Gulledge",
+        title="Use of the Correlation Coefficient with Normal Probability Plots",
+        journaltitle="The American Statistician",
+        year="1985",
+        volume="39",
+        pages="75--79",
+        number="1",
+        month="2",
+        publisher="American Statistical Association, Taylor & Francis, Ltd",
+        urldate="2023-11-23",
+        doi="10.2307/2683917",
+        url="http://www.jstor.org/stable/2683917",
         export=export,
     )
     return reference
@@ -98,20 +96,21 @@ def citation(export=False):
 
 @docs.docstring_parameter(
     sample_size=docs.SAMPLE_SIZE["type"],
-    samp_size_desc=docs.SAMPLE_SIZE["description"],
+    sample_size_desc=docs.SAMPLE_SIZE["description"],
     alpha=docs.ALPHA["type"],
     alpha_desc=docs.ALPHA["description"],
     critical=docs.CRITICAL["type"],
     critical_desc=docs.CRITICAL["description"],
-    rj_ref=RyanJoiner1976,
+    lg_ref=LooneyGulledge1985,
 )
 def _critical_value(sample_size, alpha=0.05):
-    """This function calculates the critical value of the Ryan-Joiner test [1]_.
+    """This function calculates the critical value for the Looney-Gulledge normality test [1]_.
+
 
     Parameters
     ----------
     {sample_size}
-        {samp_size_desc}
+        {sample_size_desc}
     {alpha}
         {alpha_desc}
 
@@ -122,61 +121,39 @@ def _critical_value(sample_size, alpha=0.05):
         {critical_desc}
 
 
-    See Also
-    --------
-    rj_test
-
-
-    Notes
-    -----
-    The critical values are calculated using [1]_ the following equations:
-
-    .. math::
-
-            R_{{p;\\alpha=0.10}}^{{'}} = 1.0071 - \\frac{{0.1371}}{{\\sqrt{{n}}}} - \\frac{{0.3682}}{{n}} + \\frac{{0.7780}}{{n^{{2}}}}
-
-            R_{{p;\\alpha=0.05}}^{{'}} = 1.0063 - \\frac{{0.1288}}{{\\sqrt{{n}}}} - \\frac{{0.6118}}{{n}} + \\frac{{1.3505}}{{n^{{2}}}}
-
-            R_{{p;\\alpha=0.01}}^{{'}} = 0.9963 - \\frac{{0.0211}}{{\\sqrt{{n}}}} - \\frac{{1.4106}}{{n}} + \\frac{{3.1791}}{{n^{{2}}}}
-
-    where :math:`n` is the sample size.
-
-
     References
     ----------
-    .. [1] {rj_ref}
+    .. [1] {lg_ref}
 
 
     Examples
     --------
-    >>> from normtest import ryan_joiner
-    >>> critical = ryan_joiner._critical_value(10, alpha=0.05)
+    >>> from normtest import looney_gulledge
+    >>> sample_size = 7
+    >>> critical = looney_gulledge._critical_value(sample_size, alpha=0.05)
     >>> print(critical)
-    0.9178948637370312
+    0.898
+
 
     """
+    # making a copy from original critical values
+    critical = deepcopy(critical_values.LOONEY_GULLEDGE_CRITICAL)
 
-    if alpha == 0.1:
-        return (
-            1.0071
-            - (0.1371 / np.sqrt(sample_size))
-            - (0.3682 / sample_size)
-            + (0.7780 / sample_size**2)
-        )
-    elif alpha == 0.05:
-        return (
-            1.0063
-            - (0.1288 / np.sqrt(sample_size))
-            - (0.6118 / sample_size)
-            + (1.3505 / sample_size**2)
-        )
-    else:  # alpha == 0.01:
-        return (
-            0.9963
-            - (0.0211 / np.sqrt(sample_size))
-            - (1.4106 / sample_size)
-            + (3.1791 / sample_size**2)
-        )
+    if sample_size not in critical["n"]:
+        if sample_size < 100:
+            constants.user_warning(
+                "The Looney-Gulledge critical value may not be accurate as it was obtained with linear interpolation."
+            )
+        else:
+            constants.user_warning(
+                "The Looney-Gulledge critical value may not be accurate as it was obtained with linear *extrapolation*."
+            )
+
+    f = interpolate.interp1d(
+        critical["n"][3:], critical[alpha][3:], fill_value="extrapolate"
+    )
+
+    return float(f(sample_size))
 
 
 @docs.docstring_parameter(
@@ -184,21 +161,16 @@ def _critical_value(sample_size, alpha=0.05):
     x_data_desc=docs.X_DATA["description"],
     weighted=docs.WEIGHTED["type"],
     weighted_desc=docs.WEIGHTED["description"],
-    cte_alpha=docs.CTE_ALPHA["type"],
-    cte_alpha_desc=docs.CTE_ALPHA["description"],
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
-def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8"):
+def _normal_order_statistic(x_data, weighted=False):
     """This function transforms the statistical order to the standard Normal distribution scale (:math:`z_{{i}}`).
 
     Parameters
     ----------
     {x_data}
         {x_data_desc}
-    {cte_alpha}
-        {cte_alpha_desc}
-
     {weighted}
         {weighted_desc}
 
@@ -219,12 +191,12 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8"):
 
     where :math:`p_{{i}}` is the normal statistical order and :math:`\\phi^{{-1}}` is the inverse of the standard Normal distribution. The transformation is performed using :doc:`stats.norm.ppf() <scipy:reference/generated/scipy.stats.norm>`.
 
-    The statistical order (:math:`p_{{i}}`) is estimated using :func:`_order_statistic` function. See this function for details on parameter `cte_alpha`.
+    The statistical order (:math:`p_{{i}}`) is estimated using :func:`_order_statistic` function.
 
 
     See Also
     --------
-    rj_test
+    normtest.ryan_joiner._normal_order_statistic
 
 
     Examples
@@ -232,9 +204,9 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8"):
     The first example uses `weighted=False`:
 
     >>> import numpy as np
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
-    >>> result = ryan_joiner._normal_order_statistic(data, weighted=False)
+    >>> result = looney_gulledge._normal_order_statistic(data, weighted=False)
     >>> print(result)
     [-1.67293739 -1.16188294 -0.84837993 -0.6020065  -0.38786869 -0.19032227
     0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
@@ -242,7 +214,7 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8"):
 
     The second example uses `weighted=True`, with the same data set:
 
-    >>> result = ryan_joiner._normal_order_statistic(data, weighted=True)
+    >>> result = looney_gulledge._normal_order_statistic(data, weighted=True)
     >>> print(result)
     [-1.37281032 -1.37281032 -0.84837993 -0.4921101  -0.4921101  -0.19032227
     0.          0.19032227  0.38786869  0.6020065   0.84837993  1.16188294
@@ -263,14 +235,12 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8"):
         df["Rank"] = np.arange(1, df.shape[0] + 1)
         df["Ui"] = _order_statistic(
             sample_size=x_data.size,
-            cte_alpha=cte_alpha,
         )
         df["Mi"] = df.groupby(["x_data"])["Ui"].transform("mean")
         normal_ordered = stats.norm.ppf(df["Mi"])
     else:
         ordered = _order_statistic(
             sample_size=x_data.size,
-            cte_alpha=cte_alpha,
         )
         normal_ordered = stats.norm.ppf(ordered)
 
@@ -280,25 +250,17 @@ def _normal_order_statistic(x_data, weighted=False, cte_alpha="3/8"):
 @docs.docstring_parameter(
     samp_size=docs.SAMPLE_SIZE["type"],
     samp_size_desc=docs.SAMPLE_SIZE["description"],
-    cte_alpha=docs.CTE_ALPHA["type"],
-    cte_alpha_desc=docs.CTE_ALPHA["description"],
     blom_ref=Blom1958,
-    rj_ref=RyanJoiner1976,
+    lg_ref=LooneyGulledge1985,
 )
-def _order_statistic(sample_size, cte_alpha="3/8"):
-    """This function estimates the normal statistical order (:math:`p_{{i}}`) using approximations [1]_.
+def _order_statistic(sample_size):
+    """This function estimates the normal statistical order (:math:`p_{{i}}`) using an approximation [1]_.
+
 
     Parameters
     ----------
     {samp_size}
         {samp_size_desc}
-    {cte_alpha}
-        A `str` with the `cte_alpha` value that should be adopted (see details in the Notes section). The options are:
-
-        * `"0"`;
-        * `"3/8"` (default);
-        * `"1/2"`;
-
 
 
     Returns
@@ -309,52 +271,40 @@ def _order_statistic(sample_size, cte_alpha="3/8"):
 
     See Also
     --------
-    ryan_joiner
+    normtest.ryan_joiner._order_statistic
 
 
     Notes
     -----
 
-    The `cte_alpha` (:math:`\\alpha_{{cte}}`) parameter corresponds to the values studied by [1]_, which adopts the following equation to estimate the statistical order:
+    The statistical order (:math:`p_{{i}}`) is estimated using the following aproximation:
 
     .. math::
 
             p_{{i}} = \\frac{{i - \\alpha_{{cte}}}}{{n - 2 \\times \\alpha_{{cte}} + 1}}
 
-    where :math:`n` is the sample size and :math:`i` is the ith observation.
-
-
-    .. admonition:: Info
-
-        `cte_alpha="3/8"` is adopted in the implementations of the Ryan-Joiner test in Minitab and Statext software. This option is also cited as an alternative by [2]_.
+    where :math:`n` is the sample size, :math:`i` is the ith observation and :math:`\\alpha_{{cte}}` is a constant equal to `3/8`, which is the value proposed by [2].
 
 
     References
     ----------
     .. [1] {blom_ref}
 
-    .. [2] {rj_ref}
+    .. [2] {lg_ref}
 
 
     Examples
     --------
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> size = 10
-    >>> pi = ryan_joiner._order_statistic(size)
+    >>> pi = looney_gulledge._order_statistic(size)
     >>> print(pi)
     [0.06097561 0.15853659 0.25609756 0.35365854 0.45121951 0.54878049
     0.64634146 0.74390244 0.84146341 0.93902439]
 
     """
-
     i = np.arange(1, sample_size + 1)
-    if cte_alpha == "1/2":
-        cte_alpha = 0.5
-    elif cte_alpha == "0":
-        cte_alpha = 0
-    else:
-        cte_alpha = 3 / 8
-
+    cte_alpha = 3 / 8
     return (i - cte_alpha) / (sample_size - 2 * cte_alpha + 1)
 
 
@@ -365,10 +315,10 @@ def _order_statistic(sample_size, cte_alpha="3/8"):
     samp_size_desc=docs.SAMPLE_SIZE["description"],
     p_value=docs.P_VALUE["type"],
     p_value_desc=docs.P_VALUE["description"],
-    rj_ref=RyanJoiner1976,
+    lg_ref=LooneyGulledge1985,
 )
 def _p_value(statistic, sample_size):
-    """This function estimates the probability associated with the Ryan-Joiner Normality test [1]_.
+    """This function estimates the probability associated with the Looney-Gulledge Normality test [1]_.
 
 
     Parameters
@@ -387,15 +337,15 @@ def _p_value(statistic, sample_size):
 
     See Also
     --------
-    rj_test
+    test
 
 
     Notes
     -----
-    The test probability is estimated through linear interpolation of the test statistic with critical values from the Ryan-Joiner test [1]_. The Interpolation is performed using the :doc:`scipy.interpolate.interp1d() <scipy:reference/generated/scipy.interpolate.interp1d>` function.
+    The test probability is estimated through linear interpolation of the test statistic with critical values from the Looney-Gulledge test [1]_. The Interpolation is performed using the :doc:`scipy.interpolate.interp1d() <scipy:reference/generated/scipy.interpolate.interp1d>` function.
 
-    * If the test statistic is greater than the critical value for :math:`\\alpha=0.10`, the result is always *"p > 0.100"*.
-    * If the test statistic is lower than the critical value for :math:`\\alpha=0.01`, the result is always *"p < 0.010"*.
+    * If the test statistic is greater than the critical value for :math:`\\alpha=0.995`, the result is always *"p > 0.995"*.
+    * If the test statistic is lower than the critical value for :math:`\\alpha=0.005`, the result is always *"p < 0.005"*.
 
 
     .. warning:: The estimated :math:`p_{{value}}` may not be accurate as it is calculated using linear interpolation
@@ -403,31 +353,42 @@ def _p_value(statistic, sample_size):
 
     References
     ----------
-    .. [1] {rj_ref}
+    .. [1] {lg_ref}
 
 
     Examples
     --------
-    >>> from normtest import ryan_joiner
-    >>> p_value = ryan_joiner._p_value(0.90, 10)
+    >>> from normtest import looney_gulledge
+    >>> p_value = looney_gulledge._p_value(0.98538, 7)
     >>> print(p_value)
-    0.030930589077996555
+    0.8883750000000009
 
     """
-
-    alphas = np.array([0.10, 0.05, 0.01])
-    criticals = np.array(
-        [
-            _critical_value(sample_size=sample_size, alpha=alphas[0]),
-            _critical_value(sample_size=sample_size, alpha=alphas[1]),
-            _critical_value(sample_size=sample_size, alpha=alphas[2]),
-        ]
-    )
+    alphas = [
+        0.005,
+        0.01,
+        0.025,
+        0.05,
+        0.1,
+        0.25,
+        0.5,
+        0.75,
+        0.9,
+        0.95,
+        0.975,
+        0.99,
+        0.995,
+    ]
+    criticals = []
+    for alpha in alphas:
+        criticals.append(
+            _critical_value(sample_size=sample_size, alpha=alpha),
+        )
     f = interpolate.interp1d(criticals, alphas)
     if statistic > max(criticals):
-        return "p > 0.100"
+        return "p > 0.995"
     elif statistic < min(criticals):
-        return "p < 0.010"
+        return "p < 0.005"
     else:
         p_value = float(f(statistic))
         return p_value
@@ -440,10 +401,10 @@ def _p_value(statistic, sample_size):
     zi_desc=docs.ZI["description"],
     statistic=docs.STATISTIC["type"],
     statistic_desc=docs.STATISTIC["description"],
-    rj_ref=RyanJoiner1976,
+    lg_ref=LooneyGulledge1985,
 )
 def _statistic(x_data, zi):
-    """This function estimates the Ryan-Joiner test statistic [1]_.
+    """This function estimates the Looney-Gulledge test statistic [1]_.
 
     Parameters
     ----------
@@ -472,19 +433,23 @@ def _statistic(x_data, zi):
     The correlation is estimated using :doc:`scipy.stats.pearsonr() <scipy:reference/generated/scipy.stats.pearsonr>`.
 
 
+    See also
+    --------
+    normtest.ryan_joiner._statistic
+
     References
     ----------
-    .. [1] {rj_ref}
+    .. [1] {lg_ref}
 
 
     Examples
     --------
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> import numpy as np
     >>> x_data = np.array([148, 148, 154, 158, 158, 160, 161, 162, 166, 170, 182, 195, 210])
     >>> x_data = np.sort(x_data)
-    >>> normal_order = ryan_joiner._normal_order_statistic(x_data)
-    >>> result = ryan_joiner._statistic(x_data, normal_order)
+    >>> normal_order = looney_gulledge._normal_order_statistic(x_data)
+    >>> result = looney_gulledge._statistic(x_data, normal_order)
     >>> print(result)
     0.9225156050800545
 
@@ -497,8 +462,6 @@ def _statistic(x_data, zi):
     x_data_desc=docs.X_DATA["description"],
     alpha=docs.ALPHA["type"],
     alpha_desc=docs.ALPHA["description"],
-    cte_alpha=docs.CTE_ALPHA["type"],
-    cte_alpha_desc=docs.CTE_ALPHA["description"],
     weighted=docs.WEIGHTED["type"],
     weighted_desc=docs.WEIGHTED["description"],
     statistic=docs.STATISTIC["type"],
@@ -507,10 +470,11 @@ def _statistic(x_data, zi):
     critical_desc=docs.CRITICAL["description"],
     p_value=docs.P_VALUE["type"],
     p_value_desc=docs.P_VALUE["description"],
-    rj_ref=RyanJoiner1976,
+    lg_ref=LooneyGulledge1985,
 )
-def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
-    """This function applies the Ryan-Joiner Normality test [1]_.
+def test(x_data, alpha=0.05, weighted=False):
+    """This function applies the Looney-Gulledge Normality test [1]_.
+
 
     Parameters
     ----------
@@ -518,8 +482,6 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
         {x_data_desc}
     {alpha}
         {alpha_desc}
-    {cte_alpha}
-        {cte_alpha_desc}
     {weighted}
         {weighted_desc}
 
@@ -576,21 +538,23 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
     The critical values are obtained using :func:`_critical_value`.
 
 
-    .. warning:: The estimated :math:`p_{{value}}` may not be accurate as it is calculated using linear interpolation.
+    .. warning:: The estimated :math:`p_{{value}}` may not be accurate as it is calculated using linear interpolation
+
+
 
     References
     ----------
-    .. [1] {rj_ref}
+    .. [1] {lg_ref}
 
 
     Examples
     --------
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> from scipy import stats
     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
-    >>> result = ryan_joiner.rj_test(data)
+    >>> result = looney_gulledge.test(data)
     >>> print(result)
-    RyanJoiner(statistic=0.990439558451558, critical=0.963891667086667, p_value='p > 0.100', conclusion='Fail to reject H₀')
+    LooneyGulledge(statistic=0.990439558451558, critical=0.964, p_value=0.7719779225778982, conclusion='Fail to reject H₀')
 
     """
     # ordering
@@ -600,7 +564,6 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
     zi = _normal_order_statistic(
         x_data=x_data,
         weighted=weighted,
-        cte_alpha=cte_alpha,
     )
 
     # calculating the stats
@@ -619,7 +582,7 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
     p_value = _p_value(statistic=statistic, sample_size=x_data.size)
 
     result = namedtuple(
-        "RyanJoiner", ("statistic", "critical", "p_value", "conclusion")
+        "LooneyGulledge", ("statistic", "critical", "p_value", "conclusion")
     )
     return result(statistic, critical_value, p_value, conclusion)
 
@@ -633,10 +596,10 @@ def rj_test(x_data, alpha=0.05, cte_alpha="3/8", weighted=False):
     cte_alpha_desc=docs.CTE_ALPHA["description"],
     weighted=docs.WEIGHTED["type"],
     weighted_desc=docs.WEIGHTED["description"],
-    rj_ref=RyanJoiner1976,
+    lg_ref=LooneyGulledge1985,
 )
-def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False):
-    """This function creates an `axis` with the Ryan-Joiner test [1]_ correlation graph.
+def correlation_plot(axes, x_data, weighted=False):
+    """This function creates an `axis` with the Looney-Gulledge test [1]_ correlation graph.
 
     Parameters
     ----------
@@ -644,12 +607,8 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False):
         {axes_desc}
     {x_data}
         {x_data_desc}
-    {cte_alpha}
-        {cte_alpha_desc}
-
     {weighted}
         {weighted_desc}
-
 
 
     Returns
@@ -660,28 +619,28 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False):
 
     See Also
     --------
-    rj_test
+    test
     dist_plot
 
 
     References
     ----------
-    .. [1] {rj_ref}
+    .. [1] {lg_ref}
 
 
     Examples
     --------
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> import matplotlib.pyplot as plt
     >>> from scipy import stats
     >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
     >>> fig, ax = plt.subplots(figsize=(6, 4))
-    >>> ryan_joiner.correlation_plot(axes=ax, x_data=data)
-    >>> #plt.savefig("correlation_plot.png")
+    >>> looney_gulledge.correlation_plot(axes=ax, x_data=data)
+    >>> # plt.savefig("correlation_plot.png")
     >>> plt.show()
 
     .. image:: img/correlation_plot.png
-        :alt: Correlation chart for Ryan-Joiner test Normality test
+        :alt: Correlation chart for Looney-Gulledge test Normality test
         :align: center
 
     """
@@ -692,7 +651,6 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False):
     zi = _normal_order_statistic(
         x_data=x_data,
         weighted=weighted,
-        cte_alpha=cte_alpha,
     )
     x_data = np.sort(x_data)
 
@@ -726,30 +684,38 @@ def correlation_plot(axes, x_data, cte_alpha="3/8", weighted=False):
     statistic=docs.STATISTIC["type"],
     statistic_desc=docs.STATISTIC["description"],
     sample_size=docs.SAMPLE_SIZE["type"],
-    sample_size_desc=docs.AXES["description"],
-    rj_ref=RyanJoiner1976,
+    sample_size_desc=docs.SAMPLE_SIZE["description"],
+    lg_ref=LooneyGulledge1985,
 )
-def dist_plot(
-    axes,
-    critical_range=(4, 50),
-    test=None,
-):
-    """This function generates axis with critical data from the Ryan-Joiner Normality test [1]_.
+def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01]):
+    """This function generates axis with critical data from the Looney-Gulledge Normality test [1]_.
 
     Parameters
     ----------
     {axes}
         {axes_desc}
-    critical_range : tuple (optional), with two elements:
-        x_min : int, optional
-            The lower range of the number of observations for the critical values (default is ``4``).
-        x_max : int, optional
-            The upper range of the number of observations for the critical values (default is ``50``).
     test : tuple (optional), with two elements:
         {statistic}
             {statistic_desc}
         {sample_size}
             {sample_size_desc}
+    alphas : list of floats, optional
+        The significance level (:math:`\\alpha`) to draw the critical lines. Default is `[0.10, 0.05, 0.01]`. It can be a combination of:
+
+        * ``0.005``;
+        * ``0.01``;
+        * ``0.025``;
+        * ``0.05``;
+        * ``0.10``;
+        * ``0.25``;
+        * ``0.50``;
+        * ``0.75``;
+        * ``0.90``;
+        * ``0.95``;
+        * ``0.975``;
+        * ``0.99``;
+        * ``0.995``;
+
 
 
     Returns
@@ -758,82 +724,46 @@ def dist_plot(
         {axes_desc}
 
 
-    See Also
-    --------
-    rj_test
-    correlation_plot
-
-
     References
     ----------
-    .. [1] {rj_ref}
+    .. [1] {lg_ref}
 
 
     Examples
     --------
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> import matplotlib.pyplot as plt
-    >>> from scipy import stats
-    >>> data = stats.norm.rvs(loc=0, scale=1, size=30, random_state=42)
-
-
-    Apply the Ryan Joiner test
-
-
-    >>> result = ryan_joiner.rj_test(data)
-
-
-    Create the distribution graph using the test result
-
-
     >>> fig, ax = plt.subplots(figsize=(6, 4))
-    >>> ryan_joiner.dist_plot(axes=ax, test=(result.statistic, data.size))
-    >>> # plt.savefig("rj_dist_plot.png")
+    >>> looney_gulledge.dist_plot(axes=ax, test=(0.98538, 7))
+    >>> # plt.savefig("dist_plot.png")
     >>> plt.show()
 
 
     .. image:: img/dist_plot.png
-        :alt: Critical chart for Ryan-Joiner test Normality test
+        :alt: Default critical chart for Looney-Gulledge Normality test
         :align: center
 
+
     """
-    constants.warning_plot()
+    # making a copy from original critical values
+    critical = deepcopy(critical_values.LOONEY_GULLEDGE_CRITICAL)
 
-    n_samples = np.arange(critical_range[0], critical_range[1] + 1)
-    alphas = [0.10, 0.05, 0.01]
-    alphas_label = ["$10\\%$", "$5\\%$", "$1\\%$"]
-    colors = [
-        (0.2980392156862745, 0.4470588235294118, 0.6901960784313725),
-        (0.8666666666666667, 0.5176470588235295, 0.3215686274509804),
-        (0.3333333333333333, 0.6588235294117647, 0.40784313725490196),
-    ]
-
-    # main test
     if test is not None:
-        if test[1] > critical_range[1]:
-            constants.user_warning(
-                f"The graphical visualization is best suited if the sample size ({test[1]}) is smaller than the max value ({critical_range[1]})."
-            )
-        if test[1] < critical_range[0]:
-            constants.user_warning(
-                f"The graphical visualization is best suited if the sample size ({test[1]}) is greater than the min value ({critical_range[0]})."
-            )
+        axes.scatter(test[1], test[0], c="r", label="statistic", marker="^")
 
-        axes.scatter(test[1], test[0], color="r", label="$R_{p}$", marker="^")
+    palette = itertools.cycle(constants.seaborn_colors["deep"])
 
-    # adding critical values
-    for alp, color, alp_label in zip(alphas, colors, alphas_label):
-        criticals = []
-        for sample in n_samples:
-            criticals.append(_critical_value(sample_size=sample, alpha=alp))
-        axes.scatter(n_samples, criticals, label=alp_label, color=color, s=10)
-
-    axes.set_title("Ryan-Joiner")
-
-    # adding details
-    axes.legend(loc=4)
+    for alpha, color in zip(alphas, palette):
+        axes.scatter(
+            critical["n"],
+            critical[alpha],
+            label=f"{round(alpha*100)}%",
+            s=20,
+            color=color,
+        )
     axes.set_xlabel("Sample size")
-    axes.set_ylabel("Critical value")
+    axes.set_ylabel("Looney Gulledge critical values")
+    axes.legend(loc=4)
 
     return axes
 
@@ -842,15 +772,13 @@ def dist_plot(
 @docs.docstring_parameter(
     x_data=docs.X_DATA["type"],
     x_data_desc=docs.X_DATA["description"],
-    cte_alpha=docs.CTE_ALPHA["type"],
-    cte_alpha_desc=docs.CTE_ALPHA["description"],
     weighted=docs.WEIGHTED["type"],
     weighted_desc=docs.WEIGHTED["description"],
     zi=docs.ZI["type"],
     zi_desc=docs.ZI["description"],
 )
-def _make_line_up_data(x_data, weighted, cte_alpha):
-    """Tthis function prepares the data for the Ryan Joiner test `line_up` function.
+def _make_line_up_data(x_data, weighted):
+    """Tthis function prepares the data for the Looney-Gulledge test `line_up` function.
 
     Parameters
     ----------
@@ -858,8 +786,6 @@ def _make_line_up_data(x_data, weighted, cte_alpha):
         {x_data_desc}
     {weighted}
         {weighted_desc}
-    {cte_alpha}
-        {cte_alpha_desc}
 
 
     Returns
@@ -877,7 +803,6 @@ def _make_line_up_data(x_data, weighted, cte_alpha):
     zi = _normal_order_statistic(
         x_data=x_data,
         weighted=weighted,
-        cte_alpha=cte_alpha,
     )
 
     # performing regression
@@ -891,8 +816,6 @@ def _make_line_up_data(x_data, weighted, cte_alpha):
 @docs.docstring_parameter(
     x_data=docs.X_DATA["type"],
     x_data_desc=docs.X_DATA["description"],
-    cte_alpha=docs.CTE_ALPHA["type"],
-    cte_alpha_desc=docs.CTE_ALPHA["description"],
     weighted=docs.WEIGHTED["type"],
     weighted_desc=docs.WEIGHTED["description"],
     zi=docs.ZI["type"],
@@ -900,7 +823,6 @@ def _make_line_up_data(x_data, weighted, cte_alpha):
 )
 def line_up(
     x_data,
-    cte_alpha="3/8",
     weighted=False,
     seed=42,
     correct=False,
@@ -911,9 +833,6 @@ def line_up(
     ----------
     {x_data}
         {x_data_desc}
-    {cte_alpha}
-        {cte_alpha_desc}
-
     {weighted}
         {weighted_desc}
     seed : int, optional
@@ -940,13 +859,13 @@ def line_up(
 
     See Also
     --------
-    rj_test
+    test
     dist_plot
 
 
     References
     ----------
-    .. [1] BUJA, A. et al. Statistical inference for exploratory data analysis and model diagnostics. Philosophical Transactions of the Royal Society A: Mathematical, Physical and Engineering Sciences, v. 367, n. 1906, p. 4361–4383, 13 nov. 2009
+    .. [1] BUJA, A. et al. Statistical inference for exploratory data analysis and model diagnostics. Philosophical Transactions of the Royal Society A: Mathematical, Physical and Engineering Sciences, v. 367, n. 1906, p. 4361-4383, 13 nov. 2009
 
 
     Examples
@@ -954,18 +873,18 @@ def line_up(
     The line-up method must be conducted in two steps. The first step involves generating a figure with 20 graphs from the data, without indicating which graph is the true one.
 
 
-    >>> from normtest import ryan_joiner
+    >>> from normtest import looney_gulledge
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
     >>> x_exp = np.array([5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, 4.9, 5.4])
-    >>> fig = ryan_joiner.line_up(x_exp, seed=42, correct=False)
+    >>> fig = looney_gulledge.line_up(x_exp, seed=42, correct=False)
     >>> fig.tight_layout()
     >>> # plt.savefig("line_up.png", bbox_inches="tight")
     >>> plt.show()
 
 
     .. image:: img/line_up.png
-        :alt: Line-up method chart for Ryan-Joiner test Normality test
+        :alt: Line-up method chart for Looney-Gulledge test Normality test
         :align: center
 
     The researcher must identify which of the 20 graphs deviates most significantly from what is expected for a Normal distribution. For instance, the graph located in the first row and second column.
@@ -973,7 +892,7 @@ def line_up(
     The second step involves determining which graph corresponds to the true data set. This can be accomplished by simply changing parameter `correct` from `False` to `True`:
 
 
-    >>> fig = ryan_joiner.line_up(x_exp, seed=42, correct=True)
+    >>> fig = looney_gulledge.line_up(x_exp, seed=42, correct=True)
     >>> fig.tight_layout()
     >>> # plt.savefig("line_up_true.png", bbox_inches="tight")
     >>> plt.show()
@@ -983,7 +902,7 @@ def line_up(
         :animate: fade-in
 
         .. image:: img/line_up_true.png
-            :alt: Line-up method chart for Ryan-Joiner test Normality test
+            :alt: Line-up method chart for Looney-Gulledge test Normality test
             :align: center
 
 
@@ -1038,7 +957,6 @@ def line_up(
                 x, zi, y_pred = _make_line_up_data(
                     x_data=data[i],
                     weighted=weighted,
-                    cte_alpha=cte_alpha,
                 )
                 ax[col, row].scatter(zi, x, c=color)
                 ax[col, row].plot(zi, y_pred, ls="--", c=color)
@@ -1047,7 +965,6 @@ def line_up(
                 x, zi, y_pred = _make_line_up_data(
                     x_data=data[i],
                     weighted=weighted,
-                    cte_alpha=cte_alpha,
                 )
                 ax[col, row].scatter(zi, x, c="k")
                 ax[col, row].plot(zi, y_pred, ls="--", c="k")
@@ -1062,7 +979,7 @@ def line_up(
     return fig
 
 
-##### CLASS #####
+# ##### CLASS #####
 
 
 @docs.docstring_parameter(
@@ -1080,10 +997,10 @@ def line_up(
     alpha_desc=docs.ALPHA["description"],
     safe=docs.SAFE["type"],
     safe_desc=docs.SAFE["description"],
-    rj_ref=RyanJoiner1976,
+    lg_ref=LooneyGulledge1985,
 )
-class RyanJoiner(AlphaManagement, SafeManagement):
-    """This class instantiates an object to perform the Ryan-Joiner Normality test [1]_.
+class LooneyGulledge(AlphaManagement, SafeManagement):
+    """This class instantiates an object to perform the Looney-Gulledge Normality test [1]_.
 
 
     Attributes
@@ -1108,52 +1025,49 @@ class RyanJoiner(AlphaManagement, SafeManagement):
     Methods
     -------
     fit(x_data)
-        Applies the Ryan-Joiner Normality test;
+        Applies the Looney-Gulledge Normality test;
     dist_plot(axes, alphas=[0.10, 0.05, 0.01]):
-        Generates `axis` with critical data from the Ryan-Joiner Normality test;
+        Generates `axis` with critical data from the Looney-Gulledge Normality test;
     correlation_plot(axes)
-        Generates an `axis` with the Ryan-Joiner test correlation graph;
+        Generates an `axis` with the Looney-Gulledge test correlation graph;
     line_up(seed=None, correct=False)
         Generates a `Figure` with the correlation graphs for the line up method;
     citation(export=False)
-        Returns the Ryan-Joiner's test reference;
+        Returns the Looney-Gulledge's test reference;
 
     References
     ----------
-    .. [1] {rj_ref}
+    .. [1] {lg_ref}
 
 
     Examples
     --------
-    >>> from normtest import RyanJoiner
+    >>> from normtest import LooneyGulledge
     >>> import numpy as np
     >>> x = np.array([6, 1, -4, 8, -2, 5, 0])
-    >>> test = RyanJoiner()
+    >>> test = LooneyGulledge()
     >>> test.fit(x)
     >>> print(test.normality)
-    RyanJoiner(statistic=0.9844829186140105, critical=0.8977794003662074, p_value='p > 0.100', conclusion='Fail to reject H₀')
+    LooneyGulledge(statistic=0.9844829186140105, critical=0.898, p_value=0.8715547240126971, conclusion='Fail to reject H₀')
 
     """
 
-    def __init__(
-        self, alpha=0.05, safe=True, cte_alpha="3/8", weighted=False, **kwargs
-    ):
-        """Initiates RyanJoiner `class` inheriting the `AlphaManagement` and `SafeManagement` classes
+    def __init__(self, alpha=0.05, safe=True, weighted=False, **kwargs):
+        """Initiates Looney-Gulledge `class` inheriting the `AlphaManagement` and `SafeManagement` classes
 
         Attributes
         ----------
-        class_name : "RyanJoiner"
+        class_name : "LooneyGulledge"
         conclusion : None
             This attribute is used to check whether the fit method was applied or not
         alpha : float
         safe : bool
-        cte_alpha : str
         weighted : bool
 
 
         """
         super().__init__(alpha=alpha, safe=safe, **kwargs)
-        self.class_name = "RyanJoiner"
+        self.class_name = "LooneyGulledge"
         self.conclusion = None  # for checking if the fit was applied
         if safe:
             parameters.param_options(
@@ -1165,16 +1079,6 @@ class RyanJoiner(AlphaManagement, SafeManagement):
                 stacklevel=4,
                 error=True,
             )
-            parameters.param_options(
-                option=cte_alpha,
-                options=["0", "3/8", "1/2"],
-                param_name="cte_alpha",
-                kind="class",
-                kind_name=self.class_name,
-                stacklevel=4,
-                error=True,
-            )
-
             types.is_bool(
                 value=weighted,
                 param_name="weighted",
@@ -1183,7 +1087,7 @@ class RyanJoiner(AlphaManagement, SafeManagement):
                 stacklevel=4,
                 error=True,
             )
-        self.cte_alpha = cte_alpha
+
         self.weighted = weighted
         self.set_safe(safe=safe)
         self.alpha = alpha
@@ -1205,13 +1109,12 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         self,
         x_data,
     ):
-        """This method applies the Ryan-Joiner test.
+        """This method applies the Looney-Gulledge test.
 
         Parameters
         ----------
         {x_data}
             {x_data_desc}
-
 
         Returns
         -------
@@ -1228,11 +1131,9 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         normality : named tuple
             A tuple with the main test results summarized
 
-
         See Also
         --------
-        rj_test
-
+        test
 
         """
         func_name = "fit"
@@ -1266,10 +1167,9 @@ class RyanJoiner(AlphaManagement, SafeManagement):
                 error=True,
             )
 
-        result = rj_test(
+        result = test(
             x_data=x_data,
             alpha=self.alpha,
-            cte_alpha=self.cte_alpha,
             weighted=self.weighted,
         )
         self.x_data = x_data
@@ -1283,18 +1183,15 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         axes=docs.AXES["type"],
         axes_desc=docs.AXES["description"],
     )
-    def dist_plot(self, axes, critical_range=(4, 50)):
-        """This method generates an `axis` with the critical data from the Ryan-Joiner Normality test.
+    def dist_plot(self, axes, alphas=[0.10, 0.05, 0.01]):
+        """This method generates an `axis` with critical data from the Looney-Gulledge Normality test.
 
         Parameters
         ----------
         {axes}
             {axes_desc}
-        critical_range : tuple (optional), with two elements:
-            x_min : int, optional
-                The lower range of the number of observations for the critical values (default is ``4``).
-            x_max : int, optional
-                The upper range of the number of observations for the critical values (default is ``50``).
+        alphas : list of floats, optional
+            The significance level (:math:`\\alpha`) to draw the critical lines. Default is `[0.10, 0.05, 0.01]`;
 
 
         Returns
@@ -1311,7 +1208,7 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         """
         method_name = "dist_plot"
         if self.conclusion is None:
-            return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+            return "The Looney-Gulledge Normality test was not performed yet.\nUse the 'fit' method to perform the test."
         else:
             if self.safe:
                 types.is_subplots(
@@ -1322,45 +1219,23 @@ class RyanJoiner(AlphaManagement, SafeManagement):
                     stacklevel=4,
                     error=True,
                 )
-                types.is_tuple(
-                    value=critical_range,
-                    param_name="critical_range",
-                    kind="method",
-                    kind_name=method_name,
-                    stacklevel=4,
-                    error=True,
-                )
-                types.is_int(
-                    value=critical_range[0],
-                    param_name="x_min",
-                    kind="method",
-                    kind_name=method_name,
-                    stacklevel=4,
-                    error=True,
-                )
-                types.is_int(
-                    value=critical_range[1],
-                    param_name="x_max",
-                    kind="method",
-                    kind_name=method_name,
-                    stacklevel=4,
-                    error=True,
-                )
-                numbers.is_greater_than(
-                    number=critical_range[0],
-                    lower=4,
-                    param_name="x_min",
-                    kind="method",
-                    kind_name=method_name,
-                    inclusive=True,
-                    stacklevel=4,
-                    error=True,
-                )
+                # making a copy from original critical values
+                critical = deepcopy(critical_values.LOONEY_GULLEDGE_CRITICAL)
+                for alpha in alphas:
+                    parameters.param_options(
+                        option=alpha,
+                        options=list(critical.keys())[1:],
+                        param_name="alphas",
+                        kind="method",
+                        kind_name=method_name,
+                        stacklevel=4,
+                        error=True,
+                    )
 
             return dist_plot(
-                axes=axes,
-                critical_range=critical_range,
+                axes,
                 test=(self.statistic, self.x_data.size),
+                alphas=alphas,
             )
 
     @docs.docstring_parameter(
@@ -1371,29 +1246,26 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         self,
         axes,
     ):
-        """This method generates an axis with the correlation plotfor the Ryan-Joiner Normality test.
+        """This method generates an axis with the correlation plotfor the Looney-Gulledge Normality test.
 
         Parameters
         ----------
         {axes}
             {axes_desc}
 
-
         Returns
         -------
         {axes}
             {axes_desc}
 
-
         See Also
         --------
         correlation_plot
 
-
         """
         method_name = "correlation_plot"
         if self.conclusion is None:
-            return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+            return "The Looney-Gulledge Normality test was not performed yet.\nUse the 'fit' method to perform the test."
         else:
             if self.safe:
                 types.is_subplots(
@@ -1408,7 +1280,6 @@ class RyanJoiner(AlphaManagement, SafeManagement):
             return correlation_plot(
                 axes=axes,
                 x_data=self.x_data,
-                cte_alpha=self.cte_alpha,
                 weighted=self.weighted,
             )
 
@@ -1426,23 +1297,19 @@ class RyanJoiner(AlphaManagement, SafeManagement):
         correct : bool, optional
             Whether the `x_data` is to be drawn in red (`False`) or black (`True`, default);
 
-
         Returns
         -------
         fig : matplotlib.figure.Figure
             A figure with the generated graphics;
 
-
         See Also
         --------
         line_up
 
-
-
         """
         method_name = "line_up"
         if self.conclusion is None:
-            return "The Ryan Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+            return "The Looney-Gulledge Normality test was not performed yet.\nUse the 'fit' method to perform the test."
         else:
             if self.safe:
                 types.is_bool(
@@ -1473,35 +1340,33 @@ class RyanJoiner(AlphaManagement, SafeManagement):
 
             return line_up(
                 x_data=self.x_data,
-                cte_alpha=self.cte_alpha,
                 weighted=self.weighted,
                 seed=seed,
                 correct=correct,
             )
 
     def citation(self, export=False):
-        """This method returns the reference from Ryan-Joiner's test, with the option to export the reference in `.bib` format.
+        """This method returns the reference from Looney-Gulledge's test, with the option to export the reference in `.bib` format.
 
         Parameters
         ----------
         export : bool
-            Whether to export the reference as `RyanJoiner1976.bib` file (`True`) or not (`False`, default);
-
+            Whether to export the reference as `LooneyGulledge1985.bib` file (`True`) or not (`False`, default);
 
         Returns
         -------
         reference : str
-            The Ryan-Joiner Test reference;
+            The Looney-Gulledge test reference;
 
         """
         return citation(export=export)
 
     def __str__(self):
         if self.conclusion is None:
-            text = "The Ryan-Joiner Normality test was not performed yet.\nUse the 'fit' method to perform the test."
+            text = "The Looney-Gulledge Normality test was not performed yet.\nUse the 'fit' method to perform the test."
             return text
         else:
             return self.conclusion
 
     def __repr__(self):
-        return "Ryan-Joiner Normality test"
+        return "Looney-Gulledge Normality test"

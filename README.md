@@ -6,10 +6,11 @@
 
 This package has a series of tests used to check whether a set of sample data follows, at least approximately, the Normal distribution.
 
-## Available tests (17/11/2023)
+## Available tests (25/11/2023)
 
 - Filliben
 - Ryan-Joiner
+- Looney-Gulledge
 
 
 ## Install
@@ -25,6 +26,7 @@ Each test has its own class and can be imported as follows:
 ```python
 from normtest import RyanJoiner
 from normtest import Filliben
+from normtest import LooneyGulledge
 ```
 
 To perform the test, just instantiate the class and apply the ``fit`` method, passing the data set as a ``NumpyArray``. For example:

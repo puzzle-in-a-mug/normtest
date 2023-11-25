@@ -2,7 +2,7 @@ looney_gulledge
 ===============
 
 
-This module contains the relevant functions to apply the Looney & Gulledge Normality test [1]_.
+This module contains the relevant functions to apply the Looney & Gulledge Normality test [1]_ (also known as Probability Plot Correlation Coefficient Test, PPCC).
 
 
 Class

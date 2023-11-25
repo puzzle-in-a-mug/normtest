@@ -4,9 +4,6 @@
 Command to run at the prompt:
 
     python -m unittest -v tests/versioning/test_version_info.py
-    or
-    python -m unittest -b tests/versioning/test_version_info.py
-
 --------------------------------------------------------------------------------
 """
 

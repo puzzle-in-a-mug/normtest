@@ -46,7 +46,6 @@ Last update: November 13, 2023
 
 ### Standard ###
 from collections import namedtuple
-from copy import deepcopy
 import itertools
 
 ### Third part ###
@@ -329,7 +328,7 @@ def _critical_value(sample_size, alpha=0.05):
 
     """
     # making a copy from original critical values
-    critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+    critical = critical_values.FILLIBEN_CRITICAL
 
     if sample_size not in critical["n"]:
         if sample_size < 100:
@@ -416,7 +415,7 @@ def dist_plot(axes, test=None, alphas=[0.10, 0.05, 0.01]):
 
     """
     # making a copy from original critical values
-    critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+    critical = critical_values.FILLIBEN_CRITICAL
 
     if test is not None:
         axes.scatter(test[1], test[0], c="r", label="statistic", marker="^")
@@ -1015,7 +1014,7 @@ class Filliben(AlphaManagement, SafeManagement):
                     stacklevel=4,
                     error=True,
                 )
-                critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+                critical = critical_values.FILLIBEN_CRITICAL
 
                 parameters.param_options(
                     alpha,
@@ -1154,7 +1153,7 @@ class Filliben(AlphaManagement, SafeManagement):
                     error=True,
                 )
                 # making a copy from original critical values
-                critical = deepcopy(critical_values.FILLIBEN_CRITICAL)
+                critical = critical_values.FILLIBEN_CRITICAL
                 for alpha in alphas:
                     parameters.param_options(
                         option=alpha,
